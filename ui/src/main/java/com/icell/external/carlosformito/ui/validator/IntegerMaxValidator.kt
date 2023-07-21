@@ -7,7 +7,7 @@ import com.icell.external.carlosformito.ui.R
 
 class IntegerMaxValidator(
     private val maxValue: Int,
-    @StringRes private val errorMessageId: Int = R.string.formular_lbl_validator_integer_max_error
+    @StringRes private val errorMessageId: Int = R.string.carlos_lbl_validator_integer_max_error
 ) : FormFieldValidator<Int> {
 
     override fun validate(value: Int?): FormFieldValidationResult {

@@ -9,7 +9,7 @@ class IntegerMinMaxValidator(
     private val minValue: Int,
     private val maxValue: Int,
     @StringRes
-    private val errorMessageId: Int = R.string.formular_lbl_validator_integer_min_max_error
+    private val errorMessageId: Int = R.string.carlos_lbl_validator_integer_min_max_error
 ) : FormFieldValidator<Int> {
 
     override fun validate(value: Int?): FormFieldValidationResult {

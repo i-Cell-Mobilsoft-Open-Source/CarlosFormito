@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 class DateMinValidator(
     private val minValue: LocalDate,
-    @StringRes private val errorMessageId: Int = R.string.formular_lbl_validator_date_min_error
+    @StringRes private val errorMessageId: Int = R.string.carlos_lbl_validator_date_min_error
 ) : FormFieldValidator<LocalDate> {
 
     override fun validate(value: LocalDate?): FormFieldValidationResult {

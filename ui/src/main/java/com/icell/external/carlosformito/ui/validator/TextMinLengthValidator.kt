@@ -11,7 +11,7 @@ class TextMinLengthValidator(
     @IntRange(from = MIN_LENGTH_RANGE_FROM)
     private val minLength: Int,
     @StringRes
-    private val errorMessageId: Int = R.string.formular_lbl_validator_min_length
+    private val errorMessageId: Int = R.string.carlos_lbl_validator_min_length
 ) : FormFieldValidator<String>, RequiresFieldValue {
 
     init {

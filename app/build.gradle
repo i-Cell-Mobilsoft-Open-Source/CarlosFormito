@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.formular'
+    namespace 'com.icell.external.carlosformito'
     compileSdk 33
 
     defaultConfig {

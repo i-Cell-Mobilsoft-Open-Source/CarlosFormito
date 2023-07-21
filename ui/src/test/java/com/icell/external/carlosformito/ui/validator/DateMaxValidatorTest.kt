@@ -48,15 +48,15 @@ class DateMaxValidatorTest {
     @Test
     fun `test invalid input returns custom error message`() {
         val maxValue = LocalDate.of(2023, 1, 1)
-        val validator = DateMaxValidator(maxValue, R.string.formular_lbl_test_invalid_input)
+        val validator = DateMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(maxValue.plusDays(1))
 
         assertThat(validationResult)
             .isInstanceOf(FormFieldValidationResult.Invalid.MessageWithArgs::class.java)
 
-        assertWithMessage("Error message ID should be ${R.string.formular_lbl_test_invalid_input}")
+        assertWithMessage("Error message ID should be ${R.string.carlos_lbl_test_invalid_input}")
             .that((validationResult as FormFieldValidationResult.Invalid.MessageWithArgs).errorMessageId)
-            .isEqualTo(R.string.formular_lbl_test_invalid_input)
+            .isEqualTo(R.string.carlos_lbl_test_invalid_input)
     }
 
     @Test

@@ -89,14 +89,14 @@ class ValueRequiredValidatorTest {
 
     @Test
     fun `test invalid input returns custom error message`() {
-        val validator = ValueRequiredValidator<Any>(R.string.formular_lbl_test_invalid_input)
+        val validator = ValueRequiredValidator<Any>(R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(null)
 
         assertThat(validationResult)
             .isInstanceOf(FormFieldValidationResult.Invalid.Message::class.java)
 
-        assertWithMessage("Error message ID should be ${R.string.formular_lbl_test_invalid_input}")
+        assertWithMessage("Error message ID should be ${R.string.carlos_lbl_test_invalid_input}")
             .that((validationResult as FormFieldValidationResult.Invalid.Message).errorMessageId)
-            .isEqualTo(R.string.formular_lbl_test_invalid_input)
+            .isEqualTo(R.string.carlos_lbl_test_invalid_input)
     }
 }

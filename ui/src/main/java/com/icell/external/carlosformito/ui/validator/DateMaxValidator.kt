@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 class DateMaxValidator(
     private val maxValue: LocalDate,
-    @StringRes private val errorMessageId: Int = R.string.formular_lbl_validator_date_max_error
+    @StringRes private val errorMessageId: Int = R.string.carlos_lbl_validator_date_max_error
 ) : FormFieldValidator<LocalDate> {
 
     override fun validate(value: LocalDate?): FormFieldValidationResult {

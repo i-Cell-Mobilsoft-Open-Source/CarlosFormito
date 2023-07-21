@@ -7,7 +7,7 @@ import com.icell.external.carlosformito.ui.R
 
 class IntegerMinValidator(
     private val minValue: Int,
-    @StringRes private val errorMessageId: Int = R.string.formular_lbl_validator_integer_min_error
+    @StringRes private val errorMessageId: Int = R.string.carlos_lbl_validator_integer_min_error
 ) : FormFieldValidator<Int> {
 
     override fun validate(value: Int?): FormFieldValidationResult {

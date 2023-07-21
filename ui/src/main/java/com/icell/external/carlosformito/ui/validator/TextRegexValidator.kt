@@ -8,7 +8,7 @@ import com.icell.external.carlosformito.ui.R
 class TextRegexValidator(
     private val pattern: String,
     @StringRes
-    private val errorMessageId: Int = R.string.formular_lbl_validator_validator_value_invalid_format
+    private val errorMessageId: Int = R.string.carlos_lbl_validator_validator_value_invalid_format
 ) : FormFieldValidator<String> {
 
     override fun validate(value: String?): FormFieldValidationResult {
