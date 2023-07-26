@@ -3,33 +3,35 @@ package com.icell.external.carlosformito.ui.field
 import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.VisualTransformation
-import com.icell.external.carlosformito.core.api.model.FormFieldState
+import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.util.extension.collectFieldState
 import com.icell.external.carlosformito.ui.util.extension.errorMessage
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 
 @Composable
 fun FormTextPickerField(
     modifier: Modifier = Modifier,
-    state: FormFieldState<String>,
+    fieldItem: FormFieldItem<String>,
     label: String,
     onClear: () -> Unit = {},
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     onClick: () -> Unit,
-    onFocusCleared: () -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: AnnotatedString? = null
 ) {
+    val state by fieldItem.collectFieldState()
     FormTextPickerField(
         modifier = modifier,
         value = state.value,
@@ -41,7 +43,9 @@ fun FormTextPickerField(
         enabled = enabled,
         isClearable = isClearable,
         onClick = onClick,
-        onFocusCleared = onFocusCleared,
+        onFocusCleared = {
+            fieldItem.onFieldFocusCleared()
+        },
         visualTransformation = visualTransformation,
         colors = colors,
         contentDescription = contentDescription,

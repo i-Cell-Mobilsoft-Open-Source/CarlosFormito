@@ -1,37 +1,21 @@
 package com.icell.external.carlosformito.core
 
+import com.icell.external.carlosformito.core.api.FormFieldItem
+import com.icell.external.carlosformito.core.api.FormFieldItemListener
+import com.icell.external.carlosformito.core.api.FormManager
+import com.icell.external.carlosformito.core.api.model.FormFieldInfo
+import com.icell.external.carlosformito.core.api.model.FormFieldState
+import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import com.icell.external.carlosformito.core.api.validator.RequiresFieldValue
-import com.icell.external.carlosformito.core.api.model.FormFieldItem
-import com.icell.external.carlosformito.core.api.model.FormFieldState
-import com.icell.external.carlosformito.core.api.FormFieldHandle
-import com.icell.external.carlosformito.core.api.FormFieldHandleCallback
-import com.icell.external.carlosformito.core.api.FormManager
-import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FormManagerImpl(
-    private val formFields: List<FormFieldItem<*>>,
+    private val formFields: List<FormFieldInfo<*>>,
     private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL
-) : FormManager {
-
-    private val fieldHandleCallback = object :
-        FormFieldHandleCallback {
-        override fun onFieldFocusCleared(id: String) {
-            if (validationStrategy == FormFieldValidationStrategy.ON_FOCUS_CLEAR) {
-                validateAndUpdateFieldState(id)
-            }
-        }
-
-        override fun <T> onFieldValueChanged(id: String, value: T?) {
-            this@FormManagerImpl.onFieldValueChanged(id, value)
-            if (validationStrategy == FormFieldValidationStrategy.INLINE) {
-                validateAndUpdateFieldState(id)
-            }
-        }
-    }
+) : FormManager, FormFieldItemListener {
 
     private val fieldStates: Map<String, MutableStateFlow<FormFieldState<*>>> =
         buildMap {
@@ -40,20 +24,12 @@ class FormManagerImpl(
             }
         }
 
-    private val fieldHandles: Map<String, FormFieldHandle<*>> =
+    private val fieldItems: Map<String, FormFieldItem<*>> =
         buildMap {
             formFields.forEach { formField ->
-                put(
-                    formField.id,
-                    createHandle(formField).also { handle ->
-                        handle.setFieldHandleCallback(fieldHandleCallback)
-                    }
-                )
+                put(formField.id, createFieldItem(formField))
             }
         }
-
-    private fun <T> createHandle(fieldItem: FormFieldItem<T>): FormFieldHandle<T> =
-        FormFieldHandleImpl(fieldItem.id)
 
     private val requiredFieldIds: List<String> = formFields
         .filterRequiredFields()
@@ -66,17 +42,31 @@ class FormManagerImpl(
         checkAllRequiredFieldFilled()
     }
 
+    private fun <T> createFieldItem(formField: FormFieldInfo<T>): FormFieldItem<T> {
+        val fieldItem = FormFieldItemImpl(
+            fieldId = formField.id,
+            fieldState = getFieldStateFlow<T>(formField.id)
+        )
+        return fieldItem.also { fieldItem.setListener(this) }
+    }
+
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getFieldStateFlow(id: String): MutableStateFlow<FormFieldState<T>> {
+    private fun <T> getFieldStateFlow(id: String): MutableStateFlow<FormFieldState<T>> {
         return requireNotNull(fieldStates[id] as MutableStateFlow<FormFieldState<T>>)
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getFieldHandle(id: String): FormFieldHandle<T> {
-        return requireNotNull(fieldHandles[id] as FormFieldHandle<T>)
+    override fun <T> getFieldItem(id: String): FormFieldItem<T> {
+        return requireNotNull(fieldItems[id] as FormFieldItem<T>)
     }
 
-    private fun <T> onFieldValueChanged(id: String, value: T?) {
+    override fun onFieldFocusCleared(id: String) {
+        if (validationStrategy == FormFieldValidationStrategy.ON_FOCUS_CLEAR) {
+            validateAndUpdateFieldState(id)
+        }
+    }
+
+    override fun <T> onFieldValueChanged(id: String, value: T?) {
         val currentFieldState = getFieldStateFlow<T>(id)
         currentFieldState.value = currentFieldState.value.copy(
             value = value,
@@ -85,9 +75,12 @@ class FormManagerImpl(
         if (requiredFieldIds.contains(id)) {
             checkAllRequiredFieldFilled()
         }
+        if (validationStrategy == FormFieldValidationStrategy.INLINE) {
+            validateAndUpdateFieldState(id)
+        }
     }
 
-    private fun List<FormFieldItem<*>>.filterRequiredFields(): List<FormFieldItem<*>> {
+    private fun List<FormFieldInfo<*>>.filterRequiredFields(): List<FormFieldInfo<*>> {
         return filter { formField ->
             formField.validators.any { validator -> validator is RequiresFieldValue }
         }

@@ -1,6 +1,6 @@
 package com.icell.external.carlosformito.core.api
 
-interface FormFieldHandleCallback {
+interface FormFieldItemListener {
 
     fun onFieldFocusCleared(id: String)
 
