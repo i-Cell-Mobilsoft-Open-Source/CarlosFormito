@@ -3,9 +3,9 @@ package com.icell.external.carlosformito.ui.validator
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
+import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.validator.util.ValidatorTestUtils.isValidationResultInvalid
 import org.junit.Test
-import com.icell.external.carlosformito.ui.R
 import java.time.LocalDate
 
 class DateMaxValidatorTest {

@@ -5,13 +5,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import com.icell.external.carlosformito.core.api.model.FormFieldState
-import com.icell.external.carlosformito.core.api.FormFieldHandle
+import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
+import com.icell.external.carlosformito.ui.util.extension.collectFieldState
 import com.icell.external.carlosformito.ui.util.extension.errorMessage
 import com.icell.external.carlosformito.ui.util.focusStepper
 import com.icell.external.carlosformito.ui.util.onFocusCleared
@@ -19,8 +20,7 @@ import com.icell.external.carlosformito.ui.util.onFocusCleared
 @Composable
 fun FormIntegerField(
     modifier: Modifier = Modifier,
-    state: FormFieldState<Int>,
-    handle: FormFieldHandle<Int>,
+    fieldItem: FormFieldItem<Int>,
     label: String,
     maxLength: Int? = null,
     trailingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
@@ -33,6 +33,7 @@ fun FormIntegerField(
     contentDescription: String? = null,
     supportingText: CharSequence? = null
 ) {
+    val state by fieldItem.collectFieldState()
     FormIntegerField(
         modifier = modifier,
         value = state.value,
@@ -50,50 +51,11 @@ fun FormIntegerField(
         contentDescription = contentDescription,
         supportingText = supportingText,
         onValueChange = { newValue ->
-            handle.onFieldValueChanged(newValue)
+            fieldItem.onFieldValueChanged(newValue)
         },
         onFocusCleared = {
-            handle.onFieldFocusCleared()
+            fieldItem.onFieldFocusCleared()
         }
-    )
-}
-
-@Composable
-fun FormIntegerField(
-    modifier: Modifier = Modifier,
-    state: FormFieldState<Int>,
-    label: String,
-    maxLength: Int? = null,
-    trailingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
-    contentDescription: String? = null,
-    supportingText: CharSequence? = null,
-    onValueChange: (Int?) -> Unit,
-    onFocusCleared: () -> Unit = {}
-) {
-    FormIntegerField(
-        modifier = modifier,
-        value = state.value,
-        label = label,
-        maxLength = maxLength,
-        trailingContentType = trailingContentType,
-        leadingContentType = leadingContentType,
-        isError = state.isError,
-        errorMessage = state.errorMessage(),
-        enabled = enabled,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation,
-        colors = colors,
-        contentDescription = contentDescription,
-        supportingText = supportingText,
-        onValueChange = onValueChange,
-        onFocusCleared = onFocusCleared
     )
 }
 

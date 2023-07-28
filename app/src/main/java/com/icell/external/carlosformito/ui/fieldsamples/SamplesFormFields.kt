@@ -1,35 +1,35 @@
 package com.icell.external.carlosformito.ui.fieldsamples
 
-import com.icell.external.carlosformito.core.api.model.FormFieldItem
+import com.icell.external.carlosformito.core.api.model.FormFieldInfo
 import com.icell.external.carlosformito.ui.validator.DateMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.IntegerMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.TextMinLengthValidator
 import com.icell.external.carlosformito.ui.validator.ValueRequiredValidator
 import java.time.LocalDate
 
-object SamplesFormItems {
+object SamplesFormFields {
 
     const val KEY_FORM_FIELD_NAME = "KEY_FORM_FIELD_NAME"
     const val KEY_FORM_FIELD_DATE = "KEY_FORM_FIELD_DATE"
     const val KEY_FORM_FIELD_SIZE = "KEY_FORM_FIELD_SIZE"
     const val KEY_FORM_FIELD_SECRET = "KEY_FORM_FIELD_SECRET"
 
-    fun buildItems(): List<FormFieldItem<*>> {
+    fun build(): List<FormFieldInfo<*>> {
         return listOf(
-            FormFieldItem<String>(
+            FormFieldInfo(
                 id = KEY_FORM_FIELD_NAME,
                 validators = listOf(
                     ValueRequiredValidator(),
                     TextMinLengthValidator(minLength = 3)
                 )
             ),
-            FormFieldItem<String>(
+            FormFieldInfo(
                 id = KEY_FORM_FIELD_SECRET,
                 validators = listOf(
                     TextMinLengthValidator(minLength = 8)
                 )
             ),
-            FormFieldItem<LocalDate>(
+            FormFieldInfo(
                 id = KEY_FORM_FIELD_DATE,
                 validators = listOf(
                     ValueRequiredValidator(),
@@ -39,7 +39,7 @@ object SamplesFormItems {
                     )
                 )
             ),
-            FormFieldItem<Int>(
+            FormFieldInfo(
                 id = KEY_FORM_FIELD_SIZE,
                 validators = listOf(
                     IntegerMinMaxValidator(

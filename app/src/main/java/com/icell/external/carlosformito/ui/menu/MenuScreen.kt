@@ -38,7 +38,7 @@ fun MenuScreen(
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Explore our form state management solution for Jetpack Compose in action. " +
-                        "Here are some use cases and examples:",
+                    "Here are some use cases and examples:",
                 style = MaterialTheme.typography.body2.copy(
                     color = contentColorFor(MaterialTheme.colors.surface).copy(alpha = ContentAlpha.medium),
                     lineHeight = 22.sp
