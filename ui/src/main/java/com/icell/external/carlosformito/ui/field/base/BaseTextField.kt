@@ -1,19 +1,14 @@
 package com.icell.external.carlosformito.ui.field.base
 
 import android.view.KeyEvent.ACTION_DOWN
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -87,7 +82,7 @@ fun BaseTextField(
     )
 }
 
-@Suppress("LongMethod", "CyclomaticComplexMethod")
+@Suppress("CyclomaticComplexMethod")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun BaseTextField(
@@ -129,127 +124,111 @@ private fun BaseTextField(
         Modifier
     }
 
-    Column(modifier = modifier) {
-        Box {
-            val textFieldFocusRequester = remember { FocusRequester() }
+    val textFieldFocusRequester = remember { FocusRequester() }
 
-            TextField(
-                value = value,
-                onValueChange = onValueChange,
-                textStyle = MaterialTheme.typography.body1,
-                maxLines = 1,
-                singleLine = true,
-                enabled = enabled,
-                readOnly = inputMode is TextFieldInputMode.Picker,
-                visualTransformation = visualTransformation,
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                leadingIcon = when (leadingContentType) {
-                    TextFieldAffixContentType.None -> null
-                    is TextFieldAffixContentType.Icon -> {
-                        {
-                            Icon(
-                                painterResource(id = leadingContentType.value),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clickable { leadingContentType.onClick.invoke() }
-                            )
-                        }
+    BaseFieldFrame(
+        modifier = modifier,
+        isError = isError,
+        errorMessage = errorMessage,
+        supportingText = supportingText
+    ) {
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            textStyle = MaterialTheme.typography.body1,
+            maxLines = 1,
+            singleLine = true,
+            enabled = enabled,
+            readOnly = inputMode is TextFieldInputMode.Picker,
+            visualTransformation = visualTransformation,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            leadingIcon = when (leadingContentType) {
+                TextFieldAffixContentType.None -> null
+                is TextFieldAffixContentType.Icon -> {
+                    {
+                        Icon(
+                            painterResource(id = leadingContentType.value),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable { leadingContentType.onClick.invoke() }
+                        )
                     }
+                }
 
-                    is TextFieldAffixContentType.Text -> {
-                        {
-                            Text(
-                                color = colors.textColor(enabled).value,
-                                text = leadingContentType.value,
-                                style = MaterialTheme.typography.body1
-                            )
-                        }
+                is TextFieldAffixContentType.Text -> {
+                    {
+                        Text(
+                            color = colors.textColor(enabled).value,
+                            text = leadingContentType.value,
+                            style = MaterialTheme.typography.body1
+                        )
                     }
-                },
-                trailingIcon = when (trailingContentType) {
-                    TextFieldAffixContentType.None -> null
-                    is TextFieldAffixContentType.Icon -> {
-                        {
-                            Icon(
-                                painterResource(id = trailingContentType.value),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clickable { trailingContentType.onClick.invoke() }
-                            )
-                        }
+                }
+            },
+            trailingIcon = when (trailingContentType) {
+                TextFieldAffixContentType.None -> null
+                is TextFieldAffixContentType.Icon -> {
+                    {
+                        Icon(
+                            painterResource(id = trailingContentType.value),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable { trailingContentType.onClick.invoke() }
+                        )
                     }
+                }
 
-                    is TextFieldAffixContentType.Text -> {
-                        {
-                            Text(
-                                color = colors.textColor(enabled).value,
-                                text = trailingContentType.value,
-                                style = MaterialTheme.typography.body1
-                            )
-                        }
+                is TextFieldAffixContentType.Text -> {
+                    {
+                        Text(
+                            color = colors.textColor(enabled).value,
+                            text = trailingContentType.value,
+                            style = MaterialTheme.typography.body1
+                        )
                     }
-                },
-                label = {
-                    Text(
-                        text = label
-                    )
-                },
-                colors = colors,
-                isError = isError,
+                }
+            },
+            label = {
+                Text(
+                    text = label
+                )
+            },
+            colors = colors,
+            isError = isError,
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(textFieldFocusRequester)
+                .then(semanticsModifier)
+                .then(pickerInputModeModifier)
+        )
+        if (inputMode is TextFieldInputMode.Picker) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(textFieldFocusRequester)
-                    .then(semanticsModifier)
-                    .then(pickerInputModeModifier)
+                    .matchParentSize()
+                    .clickable(
+                        enabled = enabled,
+                        onClick = {
+                            textFieldFocusRequester.requestFocus()
+                            inputMode.onClick()
+                        }
+                    )
             )
-            if (inputMode is TextFieldInputMode.Picker) {
+            if (inputMode.isClearable && value.text.isNotBlank()) {
                 Box(
                     modifier = Modifier
-                        .matchParentSize()
+                        .size(48.dp)
+                        .align(Alignment.CenterEnd)
                         .clickable(
                             enabled = enabled,
                             onClick = {
-                                textFieldFocusRequester.requestFocus()
-                                inputMode.onClick()
+                                inputMode.onClear()
                             }
                         )
                 )
-                if (inputMode.isClearable && value.text.isNotBlank()) {
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .align(Alignment.CenterEnd)
-                            .clickable(
-                                enabled = enabled,
-                                onClick = {
-                                    inputMode.onClear()
-                                }
-                            )
-                    )
-                }
             }
-        }
-        AnimatedVisibility(visible = isError) {
-            TextFieldError(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                errorText = errorMessage ?: "",
-                textColor = MaterialTheme.colors.error
-            )
-        }
-        if (supportingText != null) {
-            TextFieldSupportingText(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 12.dp)
-                    .padding(horizontal = 16.dp),
-                supportingText = supportingText,
-                textColor = LocalContentColor.current.copy(LocalContentAlpha.current)
-            )
         }
     }
 }
