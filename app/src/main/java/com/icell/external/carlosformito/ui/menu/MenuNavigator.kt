@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.icell.external.carlosformito.ui.custom.CustomFormScreen
+import com.icell.external.carlosformito.ui.custom.CustomFormViewModel
 import com.icell.external.carlosformito.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormViewModel
 
@@ -21,6 +23,9 @@ fun MenuNavigator(
             MenuScreen(
                 onNavigateToFieldSamples = {
                     navController.navigate(Route.FieldSamples.route)
+                },
+                onNavigateToCustomFormFields = {
+                    navController.navigate(Route.CustomFormFields.route)
                 }
             )
         }
@@ -34,12 +39,24 @@ fun MenuNavigator(
                 }
             )
         }
+        composable(Route.CustomFormFields.route) {
+            val viewModel: CustomFormViewModel = viewModel()
+
+            CustomFormScreen(
+                viewModel = viewModel,
+                onBackPressed = {
+                    navController.navigateUp()
+                }
+            )
+        }
     }
 }
 
 sealed class Route(val route: String) {
 
-    object SamplesMenu : Route("MenuRoute")
+    data object SamplesMenu : Route("MenuRoute")
 
-    object FieldSamples : Route("FieldSamples")
+    data object FieldSamples : Route("FieldSamples")
+
+    data object CustomFormFields : Route("CustomFormFields")
 }

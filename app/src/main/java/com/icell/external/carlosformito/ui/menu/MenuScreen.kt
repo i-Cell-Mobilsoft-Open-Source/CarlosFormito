@@ -22,7 +22,8 @@ import androidx.compose.ui.unit.sp
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MenuScreen(
-    onNavigateToFieldSamples: () -> Unit
+    onNavigateToFieldSamples: () -> Unit,
+    onNavigateToCustomFormFields: () -> Unit
 ) {
     Scaffold {
         Column(
@@ -53,6 +54,9 @@ fun MenuScreen(
             ) {
                 MenuListItem(title = "Form field samples") {
                     onNavigateToFieldSamples.invoke()
+                }
+                MenuListItem(title = "Custom form fields") {
+                    onNavigateToCustomFormFields.invoke()
                 }
             }
         }

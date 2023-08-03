@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Carlos Formito</string>
+
+    <string name="validity_start_missing_date">Date is required!</string>
+    <string name="validity_start_missing_time">Time is required!</string>
+    <string name="validity_start_out_of_range">Must be a date time between: %1$s and %2$s</string>
+
 </resources>
