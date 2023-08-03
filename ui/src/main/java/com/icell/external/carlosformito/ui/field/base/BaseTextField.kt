@@ -82,7 +82,7 @@ fun BaseTextField(
     )
 }
 
-@Suppress("CyclomaticComplexMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun BaseTextField(
