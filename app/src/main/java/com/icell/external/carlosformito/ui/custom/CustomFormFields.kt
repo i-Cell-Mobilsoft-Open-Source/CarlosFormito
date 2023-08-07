@@ -1,6 +1,6 @@
 package com.icell.external.carlosformito.ui.custom
 
-import com.icell.external.carlosformito.core.api.model.FormFieldInfo
+import com.icell.external.carlosformito.core.api.model.FormField
 import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.ui.custom.fields.model.PaymentMethod
 import com.icell.external.carlosformito.ui.custom.fields.validator.ValidityStartValidator
@@ -14,9 +14,9 @@ object CustomFormFields {
     const val KEY_PAYMENT_METHOD_TYPE = "KEY_PAYMENT_METHOD_TYPE"
     const val KEY_SAVE_PAYMENT_METHOD_CHECKED = "KEY_CHECKED"
 
-    fun buildItems(): List<FormFieldInfo<*>> {
+    fun build(): List<FormField<*>> {
         return listOf(
-            FormFieldInfo(
+            FormField(
                 id = KEY_VALIDITY_START,
                 validators = listOf(
                     ValueRequiredValidator(),
@@ -26,17 +26,17 @@ object CustomFormFields {
                     )
                 )
             ),
-            FormFieldInfo(
+            FormField(
                 id = KEY_QUANTITY,
                 initialState = FormFieldState(1),
                 validators = emptyList()
             ),
-            FormFieldInfo(
+            FormField(
                 id = KEY_PAYMENT_METHOD_TYPE,
                 initialState = FormFieldState(PaymentMethod.DebitCard),
                 validators = emptyList()
             ),
-            FormFieldInfo(
+            FormField(
                 id = KEY_SAVE_PAYMENT_METHOD_CHECKED,
                 initialState = FormFieldState(false),
                 validators = emptyList()

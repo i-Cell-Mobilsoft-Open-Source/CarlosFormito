@@ -3,7 +3,7 @@ package com.icell.external.carlosformito.core
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.core.api.FormFieldItemListener
 import com.icell.external.carlosformito.core.api.FormManager
-import com.icell.external.carlosformito.core.api.model.FormFieldInfo
+import com.icell.external.carlosformito.core.api.model.FormField
 import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FormManagerImpl(
-    private val formFields: List<FormFieldInfo<*>>,
+    private val formFields: List<FormField<*>>,
     private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL
 ) : FormManager, FormFieldItemListener {
 
@@ -42,7 +42,7 @@ class FormManagerImpl(
         checkAllRequiredFieldFilled()
     }
 
-    private fun <T> createFieldItem(formField: FormFieldInfo<T>): FormFieldItem<T> {
+    private fun <T> createFieldItem(formField: FormField<T>): FormFieldItem<T> {
         val fieldItem = FormFieldItemImpl(
             fieldId = formField.id,
             fieldState = getFieldStateFlow<T>(formField.id)
@@ -80,7 +80,7 @@ class FormManagerImpl(
         }
     }
 
-    private fun List<FormFieldInfo<*>>.filterRequiredFields(): List<FormFieldInfo<*>> {
+    private fun List<FormField<*>>.filterRequiredFields(): List<FormField<*>> {
         return filter { formField ->
             formField.validators.any { validator -> validator is RequiresFieldValue }
         }

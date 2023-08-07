@@ -1,6 +1,6 @@
 package com.icell.external.carlosformito.ui.fieldsamples
 
-import com.icell.external.carlosformito.core.api.model.FormFieldInfo
+import com.icell.external.carlosformito.core.api.model.FormField
 import com.icell.external.carlosformito.ui.validator.DateMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.IntegerMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.TextMinLengthValidator
@@ -14,22 +14,22 @@ object SamplesFormFields {
     const val KEY_FORM_FIELD_SIZE = "KEY_FORM_FIELD_SIZE"
     const val KEY_FORM_FIELD_SECRET = "KEY_FORM_FIELD_SECRET"
 
-    fun build(): List<FormFieldInfo<*>> {
+    fun build(): List<FormField<*>> {
         return listOf(
-            FormFieldInfo(
+            FormField(
                 id = KEY_FORM_FIELD_NAME,
                 validators = listOf(
                     ValueRequiredValidator(),
                     TextMinLengthValidator(minLength = 3)
                 )
             ),
-            FormFieldInfo(
+            FormField(
                 id = KEY_FORM_FIELD_SECRET,
                 validators = listOf(
                     TextMinLengthValidator(minLength = 8)
                 )
             ),
-            FormFieldInfo(
+            FormField(
                 id = KEY_FORM_FIELD_DATE,
                 validators = listOf(
                     ValueRequiredValidator(),
@@ -39,7 +39,7 @@ object SamplesFormFields {
                     )
                 )
             ),
-            FormFieldInfo(
+            FormField(
                 id = KEY_FORM_FIELD_SIZE,
                 validators = listOf(
                     IntegerMinMaxValidator(

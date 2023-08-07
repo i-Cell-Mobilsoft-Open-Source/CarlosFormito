@@ -4,13 +4,13 @@ import androidx.annotation.StringRes
 
 sealed interface FormFieldValidationResult {
 
-    object Valid : FormFieldValidationResult
+    data object Valid : FormFieldValidationResult
 
     sealed class Invalid(
         @StringRes open val errorMessageId: Int? = null
     ) : FormFieldValidationResult {
 
-        object Unknown : Invalid()
+        data object Unknown : Invalid()
 
         data class Message(
             @StringRes override val errorMessageId: Int
