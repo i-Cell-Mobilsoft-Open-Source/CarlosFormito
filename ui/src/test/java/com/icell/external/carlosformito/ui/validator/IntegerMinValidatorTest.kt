@@ -5,12 +5,13 @@ import com.google.common.truth.Truth.assertWithMessage
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.validator.util.ValidatorTestUtils.isValidationResultInvalid
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class IntegerMinValidatorTest {
 
     @Test
-    fun `validate null input`() {
+    fun `validate null input`() = runTest {
         val validator = IntegerMinValidator(5)
         val validationResult = validator.validate(null)
 
@@ -18,7 +19,7 @@ class IntegerMinValidatorTest {
     }
 
     @Test
-    fun `validate input below min value`() {
+    fun `validate input below min value`() = runTest {
         val validator = IntegerMinValidator(5)
         val validationResult = validator.validate(3)
 
@@ -26,7 +27,7 @@ class IntegerMinValidatorTest {
     }
 
     @Test
-    fun `validate input equal to min value`() {
+    fun `validate input equal to min value`() = runTest {
         val validator = IntegerMinValidator(5)
         val validationResult = validator.validate(5)
 
@@ -34,7 +35,7 @@ class IntegerMinValidatorTest {
     }
 
     @Test
-    fun `validate input above min value`() {
+    fun `validate input above min value`() = runTest {
         val validator = IntegerMinValidator(5)
         val validationResult = validator.validate(7)
 
@@ -42,7 +43,7 @@ class IntegerMinValidatorTest {
     }
 
     @Test
-    fun `test invalid input returns custom error message`() {
+    fun `test invalid input returns custom error message`() = runTest {
         val minValue = 5
         val validator = IntegerMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(3)
@@ -56,7 +57,7 @@ class IntegerMinValidatorTest {
     }
 
     @Test
-    fun `test invalid input returns error message args`() {
+    fun `test invalid input returns error message args`() = runTest {
         val minValue = 5
         val validator = IntegerMinValidator(minValue)
         val validationResult = validator.validate(3)

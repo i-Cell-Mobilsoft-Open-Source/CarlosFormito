@@ -5,13 +5,14 @@ import com.google.common.truth.Truth.assertWithMessage
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.validator.util.ValidatorTestUtils.isValidationResultInvalid
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.LocalDate
 
 class ValueRequiredValidatorTest {
 
     @Test
-    fun `validate null input`() {
+    fun `validate null input`() = runTest {
         val validator = ValueRequiredValidator<String>()
         val validatorResult = validator.validate(null)
 
@@ -19,7 +20,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `validate empty string input`() {
+    fun `validate empty string input`() = runTest {
         val validator = ValueRequiredValidator<String>()
         val validatorResult = validator.validate("")
 
@@ -27,7 +28,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `validate blank string input`() {
+    fun `validate blank string input`() = runTest {
         val validator = ValueRequiredValidator<String>()
         val validatorResult = validator.validate("     ")
 
@@ -35,7 +36,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `validate multiline blank string input`() {
+    fun `validate multiline blank string input`() = runTest {
         val validator = ValueRequiredValidator<String>()
         val validatorResult = validator.validate(
             """
@@ -49,7 +50,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `validate simple string input`() {
+    fun `validate simple string input`() = runTest {
         val validator = ValueRequiredValidator<String>()
         val validatorResult = validator.validate("text")
 
@@ -57,7 +58,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `validate multiline string input`() {
+    fun `validate multiline string input`() = runTest {
         val validator = ValueRequiredValidator<String>()
         val validatorResult = validator.validate(
             """
@@ -72,7 +73,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `validate Integer input`() {
+    fun `validate Integer input`() = runTest {
         val validator = ValueRequiredValidator<Int>()
         val validatorResult = validator.validate(Int.MAX_VALUE)
 
@@ -80,7 +81,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `validate LocalDate input`() {
+    fun `validate LocalDate input`() = runTest {
         val validator = ValueRequiredValidator<LocalDate>()
         val validatorResult = validator.validate(LocalDate.MIN)
 
@@ -88,7 +89,7 @@ class ValueRequiredValidatorTest {
     }
 
     @Test
-    fun `test invalid input returns custom error message`() {
+    fun `test invalid input returns custom error message`() = runTest {
         val validator = ValueRequiredValidator<Any>(R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(null)
 

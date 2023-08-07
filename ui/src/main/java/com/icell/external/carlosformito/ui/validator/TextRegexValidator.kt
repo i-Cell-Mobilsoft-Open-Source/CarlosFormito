@@ -11,7 +11,7 @@ class TextRegexValidator(
     private val errorMessageId: Int = R.string.carlos_lbl_validator_validator_value_invalid_format
 ) : FormFieldValidator<String> {
 
-    override fun validate(value: String?): FormFieldValidationResult {
+    override suspend fun validate(value: String?): FormFieldValidationResult {
         if (!pattern.toRegex().matches(value ?: "")) {
             return FormFieldValidationResult.Invalid.Message(errorMessageId)
         }

@@ -20,7 +20,7 @@ class TextMinLengthValidator(
         }
     }
 
-    override fun validate(value: String?): FormFieldValidationResult {
+    override suspend fun validate(value: String?): FormFieldValidationResult {
         return if ((value ?: "").length < minLength) {
             FormFieldValidationResult.Invalid.MessageWithArgs(
                 errorMessageId,

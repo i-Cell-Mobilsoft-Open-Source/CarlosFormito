@@ -15,7 +15,7 @@ class ValidityStartValidator(
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm")
 
-    override fun validate(value: ValidityStart?): FormFieldValidationResult {
+    override suspend fun validate(value: ValidityStart?): FormFieldValidationResult {
         value?.let {
             val nonNullDate = value.date ?: return FormFieldValidationResult.Invalid.Message(
                 R.string.validity_start_missing_date

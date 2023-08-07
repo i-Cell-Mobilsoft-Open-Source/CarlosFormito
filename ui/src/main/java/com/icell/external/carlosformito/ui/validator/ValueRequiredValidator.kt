@@ -11,7 +11,7 @@ class ValueRequiredValidator<T>(
     private val errorMessageId: Int = R.string.carlos_lbl_validator_validator_value_required
 ) : FormFieldValidator<T>, RequiresFieldValue {
 
-    override fun validate(value: T?): FormFieldValidationResult {
+    override suspend fun validate(value: T?): FormFieldValidationResult {
         return if (value == null || value is String && value.isBlank()) {
             FormFieldValidationResult.Invalid.Message(errorMessageId)
         } else {

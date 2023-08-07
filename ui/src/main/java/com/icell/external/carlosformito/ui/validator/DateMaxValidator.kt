@@ -11,7 +11,7 @@ class DateMaxValidator(
     @StringRes private val errorMessageId: Int = R.string.carlos_lbl_validator_date_max_error
 ) : FormFieldValidator<LocalDate> {
 
-    override fun validate(value: LocalDate?): FormFieldValidationResult {
+    override suspend fun validate(value: LocalDate?): FormFieldValidationResult {
         value?.let {
             if (value.isAfter(maxValue)) {
                 return FormFieldValidationResult.Invalid.MessageWithArgs(

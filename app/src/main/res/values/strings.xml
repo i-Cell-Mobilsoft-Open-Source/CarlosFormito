@@ -4,5 +4,6 @@
     <string name="validity_start_missing_date">Date is required!</string>
     <string name="validity_start_missing_time">Time is required!</string>
     <string name="validity_start_out_of_range">Must be a date time between: %1$s and %2$s</string>
+    <string name="email_not_unique_error">The email you entered is already taken.</string>
 
 </resources>

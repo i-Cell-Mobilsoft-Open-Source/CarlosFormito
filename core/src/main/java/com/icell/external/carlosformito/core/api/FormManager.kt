@@ -8,7 +8,7 @@ interface FormManager {
 
     fun <T> getFieldItem(id: String): FormFieldItem<T>
 
-    fun validateForm(): Boolean
+    suspend fun validateForm(): Boolean
 
     fun setFormInvalid()
 }

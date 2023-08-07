@@ -1,13 +1,17 @@
 package com.icell.external.carlosformito.ui.custom
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.icell.external.carlosformito.core.FormManagerViewModel
+import kotlinx.coroutines.launch
 
 class CustomFormViewModel : FormManagerViewModel(CustomFormFields.build()) {
 
     fun submit() {
-        if (validateForm()) {
-            Log.i("CustomFormViewModel", "Form is valid")
+        viewModelScope.launch {
+            if (validateForm()) {
+                Log.i("CustomFormViewModel", "Form is valid")
+            }
         }
     }
 }
