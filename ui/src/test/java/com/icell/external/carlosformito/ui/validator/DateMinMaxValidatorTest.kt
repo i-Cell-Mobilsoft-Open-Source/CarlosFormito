@@ -5,13 +5,14 @@ import com.google.common.truth.Truth.assertWithMessage
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.validator.util.ValidatorTestUtils.isValidationResultInvalid
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.LocalDate
 
 class DateMinMaxValidatorTest {
 
     @Test
-    fun `validate null input`() {
+    fun `validate null input`() = runTest {
         val minValue = LocalDate.MIN
         val maxValue = LocalDate.MIN.plusDays(1)
 
@@ -22,7 +23,7 @@ class DateMinMaxValidatorTest {
     }
 
     @Test
-    fun `validate date before min value`() {
+    fun `validate date before min value`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
         val maxValue = LocalDate.of(2023, 12, 31)
         val testValue = minValue.minusDays(1)
@@ -34,7 +35,7 @@ class DateMinMaxValidatorTest {
     }
 
     @Test
-    fun `validate date after max value`() {
+    fun `validate date after max value`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
         val maxValue = LocalDate.of(2023, 12, 31)
         val testValue = maxValue.plusDays(1)
@@ -46,12 +47,13 @@ class DateMinMaxValidatorTest {
     }
 
     @Test
-    fun `test invalid input returns custom error message`() {
+    fun `test invalid input returns custom error message`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
         val maxValue = LocalDate.of(2023, 12, 31)
         val testValue = maxValue.plusDays(1)
 
-        val validator = DateMinMaxValidator(minValue, maxValue, R.string.carlos_lbl_test_invalid_input)
+        val validator =
+            DateMinMaxValidator(minValue, maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(testValue)
 
         assertThat(validationResult)
@@ -63,7 +65,7 @@ class DateMinMaxValidatorTest {
     }
 
     @Test
-    fun `test invalid input returns error message args`() {
+    fun `test invalid input returns error message args`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
         val maxValue = LocalDate.of(2023, 12, 31)
         val testValue = maxValue.plusDays(1)
@@ -80,7 +82,7 @@ class DateMinMaxValidatorTest {
     }
 
     @Test
-    fun `validate date within the valid range`() {
+    fun `validate date within the valid range`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
         val maxValue = LocalDate.of(2023, 12, 31)
         val testValue = LocalDate.of(2023, 6, 1)
@@ -91,7 +93,7 @@ class DateMinMaxValidatorTest {
     }
 
     @Test
-    fun `validate date equal to min value`() {
+    fun `validate date equal to min value`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
         val maxValue = LocalDate.of(2023, 12, 31)
         val validator = DateMinMaxValidator(minValue, maxValue)
@@ -101,7 +103,7 @@ class DateMinMaxValidatorTest {
     }
 
     @Test
-    fun `validate date equal to max value`() {
+    fun `validate date equal to max value`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
         val maxValue = LocalDate.of(2023, 12, 31)
         val validator = DateMinMaxValidator(minValue, maxValue)

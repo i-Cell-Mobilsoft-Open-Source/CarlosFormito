@@ -3,12 +3,13 @@ package com.icell.external.carlosformito.ui.validator
 import com.google.common.truth.Truth.assertThat
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.ui.validator.util.ValidatorTestUtils.isValidationResultInvalid
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class TextMinLengthValidatorTest {
 
     @Test
-    fun `validate null input`() {
+    fun `validate null input`() = runTest {
         val validator = TextMinLengthValidator(1)
         val validationResult = validator.validate(null)
 
@@ -16,7 +17,7 @@ class TextMinLengthValidatorTest {
     }
 
     @Test
-    fun `validate empty input`() {
+    fun `validate empty input`() = runTest {
         val validator = TextMinLengthValidator(1)
         val validationResult = validator.validate("")
 
@@ -29,7 +30,7 @@ class TextMinLengthValidatorTest {
     }
 
     @Test
-    fun `validate blank input`() {
+    fun `validate blank input`() = runTest {
         val validator = TextMinLengthValidator(1)
         val validationResult = validator.validate("")
 
@@ -37,7 +38,7 @@ class TextMinLengthValidatorTest {
     }
 
     @Test
-    fun `validate input length below min length`() {
+    fun `validate input length below min length`() = runTest {
         val validator = TextMinLengthValidator(5)
         val validationResult = validator.validate("abcd")
 
@@ -45,7 +46,7 @@ class TextMinLengthValidatorTest {
     }
 
     @Test
-    fun `validate input length equal to min length`() {
+    fun `validate input length equal to min length`() = runTest {
         val validator = TextMinLengthValidator(5)
         val validationResult = validator.validate("abcde")
 
@@ -53,7 +54,7 @@ class TextMinLengthValidatorTest {
     }
 
     @Test
-    fun `validate input length above min length`() {
+    fun `validate input length above min length`() = runTest {
         val validator = TextMinLengthValidator(5)
         val validationResult = validator.validate("abcdef")
 

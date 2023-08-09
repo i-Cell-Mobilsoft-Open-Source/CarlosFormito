@@ -10,7 +10,7 @@ class IntegerMinValidator(
     @StringRes private val errorMessageId: Int = R.string.carlos_lbl_validator_integer_min_error
 ) : FormFieldValidator<Int> {
 
-    override fun validate(value: Int?): FormFieldValidationResult {
+    override suspend fun validate(value: Int?): FormFieldValidationResult {
         value?.let {
             if (value < minValue) {
                 return FormFieldValidationResult.Invalid.MessageWithArgs(

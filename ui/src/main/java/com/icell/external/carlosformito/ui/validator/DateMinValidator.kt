@@ -11,7 +11,7 @@ class DateMinValidator(
     @StringRes private val errorMessageId: Int = R.string.carlos_lbl_validator_date_min_error
 ) : FormFieldValidator<LocalDate> {
 
-    override fun validate(value: LocalDate?): FormFieldValidationResult {
+    override suspend fun validate(value: LocalDate?): FormFieldValidationResult {
         value?.let {
             if (value.isBefore(minValue)) {
                 return FormFieldValidationResult.Invalid.MessageWithArgs(

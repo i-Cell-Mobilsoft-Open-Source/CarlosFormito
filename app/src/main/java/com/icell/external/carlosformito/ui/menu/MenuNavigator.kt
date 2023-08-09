@@ -10,6 +10,8 @@ import com.icell.external.carlosformito.ui.custom.CustomFormScreen
 import com.icell.external.carlosformito.ui.custom.CustomFormViewModel
 import com.icell.external.carlosformito.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormViewModel
+import com.icell.external.carlosformito.ui.longrunning.LongRunningValidationScreen
+import com.icell.external.carlosformito.ui.longrunning.LongRunningValidationViewModel
 
 @Composable
 fun MenuNavigator(
@@ -25,7 +27,10 @@ fun MenuNavigator(
                     navController.navigate(Route.FieldSamples.route)
                 },
                 onNavigateToCustomFormFields = {
-                    navController.navigate(Route.CustomFormFields.route)
+                    navController.navigate(Route.CustomFormFieldsSample.route)
+                },
+                onNavigateToLongRunningValidationSample = {
+                    navController.navigate(Route.LongRunningValidationSample.route)
                 }
             )
         }
@@ -39,10 +44,20 @@ fun MenuNavigator(
                 }
             )
         }
-        composable(Route.CustomFormFields.route) {
+        composable(Route.CustomFormFieldsSample.route) {
             val viewModel: CustomFormViewModel = viewModel()
 
             CustomFormScreen(
+                viewModel = viewModel,
+                onBackPressed = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable(Route.LongRunningValidationSample.route) {
+            val viewModel: LongRunningValidationViewModel = viewModel()
+
+            LongRunningValidationScreen(
                 viewModel = viewModel,
                 onBackPressed = {
                     navController.navigateUp()
@@ -58,5 +73,7 @@ sealed class Route(val route: String) {
 
     data object FieldSamples : Route("FieldSamples")
 
-    data object CustomFormFields : Route("CustomFormFields")
+    data object CustomFormFieldsSample : Route("CustomFormFieldsSample")
+
+    data object LongRunningValidationSample : Route("LongRunningValidationSample")
 }

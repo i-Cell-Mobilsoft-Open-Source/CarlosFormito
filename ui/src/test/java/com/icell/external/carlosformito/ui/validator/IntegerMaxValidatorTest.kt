@@ -5,12 +5,13 @@ import com.google.common.truth.Truth.assertWithMessage
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.validator.util.ValidatorTestUtils.isValidationResultInvalid
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class IntegerMaxValidatorTest {
 
     @Test
-    fun `validate null input`() {
+    fun `validate null input`() = runTest {
         val validator = IntegerMaxValidator(10)
         val validationResult = validator.validate(null)
 
@@ -18,7 +19,7 @@ class IntegerMaxValidatorTest {
     }
 
     @Test
-    fun `validate input above max value`() {
+    fun `validate input above max value`() = runTest {
         val validator = IntegerMaxValidator(10)
         val validationResult = validator.validate(15)
 
@@ -26,7 +27,7 @@ class IntegerMaxValidatorTest {
     }
 
     @Test
-    fun `validate input equal to max value`() {
+    fun `validate input equal to max value`() = runTest {
         val validator = IntegerMaxValidator(10)
         val validationResult = validator.validate(10)
 
@@ -34,7 +35,7 @@ class IntegerMaxValidatorTest {
     }
 
     @Test
-    fun `validate input below max value`() {
+    fun `validate input below max value`() = runTest {
         val validator = IntegerMaxValidator(10)
         val validationResult = validator.validate(7)
 
@@ -42,7 +43,7 @@ class IntegerMaxValidatorTest {
     }
 
     @Test
-    fun `test invalid input returns custom error message`() {
+    fun `test invalid input returns custom error message`() = runTest {
         val maxValue = 10
         val validator = IntegerMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(15)
@@ -56,7 +57,7 @@ class IntegerMaxValidatorTest {
     }
 
     @Test
-    fun `test invalid input returns error message args`() {
+    fun `test invalid input returns error message args`() = runTest {
         val maxValue = 10
         val validator = IntegerMaxValidator(maxValue)
         val validationResult = validator.validate(15)
