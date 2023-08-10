@@ -6,9 +6,11 @@ import com.icell.external.carlosformito.core.FormManagerViewModel
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.launch
 
-class SamplesFormViewModel : FormManagerViewModel(
+class SamplesFormViewModel(
+    validationStrategy: FormFieldValidationStrategy
+) : FormManagerViewModel(
     formFields = SamplesFormFields.build(),
-    validationStrategy = FormFieldValidationStrategy.ON_FOCUS_CLEAR
+    validationStrategy = validationStrategy
 ) {
     fun submit() {
         viewModelScope.launch {
