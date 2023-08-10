@@ -27,11 +27,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.ui.common.CarlosTopAppBar
+import com.icell.external.carlosformito.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.ui.custom.CustomFormFields.KEY_PAYMENT_METHOD_TYPE
 import com.icell.external.carlosformito.ui.custom.CustomFormFields.KEY_QUANTITY
 import com.icell.external.carlosformito.ui.custom.CustomFormFields.KEY_SAVE_PAYMENT_METHOD_CHECKED
 import com.icell.external.carlosformito.ui.custom.CustomFormFields.KEY_VALIDITY_START
-import com.icell.external.carlosformito.ui.custom.bottomsheet.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.ui.custom.fields.FormQuantityField
 import com.icell.external.carlosformito.ui.custom.fields.FormSelectionField
 import com.icell.external.carlosformito.ui.custom.fields.FormSwitchField
@@ -44,6 +44,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CustomFormScreen(
+    title: String,
     viewModel: CustomFormViewModel,
     onBackPressed: () -> Unit
 ) {
@@ -73,10 +74,7 @@ fun CustomFormScreen(
     ) {
         Scaffold(
             topBar = {
-                CarlosTopAppBar(
-                    title = "Custom form fields",
-                    onNavigationIconPressed = onBackPressed
-                )
+                CarlosTopAppBar(title, onBackPressed)
             }
         ) {
             Column(

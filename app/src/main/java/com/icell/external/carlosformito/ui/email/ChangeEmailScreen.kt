@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.longrunning
+package com.icell.external.carlosformito.ui.email
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -26,8 +26,9 @@ import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun LongRunningValidationScreen(
-    viewModel: LongRunningValidationViewModel,
+fun ChangeEmailScreen(
+    title: String,
+    viewModel: ChangeEmailViewModel,
     onBackPressed: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -47,10 +48,7 @@ fun LongRunningValidationScreen(
 
     Scaffold(
         topBar = {
-            CarlosTopAppBar(
-                title = "Change email address",
-                onNavigationIconPressed = onBackPressed
-            )
+            CarlosTopAppBar(title, onBackPressed)
         },
         scaffoldState = scaffoldState
     ) {
@@ -59,6 +57,12 @@ fun LongRunningValidationScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 24.dp)
         ) {
+            Text(
+                text = "Change your email",
+                style = MaterialTheme.typography.subtitle1
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = "Your current email address:",
                 style = MaterialTheme.typography.caption
@@ -77,7 +81,7 @@ fun LongRunningValidationScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             FormTextField(
-                fieldItem = viewModel.getFieldItem(LongRunningValidationFields.KEY_NEW_EMAIL),
+                fieldItem = viewModel.getFieldItem(ChangeEmailFields.KEY_NEW_EMAIL),
                 label = "New email*",
                 maxLength = 32,
                 supportingText = """

@@ -1,11 +1,11 @@
-package com.icell.external.carlosformito.ui.longrunning
+package com.icell.external.carlosformito.ui.email
 
 import com.icell.external.carlosformito.core.api.model.FormField
-import com.icell.external.carlosformito.ui.longrunning.validator.FakeEmailUniqueValidator
+import com.icell.external.carlosformito.ui.email.validator.FakeEmailUniqueValidator
 import com.icell.external.carlosformito.ui.validator.TextRegexValidator
 import com.icell.external.carlosformito.ui.validator.ValueRequiredValidator
 
-object LongRunningValidationFields {
+object ChangeEmailFields {
 
     const val KEY_NEW_EMAIL = "KEY_NEW_EMAIL"
     private const val EMAIL_REGEXP =

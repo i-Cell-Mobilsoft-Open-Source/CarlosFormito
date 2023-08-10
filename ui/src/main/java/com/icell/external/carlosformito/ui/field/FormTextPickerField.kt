@@ -5,7 +5,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.VisualTransformation
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.R
@@ -17,26 +16,28 @@ import com.icell.external.carlosformito.ui.util.extension.errorMessage
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 
 @Composable
-fun FormTextPickerField(
+fun <T> FormTextPickerField(
     modifier: Modifier = Modifier,
-    fieldItem: FormFieldItem<String>,
+    fieldItem: FormFieldItem<T>,
     label: String,
-    onClear: () -> Unit = {},
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     onClick: () -> Unit,
+    displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
-    supportingText: AnnotatedString? = null
+    supportingText: CharSequence? = null
 ) {
     val state by fieldItem.collectFieldState()
     FormTextPickerField(
         modifier = modifier,
         value = state.value,
         label = label,
-        onClear = onClear,
+        onClear = {
+            fieldItem.onFieldValueChanged(null)
+        },
         leadingContentType = leadingContentType,
         isError = state.isError,
         errorMessage = state.errorMessage(),
@@ -46,6 +47,7 @@ fun FormTextPickerField(
         onFocusCleared = {
             fieldItem.onFieldFocusCleared()
         },
+        displayedValue = displayedValue,
         visualTransformation = visualTransformation,
         colors = colors,
         contentDescription = contentDescription,
@@ -54,26 +56,27 @@ fun FormTextPickerField(
 }
 
 @Composable
-fun FormTextPickerField(
+fun <T> FormTextPickerField(
     modifier: Modifier = Modifier,
-    value: String?,
+    value: T?,
     label: String,
     onClear: () -> Unit = {},
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
-    errorMessage: String? = null,
+    errorMessage: CharSequence? = null,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     onClick: (() -> Unit),
     onFocusCleared: () -> Unit = {},
+    displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
-    supportingText: AnnotatedString? = null
+    supportingText: CharSequence? = null
 ) {
     BaseTextField(
         modifier = modifier.onFocusCleared(onFocusCleared),
-        value = value ?: "",
+        value = displayedValue(value),
         label = label,
         enabled = enabled,
         isError = isError,

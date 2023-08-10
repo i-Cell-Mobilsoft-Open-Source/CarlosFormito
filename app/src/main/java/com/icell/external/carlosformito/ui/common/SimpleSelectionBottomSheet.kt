@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.custom.bottomsheet
+package com.icell.external.carlosformito.ui.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.longrunning
+package com.icell.external.carlosformito.ui.email
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class LongRunningValidationViewModel : FormManagerViewModel(LongRunningValidationFields.build()) {
+class ChangeEmailViewModel : FormManagerViewModel(ChangeEmailFields.build()) {
 
     private val mutableCurrentEmail = MutableStateFlow<String?>(null)
     val currentEmail = mutableCurrentEmail.asStateFlow()
@@ -42,7 +42,7 @@ class LongRunningValidationViewModel : FormManagerViewModel(LongRunningValidatio
     fun submit() {
         viewModelScope.launch {
             if (validateForm()) {
-                Log.i("LongRunningValidationViewModel", "Form is valid")
+                Log.i("ChangeEmailViewModel", "Form is valid")
             }
         }
     }

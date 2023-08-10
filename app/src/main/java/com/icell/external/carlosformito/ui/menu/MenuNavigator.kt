@@ -8,10 +8,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.icell.external.carlosformito.ui.custom.CustomFormScreen
 import com.icell.external.carlosformito.ui.custom.CustomFormViewModel
+import com.icell.external.carlosformito.ui.email.ChangeEmailScreen
+import com.icell.external.carlosformito.ui.email.ChangeEmailViewModel
 import com.icell.external.carlosformito.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormViewModel
-import com.icell.external.carlosformito.ui.longrunning.LongRunningValidationScreen
-import com.icell.external.carlosformito.ui.longrunning.LongRunningValidationViewModel
 
 @Composable
 fun MenuNavigator(
@@ -26,7 +26,7 @@ fun MenuNavigator(
                 onNavigateToFieldSamples = {
                     navController.navigate(Route.FieldSamples.route)
                 },
-                onNavigateToCustomFormFields = {
+                onNavigateToCustomFormFieldsSample = {
                     navController.navigate(Route.CustomFormFieldsSample.route)
                 },
                 onNavigateToLongRunningValidationSample = {
@@ -38,6 +38,7 @@ fun MenuNavigator(
             val viewModel: SamplesFormViewModel = viewModel()
 
             SampleFormScreen(
+                title = "Built-in field samples",
                 viewModel = viewModel,
                 onBackPressed = {
                     navController.navigateUp()
@@ -48,6 +49,7 @@ fun MenuNavigator(
             val viewModel: CustomFormViewModel = viewModel()
 
             CustomFormScreen(
+                title = "Custom field samples",
                 viewModel = viewModel,
                 onBackPressed = {
                     navController.navigateUp()
@@ -55,9 +57,10 @@ fun MenuNavigator(
             )
         }
         composable(Route.LongRunningValidationSample.route) {
-            val viewModel: LongRunningValidationViewModel = viewModel()
+            val viewModel: ChangeEmailViewModel = viewModel()
 
-            LongRunningValidationScreen(
+            ChangeEmailScreen(
+                title = "Long running validation sample",
                 viewModel = viewModel,
                 onBackPressed = {
                     navController.navigateUp()

@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MenuScreen(
     onNavigateToFieldSamples: () -> Unit,
-    onNavigateToCustomFormFields: () -> Unit,
-    onNavigateToLongRunningValidationSample: () -> Unit
+    onNavigateToCustomFormFieldsSample: () -> Unit,
+    onNavigateToLongRunningValidationSample: () -> Unit,
 ) {
     Scaffold {
         Column(
@@ -53,11 +53,11 @@ fun MenuScreen(
                     .padding(vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                MenuListItem(title = "Form field samples") {
+                MenuListItem(title = "Built-in field samples") {
                     onNavigateToFieldSamples.invoke()
                 }
-                MenuListItem(title = "Custom form fields") {
-                    onNavigateToCustomFormFields.invoke()
+                MenuListItem(title = "Custom field samples") {
+                    onNavigateToCustomFormFieldsSample.invoke()
                 }
                 MenuListItem(title = "Long running validation sample") {
                     onNavigateToLongRunningValidationSample.invoke()

@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.longrunning.validator
+package com.icell.external.carlosformito.ui.email.validator
 
 import com.icell.external.carlosformito.R
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult

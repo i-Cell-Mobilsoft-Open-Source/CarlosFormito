@@ -1,6 +1,7 @@
 package com.icell.external.carlosformito.ui.fieldsamples
 
 import com.icell.external.carlosformito.core.api.model.FormField
+import com.icell.external.carlosformito.ui.fieldsamples.model.PackageType
 import com.icell.external.carlosformito.ui.validator.DateMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.IntegerMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.TextMinLengthValidator
@@ -13,6 +14,7 @@ object SamplesFormFields {
     const val KEY_FORM_FIELD_DATE = "KEY_FORM_FIELD_DATE"
     const val KEY_FORM_FIELD_SIZE = "KEY_FORM_FIELD_SIZE"
     const val KEY_FORM_FIELD_SECRET = "KEY_FORM_FIELD_SECRET"
+    const val KEY_FORM_FIELD_PACKAGE = "KEY_FORM_FIELD_PACKAGE"
 
     fun build(): List<FormField<*>> {
         return listOf(
@@ -46,6 +48,12 @@ object SamplesFormFields {
                         minValue = 100,
                         maxValue = 200
                     )
+                )
+            ),
+            FormField<PackageType>(
+                id = KEY_FORM_FIELD_PACKAGE,
+                validators = listOf(
+                    ValueRequiredValidator()
                 )
             )
         )
