@@ -176,11 +176,12 @@ open class FormManagerViewModel(
         return formFields.first { item -> item.id == id }.validators as List<FormFieldValidator<T>>
     }
 
-    override fun setFormInvalid() {
-        fieldStates.forEach { (_, fieldItemState) ->
-            fieldItemState.value = fieldItemState.value.copy(
-                validationResult = FormFieldValidationResult.Invalid.Unknown
-            )
-        }
+    override fun setFormInvalid(): Unit = fieldStates.keys.forEach { id ->
+        setFieldInvalid(id, FormFieldValidationResult.Invalid.Unknown)
+    }
+
+    override fun setFieldInvalid(id: String, invalidResult: FormFieldValidationResult.Invalid) {
+        val fieldItemState = fieldStates.getValue(id)
+        fieldItemState.value = fieldItemState.value.copy(validationResult = invalidResult)
     }
 }

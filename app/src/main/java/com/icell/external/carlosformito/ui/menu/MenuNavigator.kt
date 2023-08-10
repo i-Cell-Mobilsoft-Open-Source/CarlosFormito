@@ -17,6 +17,8 @@ import com.icell.external.carlosformito.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormViewModel
 import com.icell.external.carlosformito.ui.fieldsamples.util.SamplesFormViewModelFactory
 import com.icell.external.carlosformito.ui.menu.Route.Companion.KEY_ARG_VALIDATION_STRATEGY
+import com.icell.external.carlosformito.ui.password.SetPasswordScreen
+import com.icell.external.carlosformito.ui.password.SetPasswordViewModel
 
 @Composable
 fun MenuNavigator(
@@ -36,6 +38,9 @@ fun MenuNavigator(
                 },
                 onNavigateToLongRunningValidationSample = {
                     navController.navigate(Route.LongRunningValidationSample.route)
+                },
+                onNavigateToInterdependentFieldsSample = {
+                    navController.navigate(Route.InterdependentFieldsSample.route)
                 }
             )
         }
@@ -81,6 +86,17 @@ fun MenuNavigator(
                 }
             )
         }
+        composable(Route.InterdependentFieldsSample.route) {
+            val viewModel: SetPasswordViewModel = viewModel()
+
+            SetPasswordScreen(
+                title = "Interdependent fields sample",
+                viewModel = viewModel,
+                onBackPressed = {
+                    navController.navigateUp()
+                }
+            )
+        }
     }
 }
 
@@ -93,6 +109,8 @@ sealed class Route(val route: String) {
     data object CustomFormFieldsSample : Route("CustomFormFieldsSample")
 
     data object LongRunningValidationSample : Route("LongRunningValidationSample")
+
+    data object InterdependentFieldsSample : Route("InterdependentFieldsSample")
 
     companion object {
         const val KEY_FIELD_SAMPLES_ROOT = "FieldSamples"
