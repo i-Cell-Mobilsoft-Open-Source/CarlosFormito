@@ -9,33 +9,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
+import com.google.android.material.timepicker.TimeFormat
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
-import com.icell.external.carlosformito.ui.util.DatePickerBuilder
+import com.icell.external.carlosformito.ui.util.TimePickerBuilder
 import com.icell.external.carlosformito.ui.util.extension.collectFieldState
 import com.icell.external.carlosformito.ui.util.extension.errorMessage
 import com.icell.external.carlosformito.ui.util.extension.requireActivity
 import com.icell.external.carlosformito.ui.util.onFocusCleared
-import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun FormDateField(
+fun FormTimePickerField(
     modifier: Modifier = Modifier,
-    fieldItem: FormFieldItem<LocalDate>,
+    fieldItem: FormFieldItem<LocalTime>,
     label: String,
-    dateFormatter: DateTimeFormatter,
+    timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
     dialogTitle: String = label,
-    onDisplayedValueChange: (String) -> Unit = {},
-    minDate: LocalDate? = null,
-    maxDate: LocalDate? = null,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     onClick: (() -> Unit)? = null,
+    timeFormat: Int = TimeFormat.CLOCK_24H,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -44,11 +43,11 @@ fun FormDateField(
     supportingText: CharSequence? = null
 ) {
     val state by fieldItem.collectFieldState()
-    FormDateField(
+    FormTimePickerField(
         modifier = modifier,
         value = state.value,
         label = label,
-        dateFormatter = dateFormatter,
+        timeFormatter = timeFormatter,
         onValueChange = { value ->
             fieldItem.onFieldValueChanged(value)
         },
@@ -56,15 +55,13 @@ fun FormDateField(
             fieldItem.onFieldFocusCleared()
         },
         dialogTitle = dialogTitle,
-        onDisplayedValueChange = onDisplayedValueChange,
-        minDate = minDate,
-        maxDate = maxDate,
         leadingContentType = leadingContentType,
         isError = state.isError,
         errorMessage = state.errorMessage(),
         enabled = enabled,
         isClearable = isClearable,
         onClick = onClick,
+        timeFormat = timeFormat,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
@@ -75,16 +72,13 @@ fun FormDateField(
 }
 
 @Composable
-fun FormDateField(
+fun FormTimePickerField(
     modifier: Modifier = Modifier,
-    value: LocalDate?,
+    value: LocalTime?,
     label: String,
-    dateFormatter: DateTimeFormatter,
-    onValueChange: (LocalDate?) -> Unit,
+    timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
+    onValueChange: (LocalTime?) -> Unit,
     dialogTitle: String = label,
-    onDisplayedValueChange: (String) -> Unit = {},
-    minDate: LocalDate? = null,
-    maxDate: LocalDate? = null,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
     errorMessage: String? = null,
@@ -92,6 +86,7 @@ fun FormDateField(
     isClearable: Boolean = true,
     onClick: (() -> Unit)? = null,
     onFocusCleared: () -> Unit = {},
+    timeFormat: Int = TimeFormat.CLOCK_24H,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -102,7 +97,7 @@ fun FormDateField(
     val context = LocalContext.current
     BaseTextField(
         modifier = modifier.onFocusCleared(onFocusCleared),
-        value = value?.let { dateFormatter.format(value) } ?: "",
+        value = value?.let { timeFormatter.format(value) } ?: "",
         label = label,
         enabled = enabled,
         isError = isError,
@@ -112,7 +107,7 @@ fun FormDateField(
             value = if (isClearable && value != null) {
                 R.drawable.ic_close_simple
             } else {
-                R.drawable.ic_calendar
+                R.drawable.ic_schedule
             }
         ),
         leadingContentType = leadingContentType,
@@ -121,18 +116,19 @@ fun FormDateField(
         contentDescription = contentDescription,
         visualTransformation = visualTransformation,
         supportingText = supportingText,
-        onValueChange = onDisplayedValueChange,
+        onValueChange = {
+            // intentionally blank
+        },
         inputMode = TextFieldInputMode.Picker(
             onClick = onClick ?: {
-                DatePickerBuilder.build(
+                TimePickerBuilder.build(
                     dialogTitle = dialogTitle,
-                    minDate = minDate,
-                    maxDate = maxDate,
-                    selectedDate = value,
-                    onDateSelected = { selectedDate ->
+                    selectedTime = value,
+                    timeFormat = timeFormat,
+                    onTimeSelected = { selectedDate ->
                         onValueChange(selectedDate)
                     }
-                ).show(context.requireActivity().supportFragmentManager, "FormDatePickerField")
+                ).show(context.requireActivity().supportFragmentManager, "FormTimePickerField")
             },
             isClearable = isClearable,
             onClear = {

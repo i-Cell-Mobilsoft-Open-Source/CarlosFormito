@@ -5,13 +5,17 @@ import com.icell.external.carlosformito.ui.fieldsamples.model.PackageType
 import com.icell.external.carlosformito.ui.validator.DateMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.IntegerMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.TextMinLengthValidator
+import com.icell.external.carlosformito.ui.validator.TimeMinMaxValidator
 import com.icell.external.carlosformito.ui.validator.ValueRequiredValidator
 import java.time.LocalDate
+import java.time.LocalTime
 
+@Suppress("MagicNumber")
 object SamplesFormFields {
 
     const val KEY_FORM_FIELD_NAME = "KEY_FORM_FIELD_NAME"
     const val KEY_FORM_FIELD_DATE = "KEY_FORM_FIELD_DATE"
+    const val KEY_FORM_FIELD_TIME = "KEY_FORM_FIELD_TIME"
     const val KEY_FORM_FIELD_SIZE = "KEY_FORM_FIELD_SIZE"
     const val KEY_FORM_FIELD_SECRET = "KEY_FORM_FIELD_SECRET"
     const val KEY_FORM_FIELD_PACKAGE = "KEY_FORM_FIELD_PACKAGE"
@@ -38,6 +42,16 @@ object SamplesFormFields {
                     DateMinMaxValidator(
                         minValue = LocalDate.now(),
                         maxValue = LocalDate.now().plusWeeks(1)
+                    )
+                )
+            ),
+            FormField(
+                id = KEY_FORM_FIELD_TIME,
+                validators = listOf(
+                    ValueRequiredValidator(),
+                    TimeMinMaxValidator(
+                        minValue = LocalTime.NOON,
+                        maxValue = LocalTime.of(18, 0)
                     )
                 )
             ),

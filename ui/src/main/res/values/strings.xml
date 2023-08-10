@@ -4,10 +4,13 @@
     <string name="carlos_lbl_validator_validator_value_required">This field is required!</string>
     <string name="carlos_lbl_test_invalid_input">Invalid input!</string>
     <string name="carlos_lbl_validator_validator_value_invalid_format">Invalid format!</string>
-    <string name="carlos_lbl_validator_date_min_error">Must be a date after or equal to: %s</string>
-    <string name="carlos_lbl_validator_date_max_error">Must be a date before or equal to: %s</string>
-    <string name="carlos_lbl_validator_date_min_max_error">Must be a date between: %1$s and %2$s</string>
+    <string name="carlos_lbl_validator_date_min_error">Must be a date after or equal to: %s!</string>
+    <string name="carlos_lbl_validator_date_max_error">Must be a date before or equal to: %s!</string>
+    <string name="carlos_lbl_validator_date_min_max_error">Must be a date between: %1$s and %2$s!</string>
+    <string name="carlos_lbl_validator_time_min_error">Must be a time after or equal to: %s!</string>
+    <string name="carlos_lbl_validator_time_max_error">Must be a time before or equal to: %s!</string>
+    <string name="carlos_lbl_validator_time_min_max_error">Must be a time between: %1$s and %2$s!</string>
     <string name="carlos_lbl_validator_integer_min_error">Value must be greater than or equal to %d!</string>
     <string name="carlos_lbl_validator_integer_max_error">Value must be lesser than or equal to %d!</string>
-    <string name="carlos_lbl_validator_integer_min_max_error">Must be a decimal between: %1$d and %2$d</string>
+    <string name="carlos_lbl_validator_integer_min_max_error">Must be a decimal between: %1$d and %2$d!</string>
 </resources>

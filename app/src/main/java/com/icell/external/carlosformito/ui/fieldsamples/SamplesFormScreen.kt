@@ -24,16 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.ui.common.SimpleSelectionBottomSheet
-import com.icell.external.carlosformito.ui.field.FormDateField
+import com.icell.external.carlosformito.ui.field.FormDatePickerField
 import com.icell.external.carlosformito.ui.field.FormIntegerField
 import com.icell.external.carlosformito.ui.field.FormPasswordTextField
+import com.icell.external.carlosformito.ui.field.FormPickerField
 import com.icell.external.carlosformito.ui.field.FormTextField
-import com.icell.external.carlosformito.ui.field.FormTextPickerField
+import com.icell.external.carlosformito.ui.field.FormTimePickerField
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_DATE
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_NAME
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_PACKAGE
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_SECRET
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_SIZE
+import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_TIME
 import com.icell.external.carlosformito.ui.fieldsamples.model.PackageType
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
@@ -94,11 +96,17 @@ fun SampleFormScreen(
                     supportingText = "Please give a strong password (min 8 characters)."
                 )
 
-                FormDateField(
+                FormDatePickerField(
                     fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_DATE),
                     label = "Date*",
                     dateFormatter = DateTimeFormatter.ISO_DATE,
                     supportingText = "Please select a date from next week."
+                )
+
+                FormTimePickerField(
+                    fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_TIME),
+                    label = "Time*",
+                    supportingText = "Please choose a time between noon and 6 p.m."
                 )
 
                 FormIntegerField(
@@ -107,7 +115,7 @@ fun SampleFormScreen(
                     supportingText = "Please enter a value between 100 and 200."
                 )
 
-                FormTextPickerField(
+                FormPickerField(
                     fieldItem = packageFieldItem,
                     label = "Package type*",
                     supportingText = "Please pick a Package type.",
