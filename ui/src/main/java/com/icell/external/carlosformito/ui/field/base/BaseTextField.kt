@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.ui.theme.LocalCarlosColors
+import com.icell.external.carlosformito.ui.util.testId
 
 @Composable
 fun BaseTextField(
@@ -50,6 +51,7 @@ fun BaseTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
+    testTag: String? = null,
     onValueChange: (String) -> Unit,
     inputMode: TextFieldInputMode = TextFieldInputMode.Default
 ) {
@@ -77,6 +79,7 @@ fun BaseTextField(
         contentDescription = contentDescription,
         modifier = modifier.defaultMinSize(minHeight = 82.dp),
         supportingText = supportingText,
+        testTag = testTag,
         inputMode = inputMode
     )
 }
@@ -99,6 +102,7 @@ private fun BaseTextField(
     onValueChange: (TextFieldValue) -> Unit,
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
+    testTag: String? = null,
     inputMode: TextFieldInputMode = TextFieldInputMode.Default
 ) {
     val carlosColors = LocalCarlosColors.current
@@ -129,7 +133,13 @@ private fun BaseTextField(
     val textFieldFocusRequester = remember { FocusRequester() }
 
     BaseFieldFrame(
-        modifier = modifier,
+        modifier = modifier.then(
+            if (testTag != null) {
+                Modifier.testId("textField_$testTag")
+            } else {
+                Modifier
+            }
+        ),
         isError = isError,
         errorMessage = errorMessage,
         supportingText = supportingText
@@ -202,6 +212,7 @@ private fun BaseTextField(
                 colors = textFieldColors,
                 isError = isError,
                 modifier = Modifier
+                    .testId("textField")
                     .fillMaxWidth()
                     .focusRequester(textFieldFocusRequester)
                     .then(semanticsModifier)
@@ -210,6 +221,7 @@ private fun BaseTextField(
             if (inputMode is TextFieldInputMode.Picker) {
                 Box(
                     modifier = Modifier
+                        .testId("picker")
                         .matchParentSize()
                         .clickable(
                             enabled = enabled,
@@ -222,6 +234,7 @@ private fun BaseTextField(
                 if (inputMode.isClearable && value.text.isNotBlank()) {
                     Box(
                         modifier = Modifier
+                            .testId("clear")
                             .size(48.dp)
                             .align(Alignment.CenterEnd)
                             .clickable(

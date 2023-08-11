@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.ui.util.testId
 
 @Composable
 fun BaseFieldFrame(
@@ -25,6 +26,7 @@ fun BaseFieldFrame(
         AnimatedVisibility(visible = isError) {
             TextFieldError(
                 modifier = Modifier
+                    .testId("text_error")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 errorText = errorMessage ?: ""
@@ -33,6 +35,7 @@ fun BaseFieldFrame(
         if (supportingText != null) {
             TextFieldSupportingText(
                 modifier = Modifier
+                    .testId("text_supported")
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 12.dp)
                     .padding(horizontal = 16.dp),
