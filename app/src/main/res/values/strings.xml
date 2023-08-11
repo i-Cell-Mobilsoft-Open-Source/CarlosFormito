@@ -5,5 +5,9 @@
     <string name="validity_start_missing_time">Time is required!</string>
     <string name="validity_start_out_of_range">Must be a date time between: %1$s and %2$s!</string>
     <string name="email_not_unique_error">The email you entered is already taken!</string>
+    <string name="confirm_password_not_match_error">The two passwords does not match!</string>
+    <string name="password_not_contains_number_error">The password should contain a number!</string>
+    <string name="password_not_contains_special_char_error">The password should contain a special char!</string>
+    <string name="password_not_contains_uppercase_or_lowercase_error">The password should contain both uppercase and lowercase characters!</string>
 
 </resources>

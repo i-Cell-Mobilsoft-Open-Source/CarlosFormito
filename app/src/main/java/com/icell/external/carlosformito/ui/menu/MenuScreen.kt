@@ -41,6 +41,7 @@ fun MenuScreen(
     onNavigateToFieldSamples: (validationStrategy: FormFieldValidationStrategy) -> Unit,
     onNavigateToCustomFormFieldsSample: () -> Unit,
     onNavigateToLongRunningValidationSample: () -> Unit,
+    onNavigateToInterdependentFieldsSample: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val modalSheetState = rememberModalBottomSheetState(
@@ -129,6 +130,9 @@ fun MenuScreen(
                     MenuListItem(title = "Long running validation sample") {
                         onNavigateToLongRunningValidationSample.invoke()
                     }
+                }
+                MenuListItem(title = "Interdependent fields sample") {
+                    onNavigateToInterdependentFieldsSample.invoke()
                 }
             }
         }
