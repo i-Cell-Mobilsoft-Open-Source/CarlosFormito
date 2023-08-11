@@ -2,8 +2,6 @@ package com.icell.external.carlosformito.ui.field
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -29,7 +27,6 @@ fun FormIntegerField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null
 ) {
@@ -47,7 +44,6 @@ fun FormIntegerField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
-        colors = colors,
         contentDescription = contentDescription,
         supportingText = supportingText,
         onValueChange = { newValue ->
@@ -73,7 +69,6 @@ fun FormIntegerField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
     onValueChange: (Int?) -> Unit,
@@ -88,7 +83,6 @@ fun FormIntegerField(
         enabled = enabled,
         isError = isError,
         errorMessage = errorMessage,
-        colors = colors,
         trailingContentType = trailingContentType,
         leadingContentType = leadingContentType,
         keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Number),

@@ -2,8 +2,6 @@ package com.icell.external.carlosformito.ui.field
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -11,10 +9,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
 import com.google.android.material.timepicker.TimeFormat
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.TimePickerBuilder
 import com.icell.external.carlosformito.ui.util.extension.collectFieldState
 import com.icell.external.carlosformito.ui.util.extension.errorMessage
@@ -38,7 +36,6 @@ fun FormTimePickerField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null
 ) {
@@ -65,7 +62,6 @@ fun FormTimePickerField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
-        colors = colors,
         contentDescription = contentDescription,
         supportingText = supportingText
     )
@@ -90,11 +86,11 @@ fun FormTimePickerField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null
 ) {
     val context = LocalContext.current
+    val carlosIcons = LocalCarlosIcons.current
     BaseTextField(
         modifier = modifier.onFocusCleared(onFocusCleared),
         value = value?.let { timeFormatter.format(value) } ?: "",
@@ -102,12 +98,11 @@ fun FormTimePickerField(
         enabled = enabled,
         isError = isError,
         errorMessage = errorMessage,
-        colors = colors,
         trailingContentType = TextFieldAffixContentType.Icon(
             value = if (isClearable && value != null) {
-                R.drawable.ic_close_simple
+                carlosIcons.clear
             } else {
-                R.drawable.ic_schedule
+                carlosIcons.schedule
             }
         ),
         leadingContentType = leadingContentType,

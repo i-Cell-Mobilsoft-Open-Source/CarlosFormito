@@ -13,5 +13,5 @@ sealed class TextFieldAffixContentType {
         val onClick: () -> Unit = {}
     ) : TextFieldAffixContentType()
 
-    object None : TextFieldAffixContentType()
+    data object None : TextFieldAffixContentType()
 }

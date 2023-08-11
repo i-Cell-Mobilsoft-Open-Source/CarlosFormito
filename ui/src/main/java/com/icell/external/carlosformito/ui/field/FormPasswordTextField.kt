@@ -2,8 +2,6 @@ package com.icell.external.carlosformito.ui.field
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,9 +11,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
+import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.extension.collectFieldState
 import com.icell.external.carlosformito.ui.util.extension.errorMessage
 import com.icell.external.carlosformito.ui.util.focusStepper
@@ -31,7 +29,6 @@ fun FormPasswordTextField(
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null
 ) {
@@ -47,7 +44,6 @@ fun FormPasswordTextField(
         enabled = enabled,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        colors = colors,
         contentDescription = contentDescription,
         supportingText = supportingText,
         onValueChange = { value ->
@@ -71,12 +67,12 @@ fun FormPasswordTextField(
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
     onValueChange: (String) -> Unit,
     onFocusCleared: () -> Unit = {}
 ) {
+    val carlosIcons = LocalCarlosIcons.current
     val isPasswordVisible = rememberSaveable { mutableStateOf(false) }
 
     BaseTextField(
@@ -88,12 +84,11 @@ fun FormPasswordTextField(
         enabled = enabled,
         isError = isError,
         errorMessage = errorMessage,
-        colors = colors,
         trailingContentType = TextFieldAffixContentType.Icon(
             value = if (isPasswordVisible.value) {
-                R.drawable.ic_password_visible
+                carlosIcons.passwordVisible
             } else {
-                R.drawable.ic_password_invisible
+                carlosIcons.passwordInvisible
             },
             onClick = {
                 isPasswordVisible.value = !isPasswordVisible.value

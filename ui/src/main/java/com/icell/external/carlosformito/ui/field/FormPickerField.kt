@@ -1,16 +1,14 @@
 package com.icell.external.carlosformito.ui.field
 
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.VisualTransformation
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.ui.R
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.extension.collectFieldState
 import com.icell.external.carlosformito.ui.util.extension.errorMessage
 import com.icell.external.carlosformito.ui.util.onFocusCleared
@@ -26,7 +24,6 @@ fun <T> FormPickerField(
     onClick: () -> Unit,
     displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null
 ) {
@@ -49,7 +46,6 @@ fun <T> FormPickerField(
         },
         displayedValue = displayedValue,
         visualTransformation = visualTransformation,
-        colors = colors,
         contentDescription = contentDescription,
         supportingText = supportingText
     )
@@ -70,10 +66,10 @@ fun <T> FormPickerField(
     onFocusCleared: () -> Unit = {},
     displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     contentDescription: String? = null,
     supportingText: CharSequence? = null
 ) {
+    val carlosIcons = LocalCarlosIcons.current
     BaseTextField(
         modifier = modifier.onFocusCleared(onFocusCleared),
         value = displayedValue(value),
@@ -81,12 +77,11 @@ fun <T> FormPickerField(
         enabled = enabled,
         isError = isError,
         errorMessage = errorMessage,
-        colors = colors,
         trailingContentType = TextFieldAffixContentType.Icon(
             value = if (isClearable && value != null) {
-                R.drawable.ic_close_simple
+                carlosIcons.clear
             } else {
-                R.drawable.ic_arrow_drop_down
+                carlosIcons.arrowDropDown
             }
         ),
         leadingContentType = leadingContentType,
