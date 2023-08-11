@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,8 +27,7 @@ fun BaseFieldFrame(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                errorText = errorMessage ?: "",
-                textColor = MaterialTheme.colors.error
+                errorText = errorMessage ?: ""
             )
         }
         if (supportingText != null) {
@@ -40,8 +36,7 @@ fun BaseFieldFrame(
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 12.dp)
                     .padding(horizontal = 16.dp),
-                supportingText = supportingText,
-                textColor = LocalContentColor.current.copy(LocalContentAlpha.current)
+                supportingText = supportingText
             )
         }
     }
