@@ -7,6 +7,8 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 private val darkColorPalette = darkColors(
     primary = Purple200,
@@ -36,10 +38,14 @@ fun CarlosTheme(
     }
 
     /**
-     * Here you can define your custom colors and icons used by built-in field types
+     * Here you can define your custom colors, icons and formats used by built-in field types
      */
     CompositionLocalProvider(
         LocalCarlosColors provides CarlosColors(),
+        LocalCarlosFormats provides CarlosFormattingDefaults(
+            dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG),
+            timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+        ),
         LocalCarlosIcons provides DefaultOutlinedCarlosIcons
     ) {
         MaterialTheme(

@@ -11,6 +11,7 @@ import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.DatePickerBuilder
 import com.icell.external.carlosformito.ui.util.extension.collectFieldState
@@ -25,7 +26,7 @@ fun FormDatePickerField(
     modifier: Modifier = Modifier,
     fieldItem: FormFieldItem<LocalDate>,
     label: String,
-    dateFormatter: DateTimeFormatter,
+    dateFormatter: DateTimeFormatter = LocalCarlosFormats.current.dateFormatter,
     dialogTitle: String = label,
     minDate: LocalDate? = null,
     maxDate: LocalDate? = null,
@@ -73,7 +74,7 @@ fun FormDatePickerField(
     modifier: Modifier = Modifier,
     value: LocalDate?,
     label: String,
-    dateFormatter: DateTimeFormatter,
+    dateFormatter: DateTimeFormatter = LocalCarlosFormats.current.dateFormatter,
     onValueChange: (LocalDate?) -> Unit,
     dialogTitle: String = label,
     minDate: LocalDate? = null,

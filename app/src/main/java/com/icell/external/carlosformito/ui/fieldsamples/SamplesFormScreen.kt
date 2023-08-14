@@ -38,7 +38,6 @@ import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FO
 import com.icell.external.carlosformito.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_TIME
 import com.icell.external.carlosformito.ui.fieldsamples.model.PackageType
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -99,7 +98,6 @@ fun SampleFormScreen(
                 FormDatePickerField(
                     fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_DATE),
                     label = "Date*",
-                    dateFormatter = DateTimeFormatter.ISO_DATE,
                     supportingText = "Please select a date from next week."
                 )
 

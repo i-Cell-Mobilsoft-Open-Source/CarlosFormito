@@ -7,11 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
-import com.google.android.material.timepicker.TimeFormat
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.TimePickerBuilder
 import com.icell.external.carlosformito.ui.util.extension.collectFieldState
@@ -26,13 +26,13 @@ fun FormTimePickerField(
     modifier: Modifier = Modifier,
     fieldItem: FormFieldItem<LocalTime>,
     label: String,
-    timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
+    timeFormatter: DateTimeFormatter = LocalCarlosFormats.current.timeFormatter,
     dialogTitle: String = label,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     onClick: (() -> Unit)? = null,
-    timeFormat: Int = TimeFormat.CLOCK_24H,
+    timeFormat: Int = LocalCarlosFormats.current.timeFormat,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -72,7 +72,7 @@ fun FormTimePickerField(
     modifier: Modifier = Modifier,
     value: LocalTime?,
     label: String,
-    timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
+    timeFormatter: DateTimeFormatter = LocalCarlosFormats.current.timeFormatter,
     onValueChange: (LocalTime?) -> Unit,
     dialogTitle: String = label,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
@@ -82,7 +82,7 @@ fun FormTimePickerField(
     isClearable: Boolean = true,
     onClick: (() -> Unit)? = null,
     onFocusCleared: () -> Unit = {},
-    timeFormat: Int = TimeFormat.CLOCK_24H,
+    timeFormat: Int = LocalCarlosFormats.current.timeFormat,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
