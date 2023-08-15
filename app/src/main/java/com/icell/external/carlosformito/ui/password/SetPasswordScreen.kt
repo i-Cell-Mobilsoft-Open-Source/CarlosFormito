@@ -16,12 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.R
 import com.icell.external.carlosformito.ui.common.CarlosTopAppBar
-import com.icell.external.carlosformito.ui.field.FormTextField
+import com.icell.external.carlosformito.ui.field.FormPasswordTextField
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_PASSWORD
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_PASSWORD_MAX_LENGTH
+import com.icell.external.carlosformito.ui.util.extension.collectFieldState
+import com.icell.external.carlosformito.ui.util.extension.errorMessage
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -47,7 +51,7 @@ fun SetPasswordScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            FormTextField(
+            FormPasswordTextField(
                 fieldItem = viewModel.getFieldItem(KEY_PASSWORD),
                 label = "Password*",
                 maxLength = KEY_PASSWORD_MAX_LENGTH,
@@ -59,10 +63,26 @@ fun SetPasswordScreen(
                 """.trimIndent()
             )
 
-            FormTextField(
-                fieldItem = viewModel.getFieldItem(KEY_CONFIRM_PASSWORD),
+            val confirmPasswordItem = viewModel.getFieldItem<String>(KEY_CONFIRM_PASSWORD)
+            val confirmPasswordState by confirmPasswordItem.collectFieldState()
+            val passwordMatchError by viewModel.passwordMatchError.collectAsState()
+
+            FormPasswordTextField(
+                value = confirmPasswordState.value,
+                isError = confirmPasswordState.isError || passwordMatchError,
+                errorMessage = if (passwordMatchError) {
+                    stringResource(id = R.string.confirm_password_not_match_error)
+                } else {
+                    confirmPasswordState.errorMessage()
+                },
                 label = "Confirm password*",
-                maxLength = KEY_PASSWORD_MAX_LENGTH
+                maxLength = KEY_PASSWORD_MAX_LENGTH,
+                onValueChange = { value ->
+                    confirmPasswordItem.onFieldValueChanged(value)
+                },
+                onFocusCleared = {
+                    confirmPasswordItem.onFieldFocusCleared()
+                }
             )
 
             val allRequiredFieldFilled by viewModel.allRequiredFieldFilled.collectAsState()
