@@ -10,3 +10,8 @@
 .cxx
 local.properties
 github.properties
+signing.properties
+*.jks
+*.keystore
+/release
+/app/release
