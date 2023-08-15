@@ -28,6 +28,7 @@ fun FormTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
+    testTag: String? = null,
     inputPattern: String? = null,
     textChanger: ((String) -> String)? = null
 ) {
@@ -47,6 +48,7 @@ fun FormTextField(
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = { value ->
             fieldItem.onFieldValueChanged(value)
         },
@@ -74,6 +76,7 @@ fun FormTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
+    testTag: String? = null,
     onValueChange: (String) -> Unit,
     onFocusCleared: () -> Unit = {},
     inputPattern: String? = null,
@@ -95,6 +98,7 @@ fun FormTextField(
         contentDescription = contentDescription,
         visualTransformation = visualTransformation,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = { newValue ->
             val changedText: String = textChanger?.invoke(newValue) ?: newValue
             if (maxLength != null && changedText.length > maxLength) {

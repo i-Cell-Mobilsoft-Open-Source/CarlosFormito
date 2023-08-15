@@ -30,7 +30,8 @@ fun FormPasswordTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
     FormPasswordTextField(
@@ -46,6 +47,7 @@ fun FormPasswordTextField(
         keyboardActions = keyboardActions,
         contentDescription = contentDescription,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = { value ->
             fieldItem.onFieldValueChanged(value)
         },
@@ -69,6 +71,7 @@ fun FormPasswordTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
+    testTag: String? = null,
     onValueChange: (String) -> Unit,
     onFocusCleared: () -> Unit = {}
 ) {
@@ -104,6 +107,7 @@ fun FormPasswordTextField(
             PasswordVisualTransformation()
         },
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = { newValue ->
             if (maxLength != null && newValue.length > maxLength) {
                 return@BaseTextField

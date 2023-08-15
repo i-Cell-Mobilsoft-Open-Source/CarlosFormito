@@ -38,7 +38,8 @@ fun FormDatePickerField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
     FormDatePickerField(
@@ -65,7 +66,8 @@ fun FormDatePickerField(
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = supportingText
+        supportingText = supportingText,
+        testTag = testTag
     )
 }
 
@@ -90,7 +92,8 @@ fun FormDatePickerField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val context = LocalContext.current
     val carlosIcons = LocalCarlosIcons.current
@@ -114,6 +117,7 @@ fun FormDatePickerField(
         contentDescription = contentDescription,
         visualTransformation = visualTransformation,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = {
             // intentionally blank
         },

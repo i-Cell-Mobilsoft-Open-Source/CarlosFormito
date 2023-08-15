@@ -28,7 +28,8 @@ fun FormIntegerField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
     FormIntegerField(
@@ -46,6 +47,7 @@ fun FormIntegerField(
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = { newValue ->
             fieldItem.onFieldValueChanged(newValue)
         },
@@ -71,6 +73,7 @@ fun FormIntegerField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
     supportingText: CharSequence? = null,
+    testTag: String? = null,
     onValueChange: (Int?) -> Unit,
     onFocusCleared: () -> Unit = {}
 ) {
@@ -90,6 +93,7 @@ fun FormIntegerField(
         contentDescription = contentDescription,
         visualTransformation = visualTransformation,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = { newValue ->
             if (newValue.isBlank()) {
                 onValueChange(null)

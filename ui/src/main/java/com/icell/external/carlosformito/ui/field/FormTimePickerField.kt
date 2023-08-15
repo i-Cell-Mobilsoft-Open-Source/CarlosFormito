@@ -37,7 +37,8 @@ fun FormTimePickerField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
     FormTimePickerField(
@@ -63,7 +64,8 @@ fun FormTimePickerField(
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = supportingText
+        supportingText = supportingText,
+        testTag = testTag
     )
 }
 
@@ -87,7 +89,8 @@ fun FormTimePickerField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val context = LocalContext.current
     val carlosIcons = LocalCarlosIcons.current
@@ -111,6 +114,7 @@ fun FormTimePickerField(
         contentDescription = contentDescription,
         visualTransformation = visualTransformation,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = {
             // intentionally blank
         },

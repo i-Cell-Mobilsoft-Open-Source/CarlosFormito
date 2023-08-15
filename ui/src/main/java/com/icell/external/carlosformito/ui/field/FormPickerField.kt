@@ -25,7 +25,8 @@ fun <T> FormPickerField(
     displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
     FormPickerField(
@@ -47,7 +48,8 @@ fun <T> FormPickerField(
         displayedValue = displayedValue,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = supportingText
+        supportingText = supportingText,
+        testTag = testTag
     )
 }
 
@@ -67,7 +69,8 @@ fun <T> FormPickerField(
     displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
-    supportingText: CharSequence? = null
+    supportingText: CharSequence? = null,
+    testTag: String? = null
 ) {
     val carlosIcons = LocalCarlosIcons.current
     BaseTextField(
@@ -88,6 +91,7 @@ fun <T> FormPickerField(
         contentDescription = contentDescription,
         visualTransformation = visualTransformation,
         supportingText = supportingText,
+        testTag = testTag,
         onValueChange = {
             // intentionally blank
         },
