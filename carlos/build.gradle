@@ -8,7 +8,7 @@ def githubProperties = new Properties()
 githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 
 def getVersionName = { ->
-    return "0.0.1"
+    return "0.0.5"
 }
 
 def getArtifactId = { ->
@@ -21,7 +21,7 @@ publishing {
             groupId 'com.icell.external.carlosformito'
             artifactId getArtifactId()
             version getVersionName()
-            artifact("$buildDir/outputs/aar/carlos-release.aar")
+            artifact("$buildDir/outputs/aar/carlos-debug.aar")
         }
     }
 
