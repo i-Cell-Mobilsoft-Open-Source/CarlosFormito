@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
+import com.icell.external.carlosformito.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.ui.custom.CustomFormScreen
 import com.icell.external.carlosformito.ui.custom.CustomFormViewModel
 import com.icell.external.carlosformito.ui.email.ChangeEmailScreen

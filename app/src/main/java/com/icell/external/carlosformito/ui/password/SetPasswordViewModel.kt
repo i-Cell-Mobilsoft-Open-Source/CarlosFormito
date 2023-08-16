@@ -2,7 +2,7 @@ package com.icell.external.carlosformito.ui.password
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.icell.external.carlosformito.core.FormManagerViewModel
+import com.icell.external.carlosformito.FormManagerViewModel
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_PASSWORD
 import com.icell.external.carlosformito.ui.util.extension.getFieldValue
