@@ -1,8 +1,8 @@
 package com.icell.external.carlosformito.ui.custom.fields.validator
 
 import com.icell.external.carlosformito.R
-import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
-import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
+import com.icell.external.carlosformito.api.validator.FormFieldValidationResult
+import com.icell.external.carlosformito.api.validator.FormFieldValidator
 import com.icell.external.carlosformito.ui.custom.fields.model.ValidityStart
 import java.time.ZoneId
 import java.time.ZonedDateTime

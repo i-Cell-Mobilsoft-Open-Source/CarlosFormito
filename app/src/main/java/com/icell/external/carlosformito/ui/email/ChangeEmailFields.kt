@@ -1,6 +1,6 @@
 package com.icell.external.carlosformito.ui.email
 
-import com.icell.external.carlosformito.core.api.model.FormField
+import com.icell.external.carlosformito.api.model.FormField
 import com.icell.external.carlosformito.ui.email.validator.FakeEmailUniqueValidator
 import com.icell.external.carlosformito.ui.validator.TextRegexValidator
 import com.icell.external.carlosformito.ui.validator.ValueRequiredValidator

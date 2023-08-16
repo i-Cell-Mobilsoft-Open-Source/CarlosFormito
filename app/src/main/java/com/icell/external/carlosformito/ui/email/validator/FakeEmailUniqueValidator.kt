@@ -1,8 +1,8 @@
 package com.icell.external.carlosformito.ui.email.validator
 
 import com.icell.external.carlosformito.R
-import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
-import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
+import com.icell.external.carlosformito.api.validator.FormFieldValidationResult
+import com.icell.external.carlosformito.api.validator.FormFieldValidator
 import kotlinx.coroutines.delay
 import java.io.IOException
 
