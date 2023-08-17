@@ -1,5 +1,7 @@
 package com.icell.external.carlosformito.ui.common
 
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -8,13 +10,15 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun CarlosTopAppBar(
     title: String,
-    onNavigationIconPressed: () -> Unit
+    onNavigationIconPressed: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         elevation = 2.dp,
@@ -30,6 +34,10 @@ fun CarlosTopAppBar(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+        },
+        actions = {
+            actions()
+            Modifier.width(16.dp)
         }
     )
 }

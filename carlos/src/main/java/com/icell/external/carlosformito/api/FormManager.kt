@@ -11,4 +11,6 @@ interface FormManager {
     suspend fun validateForm(): Boolean
 
     fun setFormInvalid()
+
+    fun clearForm()
 }

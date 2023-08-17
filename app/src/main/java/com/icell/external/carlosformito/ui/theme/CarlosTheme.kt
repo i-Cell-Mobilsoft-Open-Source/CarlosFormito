@@ -7,6 +7,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import com.google.android.material.timepicker.TimeFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -44,7 +45,8 @@ fun CarlosTheme(
         LocalCarlosColors provides CarlosColors(),
         LocalCarlosFormats provides CarlosFormattingDefaults(
             dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG),
-            timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+            timeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
+            timeFormat = TimeFormat.CLOCK_24H
         ),
         LocalCarlosIcons provides DefaultOutlinedCarlosIcons
     ) {

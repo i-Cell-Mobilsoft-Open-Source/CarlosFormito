@@ -183,4 +183,11 @@ open class FormManagerViewModel(
             )
         }
     }
+
+    override fun clearForm() {
+        formFields.forEach { formField ->
+            fieldStates[formField.id]?.value = formField.initialState
+        }
+        checkAllRequiredFieldFilled()
+    }
 }

@@ -11,15 +11,15 @@ import java.time.format.DateTimeFormatter
 class CarlosFormattingDefaults(
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE,
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
-    clockFormat: Int? = null
+    timeFormat: Int? = null
 ) {
 
-    private val clockFormatParam: Int? = clockFormat
+    private val timeFormatParam: Int? = timeFormat
 
     val timeFormat: Int
         @ReadOnlyComposable
         @Composable
-        get() = clockFormatParam ?: getSystemTimeFormat()
+        get() = timeFormatParam ?: getSystemTimeFormat()
 
     @ReadOnlyComposable
     @Composable
