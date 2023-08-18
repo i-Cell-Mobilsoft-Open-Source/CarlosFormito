@@ -2,7 +2,7 @@ package com.icell.external.carlosformito.ui.email
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.icell.external.carlosformito.FormManagerViewModel
+import com.icell.external.carlosformito.ui.common.FormManagerViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
