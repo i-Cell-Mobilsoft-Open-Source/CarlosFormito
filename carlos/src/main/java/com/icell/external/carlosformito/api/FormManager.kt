@@ -1,10 +1,18 @@
 package com.icell.external.carlosformito.api
 
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-interface FormManager {
+interface FormManager : FormFieldItemListener {
 
     val allRequiredFieldFilled: StateFlow<Boolean>
+
+    val validationScope: CoroutineScope
+
+    var validationExceptionHandler: CoroutineExceptionHandler?
+
+    val validationInProgress: StateFlow<Boolean>
 
     fun <T> getFieldItem(id: String): FormFieldItem<T>
 
