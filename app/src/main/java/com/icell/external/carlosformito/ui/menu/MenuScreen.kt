@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.icell.external.carlosformito.api.model.FormFieldValidationStrategy
+import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.ui.field.FormPickerField
 import kotlinx.coroutines.launch

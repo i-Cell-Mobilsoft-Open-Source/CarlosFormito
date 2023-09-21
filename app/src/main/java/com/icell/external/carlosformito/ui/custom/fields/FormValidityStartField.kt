@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.material.timepicker.TimeFormat
-import com.icell.external.carlosformito.api.FormFieldItem
+import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.custom.fields.model.ValidityStart
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
 import com.icell.external.carlosformito.ui.util.DatePickerBuilder

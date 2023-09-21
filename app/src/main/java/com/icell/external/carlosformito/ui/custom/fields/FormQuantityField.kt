@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.R
-import com.icell.external.carlosformito.api.FormFieldItem
+import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
 import com.icell.external.carlosformito.ui.util.extension.collectFieldState
 import com.icell.external.carlosformito.ui.util.extension.errorMessage

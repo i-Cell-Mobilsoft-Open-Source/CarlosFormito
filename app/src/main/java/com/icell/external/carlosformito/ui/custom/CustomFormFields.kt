@@ -1,10 +1,10 @@
 package com.icell.external.carlosformito.ui.custom
 
-import com.icell.external.carlosformito.api.model.FormField
-import com.icell.external.carlosformito.api.model.FormFieldState
+import com.icell.external.carlosformito.core.api.model.FormField
+import com.icell.external.carlosformito.core.api.model.FormFieldState
+import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import com.icell.external.carlosformito.ui.custom.fields.model.PaymentMethod
 import com.icell.external.carlosformito.ui.custom.fields.validator.ValidityStartValidator
-import com.icell.external.carlosformito.ui.validator.ValueRequiredValidator
 import java.time.ZonedDateTime
 
 object CustomFormFields {

@@ -1,12 +1,12 @@
 package com.icell.external.carlosformito.ui.fieldsamples
 
-import com.icell.external.carlosformito.api.model.FormField
+import com.icell.external.carlosformito.core.api.model.FormField
+import com.icell.external.carlosformito.core.validator.DateMinMaxValidator
+import com.icell.external.carlosformito.core.validator.IntegerMinMaxValidator
+import com.icell.external.carlosformito.core.validator.TextMinLengthValidator
+import com.icell.external.carlosformito.core.validator.TimeMinMaxValidator
+import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import com.icell.external.carlosformito.ui.fieldsamples.model.PackageType
-import com.icell.external.carlosformito.ui.validator.DateMinMaxValidator
-import com.icell.external.carlosformito.ui.validator.IntegerMinMaxValidator
-import com.icell.external.carlosformito.ui.validator.TextMinLengthValidator
-import com.icell.external.carlosformito.ui.validator.TimeMinMaxValidator
-import com.icell.external.carlosformito.ui.validator.ValueRequiredValidator
 import java.time.LocalDate
 import java.time.LocalTime
 
