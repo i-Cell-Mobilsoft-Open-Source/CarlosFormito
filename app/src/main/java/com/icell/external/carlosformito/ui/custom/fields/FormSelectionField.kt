@@ -16,10 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.commonui.extension.collectFieldState
+import com.icell.external.carlosformito.commonui.extension.errorMessage
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
-import com.icell.external.carlosformito.ui.util.extension.collectFieldState
-import com.icell.external.carlosformito.ui.util.extension.errorMessage
 
 @Composable
 fun <T> FormSelectionField(

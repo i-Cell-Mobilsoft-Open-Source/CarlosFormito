@@ -1,5 +1,7 @@
 package com.icell.external.carlosformito.core
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormField
@@ -8,10 +10,7 @@ import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrate
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import com.icell.external.carlosformito.core.api.validator.RequiresFieldValue
-import com.icell.external.carlosformito.core.util.CoroutineScopeProvider
-import com.icell.external.carlosformito.core.util.coroutineScope
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,14 +19,11 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 @Suppress("TooManyFunctions")
-open class FormManagerImpl(
+open class FormManagerViewModel(
     private val formFields: List<FormField<*>>,
     private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL,
-    override var validationExceptionHandler: CoroutineExceptionHandler? = null,
-    validationScope: CoroutineScope? = null
-) : FormManager, CoroutineScopeProvider {
-
-    private val validationScopeParam: CoroutineScope? = validationScope
+    override var validationExceptionHandler: CoroutineExceptionHandler? = null
+) : ViewModel(), FormManager {
 
     private val fieldStates: Map<String, MutableStateFlow<FormFieldState<*>>> =
         buildMap {
@@ -55,10 +51,6 @@ open class FormManagerImpl(
     private val mutableValidationInProgress = MutableStateFlow(false)
     override val validationInProgress = mutableValidationInProgress.asStateFlow()
 
-    override val validationScope: CoroutineScope
-        get() = validationScopeParam
-            ?: coroutineScope ?: error("Should provide a validation scope!")
-
     init {
         checkAllRequiredFieldFilled()
     }
@@ -67,7 +59,7 @@ open class FormManagerImpl(
         val context: CoroutineContext = validationExceptionHandler ?: EmptyCoroutineContext
 
         validationJob?.cancel()
-        validationJob = validationScope.launch(context) {
+        validationJob = viewModelScope.launch(context) {
             monitorValidationProgress(validationBlock)
         }
     }

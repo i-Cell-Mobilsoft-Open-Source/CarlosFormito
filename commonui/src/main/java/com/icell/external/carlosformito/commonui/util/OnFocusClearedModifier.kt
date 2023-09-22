@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.util
+package com.icell.external.carlosformito.commonui.util
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

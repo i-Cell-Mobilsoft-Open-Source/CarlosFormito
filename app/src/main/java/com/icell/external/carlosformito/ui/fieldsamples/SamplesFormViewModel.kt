@@ -2,8 +2,8 @@ package com.icell.external.carlosformito.ui.fieldsamples
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.icell.external.carlosformito.core.FormManagerViewModel
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
-import com.icell.external.carlosformito.ui.common.FormManagerViewModel
 import kotlinx.coroutines.launch
 
 class SamplesFormViewModel(validationStrategy: FormFieldValidationStrategy) :

@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.util.extension
+package com.icell.external.carlosformito.commonui.extension
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State

@@ -19,13 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.R
+import com.icell.external.carlosformito.commonui.extension.collectFieldState
+import com.icell.external.carlosformito.commonui.extension.errorMessage
 import com.icell.external.carlosformito.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.ui.field.FormPasswordTextField
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_PASSWORD
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_PASSWORD_MAX_LENGTH
-import com.icell.external.carlosformito.ui.util.extension.collectFieldState
-import com.icell.external.carlosformito.ui.util.extension.errorMessage
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

@@ -1,7 +1,7 @@
-package com.icell.external.carlosformito.ui.field.base
+package com.icell.external.carlosformito.commonui.base
 
 sealed interface TextFieldInputMode {
-    object Default : TextFieldInputMode
+    data object Default : TextFieldInputMode
 
     class Picker(
         val onClick: () -> Unit,

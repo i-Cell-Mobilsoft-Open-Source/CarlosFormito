@@ -15,4 +15,6 @@ dependencyResolutionManagement {
 rootProject.name = "CarlosFormito"
 include ':app'
 include ':core'
+include ':commonui'
 include ':material'
+include ':material3'

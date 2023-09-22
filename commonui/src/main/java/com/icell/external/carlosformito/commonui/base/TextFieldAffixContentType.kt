@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.field.base
+package com.icell.external.carlosformito.commonui.base
 
 import androidx.annotation.DrawableRes
 
