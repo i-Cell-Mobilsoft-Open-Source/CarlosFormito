@@ -1,13 +1,22 @@
 package com.icell.external.carlosformito.ui.fieldsamples
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.icell.external.carlosformito.core.FormManagerViewModel
+import com.icell.external.carlosformito.core.FormManagerImpl
+import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.launch
 
 class SamplesFormViewModel(validationStrategy: FormFieldValidationStrategy) :
-    FormManagerViewModel(SamplesFormFields.build(), validationStrategy) {
+    ViewModel(), FormManager by FormManagerImpl(SamplesFormFields.build(), validationStrategy) {
+
+    init {
+        /**
+         * This setup is needed for auto validation strategies
+         */
+        autoValidationScope = viewModelScope
+    }
 
     fun submit() {
         viewModelScope.launch {

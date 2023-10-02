@@ -1,7 +1,5 @@
 package com.icell.external.carlosformito.core
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormField
@@ -11,6 +9,7 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidationRe
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import com.icell.external.carlosformito.core.api.validator.RequiresFieldValue
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,11 +18,12 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 @Suppress("TooManyFunctions")
-open class FormManagerViewModel(
+open class FormManagerImpl(
     private val formFields: List<FormField<*>>,
     private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL,
-    override var validationExceptionHandler: CoroutineExceptionHandler? = null
-) : ViewModel(), FormManager {
+    override var autoValidationExceptionHandler: CoroutineExceptionHandler? = null,
+    override var autoValidationScope: CoroutineScope? = null
+) : FormManager {
 
     private val fieldStates: Map<String, MutableStateFlow<FormFieldState<*>>> =
         buildMap {
@@ -46,7 +46,7 @@ open class FormManagerViewModel(
     private val mutableAllRequiredFieldFilled: MutableStateFlow<Boolean> = MutableStateFlow(false)
     override val allRequiredFieldFilled = mutableAllRequiredFieldFilled.asStateFlow()
 
-    private var validationJob: Job? = null
+    private var autoValidationJob: Job? = null
 
     private val mutableValidationInProgress = MutableStateFlow(false)
     override val validationInProgress = mutableValidationInProgress.asStateFlow()
@@ -55,11 +55,13 @@ open class FormManagerViewModel(
         checkAllRequiredFieldFilled()
     }
 
-    private fun launchValidation(validationBlock: suspend () -> Unit) {
-        val context: CoroutineContext = validationExceptionHandler ?: EmptyCoroutineContext
+    private fun launchAutoValidation(validationBlock: suspend () -> Unit) {
+        val context: CoroutineContext = autoValidationExceptionHandler ?: EmptyCoroutineContext
+        val coroutineScope: CoroutineScope = autoValidationScope
+            ?: error("Should provide a validation scope for auto validation strategies!")
 
-        validationJob?.cancel()
-        validationJob = viewModelScope.launch(context) {
+        autoValidationJob?.cancel()
+        autoValidationJob = coroutineScope.launch(context) {
             monitorValidationProgress(validationBlock)
         }
     }
@@ -94,8 +96,8 @@ open class FormManagerViewModel(
     }
 
     override fun onFieldFocusCleared(id: String) {
-        if (validationStrategy == FormFieldValidationStrategy.ON_FOCUS_CLEAR) {
-            launchValidation {
+        if (validationStrategy == FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR) {
+            launchAutoValidation {
                 validateAndUpdateFieldState(id)
             }
         }
@@ -110,8 +112,8 @@ open class FormManagerViewModel(
         if (requiredFieldIds.contains(id)) {
             checkAllRequiredFieldFilled()
         }
-        if (validationStrategy == FormFieldValidationStrategy.INLINE) {
-            launchValidation {
+        if (validationStrategy == FormFieldValidationStrategy.AUTO_INLINE) {
+            launchAutoValidation {
                 validateAndUpdateFieldState(id)
             }
         }

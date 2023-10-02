@@ -142,8 +142,8 @@ fun MenuScreen(
 private fun FormFieldValidationStrategy.displayedValue(): String {
     return when (this) {
         FormFieldValidationStrategy.MANUAL -> "Manual"
-        FormFieldValidationStrategy.ON_FOCUS_CLEAR -> "On focus clear"
-        FormFieldValidationStrategy.INLINE -> "Inline"
+        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> "On focus clear"
+        FormFieldValidationStrategy.AUTO_INLINE -> "Inline"
     }
 }
 
@@ -153,11 +153,11 @@ private fun FormFieldValidationStrategy.description(): String {
             The validation of the form is executed manually and performed in order from top to bottom consecutively.
         """.trimIndent()
 
-        FormFieldValidationStrategy.ON_FOCUS_CLEAR -> """
+        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> """
             The validation of each individual form field is executed automatically by focus clear event of the particular field.
         """.trimIndent()
 
-        FormFieldValidationStrategy.INLINE -> """
+        FormFieldValidationStrategy.AUTO_INLINE -> """
             The validation of each individual form field is executed automatically by any value change event of the particular field.
         """.trimIndent()
     }

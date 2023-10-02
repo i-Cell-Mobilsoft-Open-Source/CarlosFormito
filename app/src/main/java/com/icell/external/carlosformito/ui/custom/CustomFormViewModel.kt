@@ -1,11 +1,15 @@
 package com.icell.external.carlosformito.ui.custom
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.icell.external.carlosformito.core.FormManagerViewModel
+import com.icell.external.carlosformito.core.FormManagerImpl
+import com.icell.external.carlosformito.core.api.FormManager
 import kotlinx.coroutines.launch
 
-class CustomFormViewModel : FormManagerViewModel(CustomFormFields.build()) {
+class CustomFormViewModel :
+    ViewModel(),
+    FormManager by FormManagerImpl(CustomFormFields.build()) {
 
     fun submit() {
         viewModelScope.launch {

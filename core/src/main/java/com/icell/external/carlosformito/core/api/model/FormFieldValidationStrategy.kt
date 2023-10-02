@@ -9,10 +9,10 @@ enum class FormFieldValidationStrategy {
     /**
      * Validating each field automatically by focus clear events
      */
-    ON_FOCUS_CLEAR,
+    AUTO_ON_FOCUS_CLEAR,
 
     /**
      * Validating each field automatically by field value change events
      */
-    INLINE
+    AUTO_INLINE
 }

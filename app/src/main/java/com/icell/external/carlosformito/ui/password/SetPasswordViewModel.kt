@@ -1,37 +1,18 @@
 package com.icell.external.carlosformito.ui.password
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.icell.external.carlosformito.commonui.extension.getFieldValue
-import com.icell.external.carlosformito.core.FormManagerViewModel
-import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
-import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_PASSWORD
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.icell.external.carlosformito.core.api.FormManager
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class SetPasswordViewModel : FormManagerViewModel(SetPasswordFields.build()) {
+class SetPasswordViewModel(
+    private val setPasswordFormManager: SetPasswordFormManager = SetPasswordFormManager()
+) : ViewModel(), FormManager by setPasswordFormManager {
 
-    private val mutablePasswordMatchError = MutableStateFlow(false)
-    val passwordMatchError = mutablePasswordMatchError.asStateFlow()
-
-    override fun <T> onFieldValueChanged(id: String, value: T?) {
-        super.onFieldValueChanged(id, value)
-
-        mutablePasswordMatchError.value = false
-    }
-
-    override suspend fun validateForm(): Boolean {
-        val independentFieldsAreValid = super.validateForm()
-
-        val password = getFieldValue<String>(KEY_PASSWORD).orEmpty()
-        val confirmPassword = getFieldValue<String>(KEY_CONFIRM_PASSWORD).orEmpty()
-        if (password != confirmPassword) {
-            mutablePasswordMatchError.value = true
-        }
-
-        return independentFieldsAreValid
-    }
+    val passwordMatchError: StateFlow<Boolean>
+        get() = setPasswordFormManager.passwordMatchError
 
     fun submit() {
         viewModelScope.launch {

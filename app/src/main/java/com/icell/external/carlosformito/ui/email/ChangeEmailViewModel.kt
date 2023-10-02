@@ -1,9 +1,10 @@
 package com.icell.external.carlosformito.ui.email
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.icell.external.carlosformito.core.FormManagerViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
+import com.icell.external.carlosformito.core.FormManagerImpl
+import com.icell.external.carlosformito.core.api.FormManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class ChangeEmailViewModel : FormManagerViewModel(ChangeEmailFields.build()) {
+class ChangeEmailViewModel :
+    ViewModel(),
+    FormManager by FormManagerImpl(ChangeEmailFields.build()) {
 
     private val mutableCurrentEmail = MutableStateFlow<String?>(null)
     val currentEmail = mutableCurrentEmail.asStateFlow()
@@ -33,16 +36,16 @@ class ChangeEmailViewModel : FormManagerViewModel(ChangeEmailFields.build()) {
 
     init {
         loadCurrentEmail()
-
-        validationExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            mutableIsError.tryEmit(throwable)
-        }
     }
 
     fun submit() {
         viewModelScope.launch {
-            if (validateForm()) {
-                Log.i("ChangeEmailViewModel", "Form is valid")
+            try {
+                if (validateForm()) {
+                    Log.i("ChangeEmailViewModel", "Form is valid")
+                }
+            } catch (throwable: Throwable) {
+                mutableIsError.tryEmit(throwable)
             }
         }
     }
