@@ -45,7 +45,8 @@ fun FormQuantityField(
             elevation = 0.dp,
             modifier = modifier,
             enabled = false,
-            onClick = {}
+            onClick = {},
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.06f)
         ) {
             val currentValue = state.value ?: 0
 

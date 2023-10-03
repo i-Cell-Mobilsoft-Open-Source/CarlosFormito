@@ -37,6 +37,7 @@ import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -117,14 +118,13 @@ fun FormDatePickerField(
 ) {
     val context = LocalContext.current
     val carlosIcons = LocalCarlosIcons.current
-
-    val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = value?.toEpochMillis(),
-        initialDisplayMode = DisplayMode.Picker
-    )
-
     var dialogVisible by remember { mutableStateOf(false) }
+
     if (dialogVisible) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = value?.toEpochMillis(ZoneOffset.UTC),
+            initialDisplayMode = DisplayMode.Picker
+        )
         val confirmEnabled by remember {
             derivedStateOf { datePickerState.selectedDateMillis != null }
         }
@@ -132,7 +132,10 @@ fun FormDatePickerField(
             onDismissRequest = { dialogVisible = false },
             confirmButton = {
                 TextButton(
-                    onClick = { dialogVisible = false },
+                    onClick = {
+                        onValueChange(datePickerState.selectedDate)
+                        dialogVisible = false
+                    },
                     enabled = confirmEnabled
                 ) {
                     Text(text = context.getString(android.R.string.ok))

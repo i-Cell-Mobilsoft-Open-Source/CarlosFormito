@@ -1,5 +1,6 @@
 package com.icell.external.carlosformito.ui.custom.fields
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +41,7 @@ fun <T> FormSelectionField(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
+                .background(MaterialTheme.colors.primary.copy(alpha = 0.06f))
                 .clickable(enabled = enabled, onClick = onSelectValue)
                 .padding(16.dp)
         ) {

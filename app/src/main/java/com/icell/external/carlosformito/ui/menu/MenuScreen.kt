@@ -72,7 +72,7 @@ fun MenuScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 24.dp)
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
@@ -130,9 +130,9 @@ fun MenuScreen(
                     MenuListItem(title = "Long running validation sample") {
                         onNavigateToLongRunningValidationSample.invoke()
                     }
-                }
-                MenuListItem(title = "Interdependent fields sample") {
-                    onNavigateToInterdependentFieldsSample.invoke()
+                    MenuListItem(title = "Interdependent fields sample") {
+                        onNavigateToInterdependentFieldsSample.invoke()
+                    }
                 }
             }
         }

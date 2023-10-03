@@ -124,7 +124,8 @@ private fun SelectValueCard(
         elevation = 0.dp,
         modifier = modifier,
         enabled = enabled,
-        onClick = onClick
+        onClick = onClick,
+        backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.06f)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

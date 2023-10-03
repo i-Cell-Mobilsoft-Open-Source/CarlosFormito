@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
+import com.icell.external.carlosformito.ui.extension.selectedTime
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
@@ -128,21 +129,25 @@ fun FormTimePickerField(
     val context = LocalContext.current
     val carlosIcons = LocalCarlosIcons.current
 
-    val currentValue = value ?: LocalTime.now()
-    val timePickerState = rememberTimePickerState(
-        initialHour = currentValue.hour,
-        initialMinute = currentValue.minute,
-        is24Hour = is24HourFormat
-    )
     val displayMode = remember { mutableStateOf(DisplayMode.Picker) }
     var dialogVisible by remember { mutableStateOf(false) }
 
     if (dialogVisible) {
+        val currentValue = value ?: LocalTime.now()
+        val timePickerState = rememberTimePickerState(
+            initialHour = currentValue.hour,
+            initialMinute = currentValue.minute,
+            is24Hour = is24HourFormat
+        )
+
         TimePickerDialog(
             onDismissRequest = { dialogVisible = false },
             confirmButton = {
                 TextButton(
-                    onClick = { dialogVisible = false }
+                    onClick = {
+                        onValueChange(timePickerState.selectedTime)
+                        dialogVisible = false
+                    }
                 ) {
                     Text(text = context.getString(android.R.string.ok))
                 }

@@ -21,7 +21,7 @@ fun CarlosTopAppBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
-        elevation = 2.dp,
+        elevation = 0.dp,
         backgroundColor = MaterialTheme.colors.surface,
         navigationIcon = {
             IconButton(onClick = onNavigationIconPressed) {

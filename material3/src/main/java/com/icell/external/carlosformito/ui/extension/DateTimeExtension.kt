@@ -5,12 +5,12 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-fun Long.toLocalDate(): LocalDate = ZonedDateTime
-    .ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
+fun Long.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate = ZonedDateTime
+    .ofInstant(Instant.ofEpochMilli(this), zoneId)
     .toLocalDate()
 
-fun LocalDate.toEpochMillis(): Long = atStartOfDay()
-    .atZone(ZoneId.systemDefault())
+fun LocalDate.toEpochMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long = atStartOfDay()
+    .atZone(zoneId)
     .toInstant()
     .toEpochMilli()
 
