@@ -33,10 +33,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.icell.external.carlosformito.commonui.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.commonui.base.TextFieldInputMode
-import com.icell.external.carlosformito.commonui.util.testId
 import com.icell.external.carlosformito.ui.theme.LocalCarlosColors
+import com.icell.external.carlosformito.ui.util.testId
 
 @Composable
 fun BaseTextField(

@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.VisualTransformation
-import com.icell.external.carlosformito.commonui.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.commonui.base.TextFieldInputMode
-import com.icell.external.carlosformito.commonui.extension.collectFieldState
-import com.icell.external.carlosformito.commonui.extension.errorMessage
-import com.icell.external.carlosformito.commonui.util.onFocusCleared
 import com.icell.external.carlosformito.core.api.FormFieldItem
+import com.icell.external.carlosformito.ui.extension.collectFieldState
+import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
+import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
+import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
+import com.icell.external.carlosformito.ui.util.onFocusCleared
 
 @Composable
 fun <T> FormPickerField(

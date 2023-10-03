@@ -3,7 +3,7 @@ package com.icell.external.carlosformito.ui.theme
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.icell.external.carlosformito.commonui.R
+import com.icell.external.carlosformito.ui.R
 
 @Stable
 data class CarlosIcons(

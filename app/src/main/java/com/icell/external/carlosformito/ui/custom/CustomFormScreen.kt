@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.icell.external.carlosformito.commonui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.ui.custom.CustomFormFields.KEY_PAYMENT_METHOD_TYPE
@@ -38,6 +37,7 @@ import com.icell.external.carlosformito.ui.custom.fields.FormSelectionField
 import com.icell.external.carlosformito.ui.custom.fields.FormSwitchField
 import com.icell.external.carlosformito.ui.custom.fields.FormValidityStartField
 import com.icell.external.carlosformito.ui.custom.fields.model.PaymentMethod
+import com.icell.external.carlosformito.ui.extension.collectFieldState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)

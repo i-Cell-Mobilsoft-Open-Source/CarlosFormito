@@ -19,9 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.R
-import com.icell.external.carlosformito.commonui.extension.collectFieldState
-import com.icell.external.carlosformito.commonui.extension.errorMessage
 import com.icell.external.carlosformito.core.api.FormFieldItem
+import com.icell.external.carlosformito.ui.extension.collectFieldState
+import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
 
 @OptIn(ExperimentalMaterialApi::class)

@@ -1,7 +1,7 @@
 package com.icell.external.carlosformito.ui.password
 
-import com.icell.external.carlosformito.commonui.extension.getFieldValue
 import com.icell.external.carlosformito.core.FormManagerImpl
+import com.icell.external.carlosformito.ui.extension.getFieldValue
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
 import com.icell.external.carlosformito.ui.password.SetPasswordFields.KEY_PASSWORD
 import kotlinx.coroutines.flow.MutableStateFlow

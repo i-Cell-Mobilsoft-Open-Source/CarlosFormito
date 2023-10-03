@@ -7,17 +7,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
-import com.icell.external.carlosformito.commonui.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.commonui.base.TextFieldInputMode
-import com.icell.external.carlosformito.commonui.extension.collectFieldState
-import com.icell.external.carlosformito.commonui.extension.errorMessage
-import com.icell.external.carlosformito.commonui.extension.requireActivity
-import com.icell.external.carlosformito.commonui.util.onFocusCleared
 import com.icell.external.carlosformito.core.api.FormFieldItem
+import com.icell.external.carlosformito.ui.extension.collectFieldState
+import com.icell.external.carlosformito.ui.extension.errorMessage
+import com.icell.external.carlosformito.ui.extension.requireActivity
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
+import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
+import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.DatePickerBuilder
+import com.icell.external.carlosformito.ui.util.onFocusCleared
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
