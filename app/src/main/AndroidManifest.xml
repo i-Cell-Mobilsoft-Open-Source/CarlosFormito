@@ -14,7 +14,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name="com.icell.external.carlosformito.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.CarlosFormito">
             <intent-filter>

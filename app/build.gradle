@@ -7,11 +7,11 @@ def signingProperties = new Properties()
 signingProperties.load(new FileInputStream(rootProject.file("signing.properties")))
 
 android {
-    namespace 'com.icell.external.carlosformito'
+    namespace 'com.icell.external.carlosformito.demo'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.icell.external.carlosformito"
+        applicationId "com.icell.external.carlosformito.demo"
         minSdk 26
         targetSdk 34
         versionCode 1
