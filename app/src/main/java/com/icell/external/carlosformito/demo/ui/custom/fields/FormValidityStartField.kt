@@ -41,7 +41,7 @@ fun FormValidityStartField(
     minDate: LocalDate? = null,
     maxDate: LocalDate? = null,
     dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd."),
-    timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
+    timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
     supportingText: CharSequence? = null
 ) {
     val state by fieldItem.collectFieldState()

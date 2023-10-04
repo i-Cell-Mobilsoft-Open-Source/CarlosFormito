@@ -51,7 +51,7 @@ fun CarlosTheme(
         LocalCarlosColors provides CarlosColors(),
         LocalCarlosFormats provides CarlosFormattingDefaults(
             dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG),
-            timeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
+            timeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
             timeFormat = TimeFormat.CLOCK_24H
         ),
         LocalCarlosIcons provides DefaultOutlinedCarlosIcons

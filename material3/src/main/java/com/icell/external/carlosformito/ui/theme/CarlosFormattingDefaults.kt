@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
 
 class CarlosFormattingDefaults(
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE,
-    val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm"),
+    val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
     is24HourFormat: Boolean? = true
 ) {
 
