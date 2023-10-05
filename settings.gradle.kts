@@ -13,8 +13,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "CarlosFormito"
-include ':app'
-include ':core'
-include ':material'
-include ':material3'
-include ':material3demo'
+include(":app")
+include(":core")
+include(":material")
+include(":material3")
+include(":material3demo")
