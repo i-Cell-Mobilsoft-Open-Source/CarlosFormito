@@ -1,7 +1,9 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
     id("io.gitlab.arturbosch.detekt") version Versions.detekt apply true
+    id("com.github.ben-manes.versions") version Versions.dependencyUpdates apply true
 }
 
 val projectSource = file(projectDir)
@@ -30,4 +32,18 @@ tasks.register<Detekt>("detektAll") {
 
 dependencies {
     detektPlugins(Dependencies.detektFormattingPlugin)
+}
+
+fun isNonStable(version: String): Boolean {
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
+    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+    val isStable = stableKeyword || regex.matches(version)
+    return isStable.not()
+}
+
+// https://github.com/ben-manes/gradle-versions-plugin
+tasks.withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+        isNonStable(candidate.version)
+    }
 }
