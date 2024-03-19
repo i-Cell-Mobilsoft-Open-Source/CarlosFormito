@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Carlos Formito</string>
+    <string name="app_name">Carlos - M2 demo</string>
 
     <string name="validity_start_missing_date">Date is required!</string>
     <string name="validity_start_missing_time">Time is required!</string>

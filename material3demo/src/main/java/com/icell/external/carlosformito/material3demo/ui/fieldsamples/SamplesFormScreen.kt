@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.material3demo.ui.fieldsamples
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,7 +48,6 @@ import com.icell.external.carlosformito.ui.field.FormTimePickerField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SampleFormScreen(
     title: String,

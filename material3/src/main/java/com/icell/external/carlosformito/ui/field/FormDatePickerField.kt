@@ -1,35 +1,18 @@
 package com.icell.external.carlosformito.ui.field
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DatePickerState
-import androidx.compose.material3.DisplayMode
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.core.api.FormFieldItem
+import com.icell.external.carlosformito.ui.datepicker.CarlosDatePicker
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
-import com.icell.external.carlosformito.ui.extension.isAfterOrEqual
-import com.icell.external.carlosformito.ui.extension.isBeforeOrEqual
-import com.icell.external.carlosformito.ui.extension.selectedDate
-import com.icell.external.carlosformito.ui.extension.toEpochMillis
-import com.icell.external.carlosformito.ui.extension.toLocalDate
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
@@ -37,7 +20,6 @@ import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 import java.time.LocalDate
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -90,7 +72,6 @@ fun FormDatePickerField(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormDatePickerField(
     modifier: Modifier = Modifier,
@@ -116,48 +97,25 @@ fun FormDatePickerField(
     supportingText: CharSequence? = null,
     testTag: String? = null
 ) {
-    val context = LocalContext.current
     val carlosIcons = LocalCarlosIcons.current
     var dialogVisible by remember { mutableStateOf(false) }
 
     if (dialogVisible) {
-        val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = value?.toEpochMillis(ZoneOffset.UTC),
-            initialDisplayMode = DisplayMode.Picker
-        )
-        val confirmEnabled by remember {
-            derivedStateOf { datePickerState.selectedDateMillis != null }
-        }
-        DatePickerDialog(
-            onDismissRequest = { dialogVisible = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onValueChange(datePickerState.selectedDate)
-                        dialogVisible = false
-                    },
-                    enabled = confirmEnabled
-                ) {
-                    Text(text = context.getString(android.R.string.ok))
-                }
+        CarlosDatePicker(
+            dialogTitle = dialogTitle,
+            dialogHeadline = dialogHeadline,
+            formatter = dateFormatter,
+            selectedDate = value,
+            minDate = minDate,
+            maxDate = maxDate,
+            onSelectDate = { selectedDate ->
+                onValueChange(selectedDate)
+                dialogVisible = false
             },
-            dismissButton = {
-                TextButton(
-                    onClick = { dialogVisible = false }
-                ) {
-                    Text(text = context.getString(android.R.string.cancel))
-                }
+            hideDialog = {
+                dialogVisible = false
             }
-        ) {
-            DatePicker(
-                datePickerState = datePickerState,
-                minDate = minDate,
-                maxDate = maxDate,
-                title = dialogTitle,
-                headline = dialogHeadline ?: "",
-                formatter = dateFormatter
-            )
-        }
+        )
     }
 
     BaseTextField(
@@ -191,44 +149,5 @@ fun FormDatePickerField(
                 onValueChange(null)
             }
         )
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DatePicker(
-    modifier: Modifier = Modifier,
-    datePickerState: DatePickerState,
-    title: String,
-    headline: String,
-    minDate: LocalDate?,
-    maxDate: LocalDate?,
-    formatter: DateTimeFormatter
-) {
-    DatePicker(
-        state = datePickerState,
-        modifier = modifier,
-        dateValidator = { selection ->
-            val selectedDate = selection.toLocalDate()
-
-            val minValid = minDate?.let { selectedDate.isAfterOrEqual(minDate) } ?: true
-            val maxValid = maxDate?.let { selectedDate.isBeforeOrEqual(maxDate) } ?: true
-
-            minValid && maxValid
-        },
-        title = {
-            Text(
-                text = title,
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-            )
-        },
-        headline = {
-            Text(
-                text = datePickerState.selectedDate?.format(formatter) ?: headline,
-                modifier = Modifier.padding(start = 24.dp)
-            )
-        },
-        showModeToggle = true,
-        colors = DatePickerDefaults.colors()
     )
 }
