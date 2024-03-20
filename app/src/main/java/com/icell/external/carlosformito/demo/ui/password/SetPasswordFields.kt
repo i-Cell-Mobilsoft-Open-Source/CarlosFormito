@@ -21,6 +21,7 @@ object SetPasswordFields {
             FormField(
                 id = KEY_PASSWORD,
                 validators = listOf(
+                    ValueRequiredValidator(),
                     TextMinLengthValidator(minLength = KEY_PASSWORD_MIN_LENGTH),
                     ContainsNumberValidator(R.string.password_not_contains_number_error),
                     ContainsSpecialCharacterValidator(R.string.password_not_contains_special_char_error),

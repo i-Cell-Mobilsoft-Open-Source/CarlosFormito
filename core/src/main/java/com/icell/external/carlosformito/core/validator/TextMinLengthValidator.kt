@@ -5,14 +5,13 @@ import androidx.annotation.StringRes
 import com.icell.external.carlosformito.core.R
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
-import com.icell.external.carlosformito.core.api.validator.RequiresFieldValue
 
 class TextMinLengthValidator(
     @IntRange(from = MIN_LENGTH_RANGE_FROM)
     private val minLength: Int,
     @StringRes
     private val errorMessageId: Int = R.string.carlos_lbl_validator_min_length
-) : FormFieldValidator<String>, RequiresFieldValue {
+) : FormFieldValidator<String> {
 
     init {
         check(minLength >= MIN_LENGTH_RANGE_FROM) {
@@ -21,7 +20,11 @@ class TextMinLengthValidator(
     }
 
     override suspend fun validate(value: String?): FormFieldValidationResult {
-        return if ((value ?: "").length < minLength) {
+        val nonNullValue = value.orEmpty()
+        if (nonNullValue.isEmpty()) {
+            return FormFieldValidationResult.Valid
+        }
+        return if (nonNullValue.length < minLength) {
             FormFieldValidationResult.Invalid.MessageWithArgs(
                 errorMessageId,
                 listOf(minLength)

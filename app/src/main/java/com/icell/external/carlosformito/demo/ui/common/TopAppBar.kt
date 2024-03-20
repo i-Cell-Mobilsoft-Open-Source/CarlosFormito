@@ -1,6 +1,7 @@
 package com.icell.external.carlosformito.demo.ui.common
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -8,7 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,7 +26,11 @@ fun CarlosTopAppBar(
         backgroundColor = MaterialTheme.colors.surface,
         navigationIcon = {
             IconButton(onClick = onNavigationIconPressed) {
-                Icon(Icons.Filled.ArrowBack, "Navigate up")
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    "Navigate up",
+                    modifier = Modifier.size(28.dp),
+                )
             }
         },
         title = {

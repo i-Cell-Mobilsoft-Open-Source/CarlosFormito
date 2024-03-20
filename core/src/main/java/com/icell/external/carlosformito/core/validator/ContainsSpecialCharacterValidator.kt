@@ -11,6 +11,9 @@ class ContainsSpecialCharacterValidator(
 
     override suspend fun validate(value: String?): FormFieldValidationResult {
         val nonNullValue = value.orEmpty()
+        if (nonNullValue.isEmpty()) {
+            return FormFieldValidationResult.Valid
+        }
         return if (!containsSpecialChars(nonNullValue)) {
             FormFieldValidationResult.Invalid.Message(errorMessageId)
         } else {

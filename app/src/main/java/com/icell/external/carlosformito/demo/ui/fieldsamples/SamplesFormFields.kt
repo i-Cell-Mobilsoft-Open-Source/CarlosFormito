@@ -32,6 +32,7 @@ object SamplesFormFields {
             FormField(
                 id = KEY_FORM_FIELD_SECRET,
                 validators = listOf(
+                    ValueRequiredValidator(),
                     TextMinLengthValidator(minLength = 8)
                 )
             ),

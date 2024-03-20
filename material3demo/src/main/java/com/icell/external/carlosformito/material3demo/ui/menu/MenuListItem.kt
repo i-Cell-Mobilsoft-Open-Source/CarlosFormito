@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -42,7 +42,7 @@ fun MenuListItem(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = null)
+                Icon(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
             }
             bodyContent()
         }

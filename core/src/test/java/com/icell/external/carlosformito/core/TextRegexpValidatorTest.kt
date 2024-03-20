@@ -8,14 +8,14 @@ import com.icell.external.carlosformito.core.validator.TextRegexValidator
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class TextRegexValidatorTest {
+class TextRegexpValidatorTest {
 
     @Test
     fun `validate null input with non-empty input requiring regex`() = runTest {
         val validator = TextRegexValidator("[a-zA-Z]")
         val validationResult = validator.validate(null)
 
-        assertThat(validationResult).isValidationResultInvalid()
+        assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
     @Test
@@ -45,7 +45,7 @@ class TextRegexValidatorTest {
     @Test
     fun `test invalid input returns custom error message`() = runTest {
         val validator = TextRegexValidator("\\s", R.string.carlos_lbl_test_invalid_input)
-        val validationResult = validator.validate(null)
+        val validationResult = validator.validate("non-whitespace-string")
 
         assertThat(validationResult)
             .isInstanceOf(FormFieldValidationResult.Invalid.Message::class.java)

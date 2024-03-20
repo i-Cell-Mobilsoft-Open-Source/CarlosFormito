@@ -3,7 +3,7 @@ package com.icell.external.carlosformito.material3demo.ui.common
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,7 +24,7 @@ fun CarlosTopAppBar(
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = onNavigationIconPressed) {
-                Icon(Icons.Filled.ArrowBack, "Navigate up")
+                Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Navigate up")
             }
         },
         title = {

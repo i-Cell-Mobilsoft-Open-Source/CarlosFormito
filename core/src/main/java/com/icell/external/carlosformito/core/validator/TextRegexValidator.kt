@@ -12,7 +12,11 @@ class TextRegexValidator(
 ) : FormFieldValidator<String> {
 
     override suspend fun validate(value: String?): FormFieldValidationResult {
-        if (!pattern.toRegex().matches(value ?: "")) {
+        val nonNullValue = value.orEmpty()
+        if (nonNullValue.isEmpty()) {
+            return FormFieldValidationResult.Valid
+        }
+        if (!pattern.toRegex().matches(nonNullValue)) {
             return FormFieldValidationResult.Invalid.Message(errorMessageId)
         }
         return FormFieldValidationResult.Valid

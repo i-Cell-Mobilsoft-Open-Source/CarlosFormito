@@ -14,7 +14,7 @@ class TextMinLengthValidatorTest {
         val validator = TextMinLengthValidator(1)
         val validationResult = validator.validate(null)
 
-        assertThat(validationResult).isValidationResultInvalid()
+        assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
     @Test
@@ -22,7 +22,7 @@ class TextMinLengthValidatorTest {
         val validator = TextMinLengthValidator(1)
         val validationResult = validator.validate("")
 
-        assertThat(validationResult).isValidationResultInvalid()
+        assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
     @Test(expected = IllegalStateException::class)
@@ -33,9 +33,9 @@ class TextMinLengthValidatorTest {
     @Test
     fun `validate blank input`() = runTest {
         val validator = TextMinLengthValidator(1)
-        val validationResult = validator.validate("")
+        val validationResult = validator.validate(" ")
 
-        assertThat(validationResult).isValidationResultInvalid()
+        assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
     @Test

@@ -18,12 +18,12 @@ class ContainsSpecialCharacterValidatorTest {
 
     @Test
     fun `validate null input`() = runTest {
-        validator.validateAssertInvalid(null)
+        validator.validateAssertValid(null)
     }
 
     @Test
     fun `validate empty input`() = runTest {
-        validator.validateAssertInvalid("")
+        validator.validateAssertValid("")
     }
 
     @Test

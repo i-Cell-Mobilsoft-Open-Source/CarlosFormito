@@ -7,7 +7,7 @@ import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
-import com.icell.external.carlosformito.core.api.validator.RequiresFieldValue
+import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -40,7 +40,9 @@ open class FormManagerImpl(
         }
 
     private val requiredFieldIds: List<String> = formFields
-        .filterRequiredFields()
+        .filter { formField ->
+            formField.validators.any { validator -> validator is ValueRequiredValidator }
+        }
         .map { formField -> formField.id }
 
     private val mutableAllRequiredFieldFilled: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -116,12 +118,6 @@ open class FormManagerImpl(
             launchAutoValidation {
                 validateAndUpdateFieldState(id)
             }
-        }
-    }
-
-    private fun List<FormField<*>>.filterRequiredFields(): List<FormField<*>> {
-        return filter { formField ->
-            formField.validators.any { validator -> validator is RequiresFieldValue }
         }
     }
 

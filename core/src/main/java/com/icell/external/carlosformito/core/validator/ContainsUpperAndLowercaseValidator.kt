@@ -10,6 +10,9 @@ class ContainsUpperAndLowercaseValidator(
 
     override suspend fun validate(value: String?): FormFieldValidationResult {
         val nonNullValue = value.orEmpty()
+        if (nonNullValue.isEmpty()) {
+            return FormFieldValidationResult.Valid
+        }
         return if (
             nonNullValue.none { it.isUpperCase() } || nonNullValue.none { it.isLowerCase() }
         ) {
