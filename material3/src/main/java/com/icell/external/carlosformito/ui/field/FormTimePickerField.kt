@@ -14,7 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.KeyboardAlt
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -104,7 +104,7 @@ fun FormTimePickerField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormTimePickerField(
+private fun FormTimePickerField(
     modifier: Modifier = Modifier,
     value: LocalTime?,
     label: String,
@@ -274,7 +274,7 @@ private fun TimePickerDialog(
     displayModeIcon: @Composable (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    AlertDialog(
+    BasicAlertDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier.wrapContentHeight()
     ) {

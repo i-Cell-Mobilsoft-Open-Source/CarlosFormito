@@ -70,7 +70,7 @@ fun FormTimePickerField(
 }
 
 @Composable
-fun FormTimePickerField(
+private fun FormTimePickerField(
     modifier: Modifier = Modifier,
     value: LocalTime?,
     label: String,

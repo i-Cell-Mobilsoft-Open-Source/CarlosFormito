@@ -26,21 +26,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.material3demo.ui.common.SimpleSelectionBottomSheet
+import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.field.FormPickerField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuScreen(
+    viewModel: MenuViewModel,
     onNavigateToFieldsSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
 ) {
+    val validationStrategyField =
+        viewModel.getFieldItem<FormFieldValidationStrategy>(KEY_VALIDATION_STRATEGY_FIELD)
+    val validationStrategyState by validationStrategyField.collectFieldState()
+
     val scope = rememberCoroutineScope()
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-    var validationStrategy by rememberSaveable {
-        mutableStateOf(FormFieldValidationStrategy.MANUAL)
-    }
 
     Scaffold { innerPadding ->
         Column(
@@ -75,18 +77,20 @@ fun MenuScreen(
                                 horizontal = 16.dp,
                                 vertical = 8.dp
                             ),
-                            value = validationStrategy,
+                            fieldItem = validationStrategyField,
                             label = "Field validation strategy",
                             onClick = { openBottomSheet = true },
                             displayedValue = { validationStrategy ->
                                 validationStrategy?.displayedValue() ?: ""
                             },
                             isClearable = false,
-                            supportingText = validationStrategy.description()
+                            supportingText = validationStrategyState.value?.description()
                         )
                     }
                 ) {
-                    onNavigateToFieldsSample.invoke(validationStrategy)
+                    onNavigateToFieldsSample.invoke(
+                        validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                    )
                 }
             }
         }
@@ -102,7 +106,7 @@ fun MenuScreen(
                 items = FormFieldValidationStrategy.entries,
                 itemText = { _, item -> item.displayedValue() },
                 onItemSelected = { _, item ->
-                    validationStrategy = item
+                    validationStrategyField.onFieldValueChanged(item)
 
                     scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
                         if (!bottomSheetState.isVisible) {

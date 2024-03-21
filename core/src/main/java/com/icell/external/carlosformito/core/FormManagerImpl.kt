@@ -88,7 +88,7 @@ open class FormManagerImpl(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> getFieldStateFlow(id: String): MutableStateFlow<FormFieldState<T>> {
+    protected fun <T> getFieldStateFlow(id: String): MutableStateFlow<FormFieldState<T>> {
         return requireNotNull(fieldStates[id] as MutableStateFlow<FormFieldState<T>>)
     }
 

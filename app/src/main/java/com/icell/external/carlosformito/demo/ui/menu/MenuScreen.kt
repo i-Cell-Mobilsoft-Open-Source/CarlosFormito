@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.demo.ui.menu
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,37 +20,36 @@ import androidx.compose.material.contentColorFor
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
+import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.field.FormPickerField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MenuScreen(
+    viewModel: MenuViewModel,
     onNavigateToFieldSamples: (validationStrategy: FormFieldValidationStrategy) -> Unit,
     onNavigateToCustomFormFieldsSample: () -> Unit,
     onNavigateToLongRunningValidationSample: () -> Unit,
     onNavigateToInterdependentFieldsSample: () -> Unit
 ) {
+    val validationStrategyField =
+        viewModel.getFieldItem<FormFieldValidationStrategy>(KEY_VALIDATION_STRATEGY_FIELD)
+    val validationStrategyState by validationStrategyField.collectFieldState()
+
     val coroutineScope = rememberCoroutineScope()
     val modalSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
         skipHalfExpanded = false
     )
-    var validationStrategy by rememberSaveable {
-        mutableStateOf(FormFieldValidationStrategy.MANUAL)
-    }
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
         sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
@@ -60,7 +58,7 @@ fun MenuScreen(
                 items = FormFieldValidationStrategy.entries,
                 itemText = { _, item -> item.displayedValue() },
                 onItemSelected = { _, item ->
-                    validationStrategy = item
+                    validationStrategyField.onFieldValueChanged(item)
                     coroutineScope.launch {
                         modalSheetState.hide()
                     }
@@ -68,10 +66,11 @@ fun MenuScreen(
             )
         }
     ) {
-        Scaffold {
+        Scaffold { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(innerPadding)
                     .padding(horizontal = 24.dp)
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -106,7 +105,7 @@ fun MenuScreen(
                                     horizontal = 16.dp,
                                     vertical = 8.dp
                                 ),
-                                value = validationStrategy,
+                                fieldItem = validationStrategyField,
                                 label = "Field validation strategy",
                                 onClick = {
                                     coroutineScope.launch {
@@ -117,11 +116,13 @@ fun MenuScreen(
                                     validationStrategy?.displayedValue() ?: ""
                                 },
                                 isClearable = false,
-                                supportingText = validationStrategy.description()
+                                supportingText = validationStrategyState.value?.description()
                             )
                         },
                         onClick = {
-                            onNavigateToFieldSamples.invoke(validationStrategy)
+                            onNavigateToFieldSamples.invoke(
+                                validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                            )
                         }
                     )
                     MenuListItem(title = "Custom field samples") {

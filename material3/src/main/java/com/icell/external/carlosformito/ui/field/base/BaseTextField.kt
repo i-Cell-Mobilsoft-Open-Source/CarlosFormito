@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
@@ -20,6 +21,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.Key
@@ -162,6 +164,12 @@ fun BaseTextField(
                         modifier = Modifier
                             .testId("picker")
                             .matchParentSize()
+                            .clip(
+                                MaterialTheme.shapes.small.copy(
+                                    bottomEnd = ZeroCornerSize,
+                                    bottomStart = ZeroCornerSize
+                                )
+                            )
                             .clickable(
                                 enabled = enabled,
                                 onClick = {

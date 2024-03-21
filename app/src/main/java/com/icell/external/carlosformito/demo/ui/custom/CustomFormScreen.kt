@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.demo.ui.custom
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,8 +25,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
+import com.icell.external.carlosformito.demo.ui.custom.CustomFormFields.KEY_DEBIT_CARD_NUMBER
 import com.icell.external.carlosformito.demo.ui.custom.CustomFormFields.KEY_PAYMENT_METHOD_TYPE
 import com.icell.external.carlosformito.demo.ui.custom.CustomFormFields.KEY_QUANTITY
 import com.icell.external.carlosformito.demo.ui.custom.CustomFormFields.KEY_SAVE_PAYMENT_METHOD_CHECKED
@@ -38,10 +39,10 @@ import com.icell.external.carlosformito.demo.ui.custom.fields.FormSwitchField
 import com.icell.external.carlosformito.demo.ui.custom.fields.FormValidityStartField
 import com.icell.external.carlosformito.demo.ui.custom.fields.model.PaymentMethod
 import com.icell.external.carlosformito.ui.extension.collectFieldState
+import com.icell.external.carlosformito.ui.field.FormTextField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CustomFormScreen(
     title: String,
@@ -76,10 +77,11 @@ fun CustomFormScreen(
             topBar = {
                 CarlosTopAppBar(title, onBackPressed)
             }
-        ) {
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
+                    .padding(innerPadding)
                     .padding(horizontal = 16.dp)
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -137,16 +139,9 @@ fun CustomFormScreen(
                         )
                         val selectedPaymentMethod by paymentMethodItem.collectFieldState()
                         AnimatedVisibility(visible = selectedPaymentMethod.value == PaymentMethod.DebitCard) {
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                color = MaterialTheme.colors.background
-                            )
-                            FormSwitchField(
-                                text = "Save debit card",
-                                fieldItem = viewModel.getFieldItem(KEY_SAVE_PAYMENT_METHOD_CHECKED),
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                            DebitCardForm(
+                                viewModel.getFieldItem(KEY_DEBIT_CARD_NUMBER),
+                                viewModel.getFieldItem(KEY_SAVE_PAYMENT_METHOD_CHECKED)
                             )
                         }
                     }
@@ -164,5 +159,33 @@ fun CustomFormScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun DebitCardForm(
+    debitCardNumberField: FormFieldItem<String>,
+    savePaymentMethodCheckedField: FormFieldItem<Boolean>
+) {
+    Column {
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)
+        )
+        FormTextField(
+            fieldItem = debitCardNumberField,
+            label = "Debit card number*",
+            maxLength = 32,
+            supportingText = """
+                This is a required field which is visible only when debit card option is selected.
+            """.trimIndent()
+        )
+        FormSwitchField(
+            text = "Save debit card",
+            fieldItem = savePaymentMethodCheckedField,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+        )
     }
 }

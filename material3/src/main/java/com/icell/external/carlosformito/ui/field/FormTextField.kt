@@ -61,7 +61,7 @@ fun FormTextField(
 }
 
 @Composable
-fun FormTextField(
+private fun FormTextField(
     modifier: Modifier = Modifier,
     maxLength: Int? = null,
     value: String?,

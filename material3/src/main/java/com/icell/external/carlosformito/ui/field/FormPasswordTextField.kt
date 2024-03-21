@@ -58,7 +58,7 @@ fun FormPasswordTextField(
 }
 
 @Composable
-fun FormPasswordTextField(
+private fun FormPasswordTextField(
     modifier: Modifier = Modifier,
     maxLength: Int? = null,
     value: String?,

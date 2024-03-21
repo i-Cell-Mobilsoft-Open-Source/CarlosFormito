@@ -12,6 +12,7 @@ object CustomFormFields {
     const val KEY_VALIDITY_START = "KEY_FORM_FIELD_VALIDITY_START"
     const val KEY_QUANTITY = "KEY_QUANTITY"
     const val KEY_PAYMENT_METHOD_TYPE = "KEY_PAYMENT_METHOD_TYPE"
+    const val KEY_DEBIT_CARD_NUMBER = "KEY_DEBIT_CARD_NUMBER"
     const val KEY_SAVE_PAYMENT_METHOD_CHECKED = "KEY_CHECKED"
 
     fun build(): List<FormField<*>> {
@@ -33,8 +34,14 @@ object CustomFormFields {
             ),
             FormField(
                 id = KEY_PAYMENT_METHOD_TYPE,
-                initialState = FormFieldState(PaymentMethod.DebitCard),
+                initialState = FormFieldState(PaymentMethod.Balance),
                 validators = emptyList()
+            ),
+            FormField(
+                id = KEY_DEBIT_CARD_NUMBER,
+                validators = listOf(
+                    ValueRequiredValidator()
+                )
             ),
             FormField(
                 id = KEY_SAVE_PAYMENT_METHOD_CHECKED,

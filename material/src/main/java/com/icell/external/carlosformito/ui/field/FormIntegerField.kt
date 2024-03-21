@@ -58,7 +58,7 @@ fun FormIntegerField(
 }
 
 @Composable
-fun FormIntegerField(
+private fun FormIntegerField(
     modifier: Modifier = Modifier,
     value: Int?,
     label: String,

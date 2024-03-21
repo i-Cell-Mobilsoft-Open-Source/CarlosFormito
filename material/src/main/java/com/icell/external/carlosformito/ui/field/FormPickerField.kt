@@ -54,7 +54,7 @@ fun <T> FormPickerField(
 }
 
 @Composable
-fun <T> FormPickerField(
+private fun <T> FormPickerField(
     modifier: Modifier = Modifier,
     value: T?,
     label: String,

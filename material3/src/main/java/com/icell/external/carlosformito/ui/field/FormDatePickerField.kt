@@ -73,7 +73,7 @@ fun FormDatePickerField(
 }
 
 @Composable
-fun FormDatePickerField(
+private fun FormDatePickerField(
     modifier: Modifier = Modifier,
     value: LocalDate?,
     label: String,

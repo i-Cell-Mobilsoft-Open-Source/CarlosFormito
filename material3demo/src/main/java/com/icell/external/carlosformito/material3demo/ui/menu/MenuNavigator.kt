@@ -50,6 +50,7 @@ fun MenuNavigator(
     ) {
         composable(Route.MenuScreen.route) {
             MenuScreen(
+                viewModel = viewModel<MenuViewModel>(),
                 onNavigateToFieldsSample = { validationStrategy ->
                     navController.navigate(Route.buildFieldSampleRoute(validationStrategy))
                 }
