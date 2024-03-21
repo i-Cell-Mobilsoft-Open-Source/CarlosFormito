@@ -15,6 +15,7 @@ import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.focusStepper
 import com.icell.external.carlosformito.ui.util.onFocusCleared
@@ -53,6 +54,9 @@ fun FormPasswordTextField(
         },
         onFocusCleared = {
             fieldItem.onFieldFocusCleared()
+        },
+        onVisibilityChanged = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
         }
     )
 }
@@ -73,10 +77,13 @@ private fun FormPasswordTextField(
     supportingText: CharSequence? = null,
     testTag: String? = null,
     onValueChange: (String) -> Unit,
-    onFocusCleared: () -> Unit = {}
+    onFocusCleared: () -> Unit = {},
+    onVisibilityChanged: (visible: Boolean) -> Unit = {},
 ) {
     val carlosIcons = LocalCarlosIcons.current
     val isPasswordVisible = rememberSaveable { mutableStateOf(false) }
+
+    TrackVisibilityEffect(onVisibilityChanged)
 
     BaseTextField(
         modifier = modifier

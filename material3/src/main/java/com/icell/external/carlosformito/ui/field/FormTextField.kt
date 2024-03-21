@@ -11,6 +11,7 @@ import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.util.focusStepper
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 
@@ -55,6 +56,9 @@ fun FormTextField(
         onFocusCleared = {
             fieldItem.onFieldFocusCleared()
         },
+        onVisibilityChanged = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
+        },
         inputPattern = inputPattern,
         textChanger = textChanger
     )
@@ -79,9 +83,11 @@ private fun FormTextField(
     testTag: String? = null,
     onValueChange: (String) -> Unit,
     onFocusCleared: () -> Unit = {},
+    onVisibilityChanged: (visible: Boolean) -> Unit = {},
     inputPattern: String? = null,
     textChanger: ((String) -> String)? = null
 ) {
+    TrackVisibilityEffect(onVisibilityChanged)
     BaseTextField(
         modifier = modifier
             .focusStepper()

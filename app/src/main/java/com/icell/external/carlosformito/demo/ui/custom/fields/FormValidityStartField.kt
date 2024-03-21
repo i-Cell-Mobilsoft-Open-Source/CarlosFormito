@@ -28,6 +28,7 @@ import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.extension.requireActivity
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.util.DatePickerBuilder
 import com.icell.external.carlosformito.ui.util.TimePickerBuilder
 import java.time.LocalDate
@@ -45,6 +46,11 @@ fun FormValidityStartField(
     supportingText: CharSequence? = null
 ) {
     val state by fieldItem.collectFieldState()
+
+    TrackVisibilityEffect { visible ->
+        fieldItem.onFieldVisibilityChanged(visible)
+    }
+
     BaseFieldFrame(
         modifier = modifier,
         isError = state.isError,

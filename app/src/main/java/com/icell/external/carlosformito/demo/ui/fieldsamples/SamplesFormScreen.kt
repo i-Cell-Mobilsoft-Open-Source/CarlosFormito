@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.demo.ui.fieldsamples
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,7 +48,6 @@ import com.icell.external.carlosformito.ui.field.FormTimePickerField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SampleFormScreen(
     title: String,
@@ -119,10 +117,11 @@ fun SampleFormScreen(
                     }
                 )
             }
-        ) {
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
+                    .padding(innerPadding)
                     .padding(horizontal = 16.dp)
             ) {
                 Spacer(modifier = Modifier.height(24.dp))

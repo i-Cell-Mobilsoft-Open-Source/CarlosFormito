@@ -5,4 +5,6 @@ interface FormFieldItemListener {
     fun onFieldFocusCleared(id: String)
 
     fun <T> onFieldValueChanged(id: String, value: T?)
+
+    fun onFieldVisibilityChanged(id: String, visible: Boolean)
 }

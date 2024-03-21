@@ -10,6 +10,12 @@ class SetPasswordViewModel(
     private val setPasswordFormManager: SetPasswordFormManager = SetPasswordFormManager()
 ) : ViewModel(), FormManager by setPasswordFormManager {
 
+    init {
+        viewModelScope.launch {
+            initFormManager()
+        }
+    }
+
     fun submit() {
         viewModelScope.launch {
             if (validateForm()) {

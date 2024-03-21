@@ -18,6 +18,11 @@ object CustomFormFields {
     fun build(): List<FormField<*>> {
         return listOf(
             FormField(
+                id = KEY_QUANTITY,
+                initialState = FormFieldState(1),
+                validators = emptyList()
+            ),
+            FormField(
                 id = KEY_VALIDITY_START,
                 validators = listOf(
                     ValueRequiredValidator(),
@@ -26,11 +31,6 @@ object CustomFormFields {
                         maxDateTime = ZonedDateTime.now().plusWeeks(1)
                     )
                 )
-            ),
-            FormField(
-                id = KEY_QUANTITY,
-                initialState = FormFieldState(1),
-                validators = emptyList()
             ),
             FormField(
                 id = KEY_PAYMENT_METHOD_TYPE,

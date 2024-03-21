@@ -14,6 +14,7 @@ import com.icell.external.carlosformito.ui.extension.requireActivity
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.DatePickerBuilder
@@ -53,6 +54,9 @@ fun FormDatePickerField(
         onFocusCleared = {
             fieldItem.onFieldFocusCleared()
         },
+        onVisibilityChanged = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
+        },
         dialogTitle = dialogTitle,
         minDate = minDate,
         maxDate = maxDate,
@@ -88,6 +92,7 @@ private fun FormDatePickerField(
     isClearable: Boolean = true,
     onClick: (() -> Unit)? = null,
     onFocusCleared: () -> Unit = {},
+    onVisibilityChanged: (visible: Boolean) -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -97,6 +102,9 @@ private fun FormDatePickerField(
 ) {
     val context = LocalContext.current
     val carlosIcons = LocalCarlosIcons.current
+
+    TrackVisibilityEffect(onVisibilityChanged)
+
     BaseTextField(
         modifier = modifier.onFocusCleared(onFocusCleared),
         value = value?.let { dateFormatter.format(value) } ?: "",

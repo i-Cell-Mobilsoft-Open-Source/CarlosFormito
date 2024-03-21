@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -115,36 +114,29 @@ fun CustomFormScreen(
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    elevation = 0.dp,
-                    enabled = false,
-                    onClick = {}
-                ) {
-                    Column {
-                        FormSelectionField(
-                            fieldItem = paymentMethodItem,
-                            onSelectValue = {
-                                coroutineScope.launch {
-                                    modalSheetState.show()
-                                }
-                            },
-                            displayedValue = { method ->
-                                when (method) {
-                                    PaymentMethod.Balance -> "Balance"
-                                    PaymentMethod.DebitCard -> "Debit card"
-                                    PaymentMethod.SavedDebitCard -> "Saved debit card"
-                                    null -> "Please select payment method"
-                                }
-                            }
-                        )
-                        val selectedPaymentMethod by paymentMethodItem.collectFieldState()
-                        AnimatedVisibility(visible = selectedPaymentMethod.value == PaymentMethod.DebitCard) {
-                            DebitCardForm(
-                                viewModel.getFieldItem(KEY_DEBIT_CARD_NUMBER),
-                                viewModel.getFieldItem(KEY_SAVE_PAYMENT_METHOD_CHECKED)
-                            )
+                FormSelectionField(
+                    fieldItem = paymentMethodItem,
+                    onSelectValue = {
+                        coroutineScope.launch {
+                            modalSheetState.show()
+                        }
+                    },
+                    displayedValue = { method ->
+                        when (method) {
+                            PaymentMethod.Balance -> "Balance"
+                            PaymentMethod.DebitCard -> "Debit card"
+                            PaymentMethod.SavedDebitCard -> "Saved debit card"
+                            null -> "Please select payment method"
                         }
                     }
+                )
+
+                val selectedPaymentMethod by paymentMethodItem.collectFieldState()
+                AnimatedVisibility(visible = selectedPaymentMethod.value == PaymentMethod.DebitCard) {
+                    DebitCardForm(
+                        viewModel.getFieldItem(KEY_DEBIT_CARD_NUMBER),
+                        viewModel.getFieldItem(KEY_SAVE_PAYMENT_METHOD_CHECKED)
+                    )
                 }
 
                 val allRequiredFieldFilled by viewModel.allRequiredFieldFilled.collectAsState()

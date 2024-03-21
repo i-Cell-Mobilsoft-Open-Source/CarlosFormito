@@ -5,7 +5,7 @@ import com.icell.external.carlosformito.core.api.FormFieldItemListener
 import com.icell.external.carlosformito.core.api.model.FormFieldState
 import kotlinx.coroutines.flow.StateFlow
 
-class FormFieldItemImpl<T>(
+internal class CarlosFormFieldItem<T>(
     private val fieldId: String,
     override val fieldState: StateFlow<FormFieldState<T>>
 ) : FormFieldItem<T> {
@@ -18,6 +18,10 @@ class FormFieldItemImpl<T>(
 
     override fun <T> onFieldValueChanged(value: T?) {
         listener?.onFieldValueChanged(fieldId, value)
+    }
+
+    override fun onFieldVisibilityChanged(visible: Boolean) {
+        listener?.onFieldVisibilityChanged(fieldId, visible)
     }
 
     fun setListener(listener: FormFieldItemListener?) {

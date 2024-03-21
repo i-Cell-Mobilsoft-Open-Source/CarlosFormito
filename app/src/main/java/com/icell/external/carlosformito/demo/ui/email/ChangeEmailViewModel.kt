@@ -3,7 +3,7 @@ package com.icell.external.carlosformito.demo.ui.email
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.icell.external.carlosformito.core.FormManagerImpl
+import com.icell.external.carlosformito.core.CarlosFormManager
 import com.icell.external.carlosformito.core.api.FormManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class ChangeEmailViewModel :
     ViewModel(),
-    FormManager by FormManagerImpl(ChangeEmailFields.build()) {
+    FormManager by CarlosFormManager(ChangeEmailFields.build()) {
 
     private val mutableCurrentEmail = MutableStateFlow<String?>(null)
     val currentEmail = mutableCurrentEmail.asStateFlow()
@@ -35,6 +35,9 @@ class ChangeEmailViewModel :
     val isError = mutableIsError.asSharedFlow()
 
     init {
+        viewModelScope.launch {
+            initFormManager()
+        }
         loadCurrentEmail()
     }
 

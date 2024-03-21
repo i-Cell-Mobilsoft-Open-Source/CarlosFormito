@@ -10,6 +10,7 @@ import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 
@@ -45,6 +46,9 @@ fun <T> FormPickerField(
         onFocusCleared = {
             fieldItem.onFieldFocusCleared()
         },
+        onVisibilityChanged = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
+        },
         displayedValue = displayedValue,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
@@ -66,6 +70,7 @@ private fun <T> FormPickerField(
     isClearable: Boolean = true,
     onClick: (() -> Unit),
     onFocusCleared: () -> Unit = {},
+    onVisibilityChanged: (visible: Boolean) -> Unit = {},
     displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
@@ -73,6 +78,9 @@ private fun <T> FormPickerField(
     testTag: String? = null
 ) {
     val carlosIcons = LocalCarlosIcons.current
+
+    TrackVisibilityEffect(onVisibilityChanged)
+
     BaseTextField(
         modifier = modifier.onFocusCleared(onFocusCleared),
         value = displayedValue(value),
