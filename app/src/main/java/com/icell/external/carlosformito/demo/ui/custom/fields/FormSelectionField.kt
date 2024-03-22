@@ -1,11 +1,11 @@
 package com.icell.external.carlosformito.demo.ui.custom.fields
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -21,7 +21,9 @@ import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun <T> FormSelectionField(
     modifier: Modifier = Modifier,
@@ -32,26 +34,36 @@ fun <T> FormSelectionField(
     supportingText: AnnotatedString? = null
 ) {
     val state by fieldItem.collectFieldState()
+
+    TrackVisibilityEffect { visible ->
+        fieldItem.onFieldVisibilityChanged(visible)
+    }
+
     BaseFieldFrame(
         modifier = modifier,
         isError = state.isError,
         errorMessage = state.errorMessage(),
         supportingText = supportingText
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(MaterialTheme.colors.primary.copy(alpha = 0.06f))
-                .clickable(enabled = enabled, onClick = onSelectValue)
-                .padding(16.dp)
+        Card(
+            elevation = 0.dp,
+            modifier = modifier,
+            enabled = enabled,
+            onClick = onSelectValue,
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.06f)
         ) {
-            Text(
-                text = displayedValue(state.value),
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = displayedValue(state.value),
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
+            }
         }
     }
 }

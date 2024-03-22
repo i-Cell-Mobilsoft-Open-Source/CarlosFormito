@@ -1,5 +1,6 @@
 package com.icell.external.carlosformito.core
 
+import android.util.Log
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormField
@@ -10,19 +11,23 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("TooManyFunctions")
-open class FormManagerImpl(
+open class CarlosFormManager(
     private val formFields: List<FormField<*>>,
-    private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL,
-    override var autoValidationExceptionHandler: CoroutineExceptionHandler? = null,
-    override var autoValidationScope: CoroutineScope? = null
+    private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL
 ) : FormManager {
 
     private val fieldStates: Map<String, MutableStateFlow<FormFieldState<*>>> =
@@ -45,6 +50,12 @@ open class FormManagerImpl(
         }
         .map { formField -> formField.id }
 
+    private val fieldVisibility = MutableStateFlow(
+        buildMap {
+            formFields.forEach { formField -> put(formField.id, false) }
+        }
+    )
+
     private val mutableAllRequiredFieldFilled: MutableStateFlow<Boolean> = MutableStateFlow(false)
     override val allRequiredFieldFilled = mutableAllRequiredFieldFilled.asStateFlow()
 
@@ -53,8 +64,21 @@ open class FormManagerImpl(
     private val mutableValidationInProgress = MutableStateFlow(false)
     override val validationInProgress = mutableValidationInProgress.asStateFlow()
 
-    init {
-        checkAllRequiredFieldFilled()
+    private var initialized: Boolean = false
+
+    override var autoValidationScope: CoroutineScope? = null
+    override var autoValidationExceptionHandler: CoroutineExceptionHandler? = null
+
+    @OptIn(FlowPreview::class)
+    override suspend fun initFormManager() {
+        coroutineScope {
+            initialized = true
+            autoValidationScope = this
+
+            fieldVisibility.debounce(FIELD_VISIBILITY_UPDATE_DEBOUNCE).collectLatest { _ ->
+                checkAllRequiredFieldFilled()
+            }
+        }
     }
 
     private fun launchAutoValidation(validationBlock: suspend () -> Unit) {
@@ -80,7 +104,7 @@ open class FormManagerImpl(
     }
 
     private fun <T> createFieldItem(formField: FormField<T>): FormFieldItem<T> {
-        val fieldItem = FormFieldItemImpl(
+        val fieldItem = CarlosFormFieldItem(
             fieldId = formField.id,
             fieldState = getFieldStateFlow<T>(formField.id)
         )
@@ -94,10 +118,12 @@ open class FormManagerImpl(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getFieldItem(id: String): FormFieldItem<T> {
+        checkInitialized()
         return requireNotNull(fieldItems[id] as FormFieldItem<T>)
     }
 
     override fun onFieldFocusCleared(id: String) {
+        checkInitialized()
         if (validationStrategy == FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR) {
             launchAutoValidation {
                 validateAndUpdateFieldState(id)
@@ -106,11 +132,14 @@ open class FormManagerImpl(
     }
 
     override fun <T> onFieldValueChanged(id: String, value: T?) {
+        checkInitialized()
         val currentFieldState = getFieldStateFlow<T>(id)
-        currentFieldState.value = currentFieldState.value.copy(
-            value = value,
-            validationResult = null // Clear validation result on value change
-        )
+        currentFieldState.update { state ->
+            state.copy(
+                value = value,
+                validationResult = null // Clear validation result on value change
+            )
+        }
         if (requiredFieldIds.contains(id)) {
             checkAllRequiredFieldFilled()
         }
@@ -121,8 +150,18 @@ open class FormManagerImpl(
         }
     }
 
+    override fun onFieldVisibilityChanged(id: String, visible: Boolean) {
+        checkInitialized()
+        if (fieldVisibility.value[id] != visible) {
+            fieldVisibility.update { visibilityMap ->
+                visibilityMap.toMutableMap().apply { put(id, visible) }
+            }
+        }
+    }
+
     private fun checkAllRequiredFieldFilled() {
         mutableAllRequiredFieldFilled.value = requiredFieldIds
+            .filter { id -> fieldVisibility.value[id] == true }
             .map { id -> fieldStates[id]?.value?.value }
             .all { fieldValue ->
                 if (fieldValue is String) {
@@ -134,6 +173,7 @@ open class FormManagerImpl(
     }
 
     override suspend fun validateForm(): Boolean {
+        checkInitialized()
         var isFormValid = false
 
         monitorValidationProgress {
@@ -142,16 +182,26 @@ open class FormManagerImpl(
                 .all { isValid -> isValid }
         }
 
+        if (BuildConfig.DEBUG) {
+            printFormState()
+        }
+
         return isFormValid
     }
 
     private suspend fun validateAndUpdateFieldState(id: String): Boolean {
+        /**
+         * Skip validation for invisible fields
+         */
+        if (fieldVisibility.value[id] != true) {
+            return true
+        }
         val fieldState = fieldStates.getValue(id)
         val validationResult = validateField(
             fieldValue = fieldState.value.value,
             validators = getValidators(id)
         )
-        fieldState.value = fieldState.value.copy(validationResult = validationResult)
+        fieldState.update { state -> state.copy(validationResult = validationResult) }
         return validationResult is FormFieldValidationResult.Valid
     }
 
@@ -174,17 +224,57 @@ open class FormManagerImpl(
     }
 
     override fun setFormInvalid() {
+        checkInitialized()
         fieldStates.forEach { (_, fieldItemState) ->
-            fieldItemState.value = fieldItemState.value.copy(
-                validationResult = FormFieldValidationResult.Invalid.Unknown
-            )
+            fieldItemState.update { state ->
+                state.copy(
+                    validationResult = FormFieldValidationResult.Invalid.Unknown
+                )
+            }
         }
     }
 
     override fun clearForm() {
+        checkInitialized()
         formFields.forEach { formField ->
             fieldStates[formField.id]?.value = formField.initialState
         }
         checkAllRequiredFieldFilled()
+    }
+
+    @Suppress("MagicNumber")
+    override fun printFormState() {
+        checkInitialized()
+        val logText = buildString {
+            appendLine("------Form state------")
+
+            formFields.forEach { field ->
+                val fieldState = fieldStates.getValue(field.id).value
+                val row = listOf(
+                    field.id.take(30).padEnd(30),
+                    fieldState.value.toString().take(30).padEnd(30),
+                    fieldVisibility.value[field.id].toString().padEnd(5),
+                    fieldState.validationResult.toString()
+                ).joinToString(" | ")
+                appendLine(row)
+            }
+
+            if (formFields.isEmpty()) {
+                appendLine("Empty")
+            }
+
+            append("----------------------")
+        }
+        Log.d("CarlosFormManager", logText)
+    }
+
+    private fun checkInitialized() {
+        if (!initialized) {
+            error("Please call ${this::initFormManager.name}() before using ${CarlosFormManager::class.simpleName}!")
+        }
+    }
+
+    companion object {
+        private val FIELD_VISIBILITY_UPDATE_DEBOUNCE = 300.milliseconds
     }
 }

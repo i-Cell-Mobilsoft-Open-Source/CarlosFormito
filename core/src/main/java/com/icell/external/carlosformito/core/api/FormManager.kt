@@ -14,6 +14,8 @@ interface FormManager : FormFieldItemListener {
 
     val validationInProgress: StateFlow<Boolean>
 
+    suspend fun initFormManager()
+
     fun <T> getFieldItem(id: String): FormFieldItem<T>
 
     suspend fun validateForm(): Boolean
@@ -21,4 +23,6 @@ interface FormManager : FormFieldItemListener {
     fun setFormInvalid()
 
     fun clearForm()
+
+    fun printFormState()
 }

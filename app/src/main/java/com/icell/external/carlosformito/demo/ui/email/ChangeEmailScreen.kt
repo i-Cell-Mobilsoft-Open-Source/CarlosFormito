@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.demo.ui.email
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +23,6 @@ import com.icell.external.carlosformito.demo.ui.common.FullScreenProgressDialog
 import com.icell.external.carlosformito.ui.field.FormTextField
 import kotlinx.coroutines.flow.collectLatest
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChangeEmailScreen(
     title: String,
@@ -51,11 +49,12 @@ fun ChangeEmailScreen(
             CarlosTopAppBar(title, onBackPressed)
         },
         scaffoldState = scaffoldState
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 24.dp)
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = "Change your email",

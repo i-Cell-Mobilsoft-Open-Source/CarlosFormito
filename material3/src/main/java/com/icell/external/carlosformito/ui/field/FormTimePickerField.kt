@@ -48,6 +48,7 @@ import com.icell.external.carlosformito.ui.extension.selectedTime
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
 import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
 import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import com.icell.external.carlosformito.ui.util.onFocusCleared
@@ -85,6 +86,9 @@ fun FormTimePickerField(
         onFocusCleared = {
             fieldItem.onFieldFocusCleared()
         },
+        onVisibilityChanged = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
+        },
         dialogTitle = dialogTitle,
         leadingContentType = leadingContentType,
         isError = state.isError,
@@ -118,6 +122,7 @@ private fun FormTimePickerField(
     isClearable: Boolean = true,
     onClick: (() -> Unit)? = null,
     onFocusCleared: () -> Unit = {},
+    onVisibilityChanged: (visible: Boolean) -> Unit = {},
     is24HourFormat: Boolean = LocalCarlosFormats.current.is24HourFormat,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -128,6 +133,8 @@ private fun FormTimePickerField(
 ) {
     val context = LocalContext.current
     val carlosIcons = LocalCarlosIcons.current
+
+    TrackVisibilityEffect(onVisibilityChanged)
 
     val displayMode = remember { mutableStateOf(DisplayMode.Picker) }
     var dialogVisible by remember { mutableStateOf(false) }

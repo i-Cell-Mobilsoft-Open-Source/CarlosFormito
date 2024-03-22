@@ -12,6 +12,7 @@ import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.util.focusStepper
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 
@@ -75,8 +76,10 @@ private fun FormIntegerField(
     supportingText: CharSequence? = null,
     testTag: String? = null,
     onValueChange: (Int?) -> Unit,
-    onFocusCleared: () -> Unit = {}
+    onFocusCleared: () -> Unit = {},
+    onVisibilityChanged: (visible: Boolean) -> Unit = {},
 ) {
+    TrackVisibilityEffect(onVisibilityChanged)
     BaseTextField(
         modifier = modifier
             .focusStepper()

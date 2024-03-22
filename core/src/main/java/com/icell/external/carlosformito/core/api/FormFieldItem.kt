@@ -10,4 +10,6 @@ interface FormFieldItem<T> {
     fun <T> onFieldValueChanged(value: T?)
 
     fun onFieldFocusCleared()
+
+    fun onFieldVisibilityChanged(visible: Boolean)
 }

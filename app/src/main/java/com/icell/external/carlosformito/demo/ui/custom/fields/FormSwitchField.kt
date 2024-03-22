@@ -16,6 +16,7 @@ import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 
 @Composable
 fun FormSwitchField(
@@ -29,6 +30,10 @@ fun FormSwitchField(
 ) {
     val state by fieldItem.collectFieldState()
     val currentValue = state.value ?: false
+
+    TrackVisibilityEffect { visible ->
+        fieldItem.onFieldVisibilityChanged(visible)
+    }
 
     BaseFieldFrame(
         modifier = modifier,

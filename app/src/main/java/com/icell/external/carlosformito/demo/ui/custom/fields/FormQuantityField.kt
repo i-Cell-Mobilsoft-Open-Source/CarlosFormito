@@ -23,6 +23,7 @@ import com.icell.external.carlosformito.demo.R
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
+import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -35,6 +36,11 @@ fun FormQuantityField(
     supportingText: CharSequence? = null
 ) {
     val state by fieldItem.collectFieldState()
+
+    TrackVisibilityEffect { visible ->
+        fieldItem.onFieldVisibilityChanged(visible)
+    }
+
     BaseFieldFrame(
         modifier = modifier,
         isError = state.isError,
