@@ -36,9 +36,9 @@ import kotlinx.coroutines.launch
 fun MenuScreen(
     viewModel: MenuViewModel,
     onNavigateToFieldSamples: (validationStrategy: FormFieldValidationStrategy) -> Unit,
-    onNavigateToCustomFormFieldsSample: () -> Unit,
-    onNavigateToLongRunningValidationSample: () -> Unit,
-    onNavigateToInterdependentFieldsSample: () -> Unit
+    onNavigateToCustomFormFieldsSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
+    onNavigateToLongRunningValidationSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
+    onNavigateToInterdependentFieldsSample: (validationStrategy: FormFieldValidationStrategy) -> Unit
 ) {
     val validationStrategyField =
         viewModel.getFieldItem<FormFieldValidationStrategy>(KEY_VALIDATION_STRATEGY_FIELD)
@@ -70,6 +70,7 @@ fun MenuScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .padding(innerPadding)
                     .padding(horizontal = 24.dp)
             ) {
@@ -91,48 +92,45 @@ fun MenuScreen(
                     )
                 )
 
+                FormPickerField(
+                    modifier = Modifier.padding(top = 24.dp),
+                    fieldItem = validationStrategyField,
+                    label = "Field validation strategy",
+                    onClick = {
+                        coroutineScope.launch {
+                            modalSheetState.show()
+                        }
+                    },
+                    displayedValue = { validationStrategy ->
+                        validationStrategy?.displayedValue() ?: ""
+                    },
+                    isClearable = false,
+                    supportingText = validationStrategyState.value?.description()
+                )
+
                 Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(vertical = 24.dp),
+                    modifier = Modifier.padding(vertical = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    MenuListItem(
-                        title = "Built-in field samples",
-                        bodyContent = {
-                            FormPickerField(
-                                modifier = Modifier.padding(
-                                    horizontal = 16.dp,
-                                    vertical = 8.dp
-                                ),
-                                fieldItem = validationStrategyField,
-                                label = "Field validation strategy",
-                                onClick = {
-                                    coroutineScope.launch {
-                                        modalSheetState.show()
-                                    }
-                                },
-                                displayedValue = { validationStrategy ->
-                                    validationStrategy?.displayedValue() ?: ""
-                                },
-                                isClearable = false,
-                                supportingText = validationStrategyState.value?.description()
-                            )
-                        },
-                        onClick = {
-                            onNavigateToFieldSamples.invoke(
-                                validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
-                            )
-                        }
-                    )
+                    MenuListItem(title = "Built-in field samples") {
+                        onNavigateToFieldSamples.invoke(
+                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                        )
+                    }
                     MenuListItem(title = "Custom field samples") {
-                        onNavigateToCustomFormFieldsSample.invoke()
+                        onNavigateToCustomFormFieldsSample.invoke(
+                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                        )
                     }
                     MenuListItem(title = "Long running validation sample") {
-                        onNavigateToLongRunningValidationSample.invoke()
+                        onNavigateToLongRunningValidationSample.invoke(
+                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                        )
                     }
                     MenuListItem(title = "Interdependent fields sample") {
-                        onNavigateToInterdependentFieldsSample.invoke()
+                        onNavigateToInterdependentFieldsSample.invoke(
+                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                        )
                     }
                 }
             }
@@ -143,8 +141,8 @@ fun MenuScreen(
 private fun FormFieldValidationStrategy.displayedValue(): String {
     return when (this) {
         FormFieldValidationStrategy.MANUAL -> "Manual"
-        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> "On focus clear"
-        FormFieldValidationStrategy.AUTO_INLINE -> "Inline"
+        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> "Automatic on focus clear"
+        FormFieldValidationStrategy.AUTO_INLINE -> "Automatic inline"
     }
 }
 

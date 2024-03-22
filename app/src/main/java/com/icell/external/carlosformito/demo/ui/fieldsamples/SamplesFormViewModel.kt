@@ -8,8 +8,9 @@ import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.launch
 
-class SamplesFormViewModel(validationStrategy: FormFieldValidationStrategy) :
-    ViewModel(), FormManager by CarlosFormManager(SamplesFormFields.build(), validationStrategy) {
+class SamplesFormViewModel(
+    validationStrategy: FormFieldValidationStrategy
+) : ViewModel(), FormManager by CarlosFormManager(SamplesFormFields.build(), validationStrategy) {
 
     init {
         viewModelScope.launch {

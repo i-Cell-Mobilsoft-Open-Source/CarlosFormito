@@ -7,7 +7,7 @@ import com.icell.external.carlosformito.core.api.FormManager
 import kotlinx.coroutines.launch
 
 class SetPasswordViewModel(
-    private val setPasswordFormManager: SetPasswordFormManager = SetPasswordFormManager()
+    setPasswordFormManager: SetPasswordFormManager,
 ) : ViewModel(), FormManager by setPasswordFormManager {
 
     init {
