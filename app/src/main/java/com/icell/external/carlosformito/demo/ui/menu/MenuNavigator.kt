@@ -17,11 +17,12 @@ import com.icell.external.carlosformito.demo.ui.email.ChangeEmailScreen
 import com.icell.external.carlosformito.demo.ui.email.ChangeEmailViewModel
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormViewModel
-import com.icell.external.carlosformito.demo.ui.fieldsamples.util.SamplesFormViewModelFactory
 import com.icell.external.carlosformito.demo.ui.menu.Route.Companion.KEY_ARG_VALIDATION_STRATEGY
+import com.icell.external.carlosformito.demo.ui.password.SetPasswordFormManager
 import com.icell.external.carlosformito.demo.ui.password.SetPasswordScreen
 import com.icell.external.carlosformito.demo.ui.password.SetPasswordViewModel
 
+@Suppress("LongMethod")
 @Composable
 fun MenuNavigator(
     navController: NavHostController = rememberNavController()
@@ -58,16 +59,16 @@ fun MenuNavigator(
             MenuScreen(
                 viewModel = viewModel<MenuViewModel>(),
                 onNavigateToFieldSamples = { validationStrategy ->
-                    navController.navigate(Route.buildFieldSampleRoute(validationStrategy))
+                    navController.navigate("${Route.KEY_FIELD_SAMPLES_ROOT}/${validationStrategy.name}")
                 },
-                onNavigateToCustomFormFieldsSample = {
-                    navController.navigate(Route.CustomFormFieldsSample.route)
+                onNavigateToCustomFormFieldsSample = { validationStrategy ->
+                    navController.navigate("${Route.KEY_CUSTOM_FORM_SAMPLES_ROOT}/${validationStrategy.name}")
                 },
-                onNavigateToLongRunningValidationSample = {
-                    navController.navigate(Route.LongRunningValidationSample.route)
+                onNavigateToLongRunningValidationSample = { validationStrategy ->
+                    navController.navigate("${Route.KEY_LONG_RUNNING_SAMPLE_ROOT}/${validationStrategy.name}")
                 },
-                onNavigateToInterdependentFieldsSample = {
-                    navController.navigate(Route.InterdependentFieldsSample.route)
+                onNavigateToInterdependentFieldsSample = { validationStrategy ->
+                    navController.navigate("${Route.KEY_INTERDEPENDENT_FIELDS_SAMPLE_ROOT}/${validationStrategy.name}")
                 }
             )
         }
@@ -76,12 +77,13 @@ fun MenuNavigator(
             arguments = listOf(
                 navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
             )
-        ) { backStackEntry ->
-            val validationStrategy = FormFieldValidationStrategy.valueOf(
-                requireNotNull(backStackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
+        ) { backstackEntry ->
+            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
+                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
             )
-            val viewModel: SamplesFormViewModel =
-                viewModel(factory = SamplesFormViewModelFactory(validationStrategy))
+            val viewModel: SamplesFormViewModel = viewModel {
+                SamplesFormViewModel(validationStrategy)
+            }
 
             SampleFormScreen(
                 title = "Built-in field samples",
@@ -91,8 +93,18 @@ fun MenuNavigator(
                 }
             )
         }
-        composable(Route.CustomFormFieldsSample.route) {
-            val viewModel: CustomFormViewModel = viewModel()
+        composable(
+            route = Route.CustomFormFieldsSample.route,
+            arguments = listOf(
+                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
+            )
+        ) { backstackEntry ->
+            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
+                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
+            )
+            val viewModel: CustomFormViewModel = viewModel {
+                CustomFormViewModel(validationStrategy)
+            }
 
             CustomFormScreen(
                 title = "Custom field samples",
@@ -102,8 +114,18 @@ fun MenuNavigator(
                 }
             )
         }
-        composable(Route.LongRunningValidationSample.route) {
-            val viewModel: ChangeEmailViewModel = viewModel()
+        composable(
+            route = Route.LongRunningValidationSample.route,
+            arguments = listOf(
+                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
+            )
+        ) { backstackEntry ->
+            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
+                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
+            )
+            val viewModel: ChangeEmailViewModel = viewModel {
+                ChangeEmailViewModel(validationStrategy)
+            }
 
             ChangeEmailScreen(
                 title = "Long running validation sample",
@@ -113,8 +135,18 @@ fun MenuNavigator(
                 }
             )
         }
-        composable(Route.InterdependentFieldsSample.route) {
-            val viewModel: SetPasswordViewModel = viewModel()
+        composable(
+            route = Route.InterdependentFieldsSample.route,
+            arguments = listOf(
+                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
+            )
+        ) { backstackEntry ->
+            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
+                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
+            )
+            val viewModel: SetPasswordViewModel = viewModel {
+                SetPasswordViewModel(SetPasswordFormManager(validationStrategy))
+            }
 
             SetPasswordScreen(
                 title = "Interdependent fields sample",
@@ -131,20 +163,23 @@ sealed class Route(val route: String) {
 
     data object SamplesMenu : Route("MenuRoute")
 
-    data object FieldSamples : Route("$KEY_FIELD_SAMPLES_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
+    data object FieldSamples :
+        Route("$KEY_FIELD_SAMPLES_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
 
-    data object CustomFormFieldsSample : Route("CustomFormFieldsSample")
+    data object CustomFormFieldsSample :
+        Route("$KEY_CUSTOM_FORM_SAMPLES_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
 
-    data object LongRunningValidationSample : Route("LongRunningValidationSample")
+    data object LongRunningValidationSample :
+        Route("$KEY_LONG_RUNNING_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
 
-    data object InterdependentFieldsSample : Route("InterdependentFieldsSample")
+    data object InterdependentFieldsSample :
+        Route("$KEY_INTERDEPENDENT_FIELDS_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
 
     companion object {
         const val KEY_FIELD_SAMPLES_ROOT = "FieldSamples"
+        const val KEY_CUSTOM_FORM_SAMPLES_ROOT = "CustomFormFieldsSample"
+        const val KEY_LONG_RUNNING_SAMPLE_ROOT = "LongRunningValidationSample"
+        const val KEY_INTERDEPENDENT_FIELDS_SAMPLE_ROOT = "InterdependentFieldsSample"
         const val KEY_ARG_VALIDATION_STRATEGY = "validationStrategy"
-
-        fun buildFieldSampleRoute(validationStrategy: FormFieldValidationStrategy): String {
-            return "$KEY_FIELD_SAMPLES_ROOT/${validationStrategy.name}"
-        }
     }
 }

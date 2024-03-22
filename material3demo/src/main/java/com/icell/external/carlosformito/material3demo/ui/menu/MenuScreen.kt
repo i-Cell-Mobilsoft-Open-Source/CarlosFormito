@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -48,6 +47,7 @@ fun MenuScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -56,7 +56,7 @@ fun MenuScreen(
 
             Text(
                 text = "Welcome to Carlos Formito!",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineSmall
             )
             Text(
                 text = "Explore our form state management solution for Jetpack Compose in action. " +
@@ -64,30 +64,22 @@ fun MenuScreen(
                 style = MaterialTheme.typography.bodySmall.copy(lineHeight = 22.sp)
             )
 
+            FormPickerField(
+                modifier = Modifier.padding(top = 24.dp),
+                fieldItem = validationStrategyField,
+                label = "Field validation strategy",
+                onClick = { openBottomSheet = true },
+                displayedValue = { validationStrategy ->
+                    validationStrategy?.displayedValue() ?: ""
+                },
+                isClearable = false,
+                supportingText = validationStrategyState.value?.description()
+            )
+
             Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             ) {
-                MenuListItem(
-                    title = "Built-in field samples",
-                    bodyContent = {
-                        FormPickerField(
-                            modifier = Modifier.padding(
-                                horizontal = 16.dp,
-                                vertical = 8.dp
-                            ),
-                            fieldItem = validationStrategyField,
-                            label = "Field validation strategy",
-                            onClick = { openBottomSheet = true },
-                            displayedValue = { validationStrategy ->
-                                validationStrategy?.displayedValue() ?: ""
-                            },
-                            isClearable = false,
-                            supportingText = validationStrategyState.value?.description()
-                        )
-                    }
-                ) {
+                MenuListItem(title = "Built-in field samples") {
                     onNavigateToFieldsSample.invoke(
                         validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
                     )
@@ -99,8 +91,7 @@ fun MenuScreen(
     if (openBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet = false },
-            sheetState = bottomSheetState,
-            windowInsets = BottomSheetDefaults.windowInsets
+            sheetState = bottomSheetState
         ) {
             SimpleSelectionBottomSheet(
                 items = FormFieldValidationStrategy.entries,
@@ -122,8 +113,8 @@ fun MenuScreen(
 private fun FormFieldValidationStrategy.displayedValue(): String {
     return when (this) {
         FormFieldValidationStrategy.MANUAL -> "Manual"
-        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> "On focus clear"
-        FormFieldValidationStrategy.AUTO_INLINE -> "Inline"
+        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> "Automatic on focus clear"
+        FormFieldValidationStrategy.AUTO_INLINE -> "Automatic inline"
     }
 }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.icell.external.carlosformito.core.CarlosFormManager
 import com.icell.external.carlosformito.core.api.FormManager
+import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +17,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class ChangeEmailViewModel :
-    ViewModel(),
-    FormManager by CarlosFormManager(ChangeEmailFields.build()) {
+class ChangeEmailViewModel(
+    validationStrategy: FormFieldValidationStrategy
+) : ViewModel(), FormManager by CarlosFormManager(ChangeEmailFields.build(), validationStrategy) {
 
     private val mutableCurrentEmail = MutableStateFlow<String?>(null)
     val currentEmail = mutableCurrentEmail.asStateFlow()

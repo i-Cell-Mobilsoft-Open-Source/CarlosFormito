@@ -13,7 +13,6 @@ import androidx.navigation.navArgument
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.material3demo.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.material3demo.ui.fieldsamples.SamplesFormViewModel
-import com.icell.external.carlosformito.material3demo.ui.fieldsamples.SamplesFormViewModelFactory
 import com.icell.external.carlosformito.material3demo.ui.menu.Route.Companion.KEY_ARG_VALIDATION_STRATEGY
 
 @Composable
@@ -52,7 +51,7 @@ fun MenuNavigator(
             MenuScreen(
                 viewModel = viewModel<MenuViewModel>(),
                 onNavigateToFieldsSample = { validationStrategy ->
-                    navController.navigate(Route.buildFieldSampleRoute(validationStrategy))
+                    navController.navigate("${Route.KEY_FIELD_SAMPLES_ROOT}/${validationStrategy.name}")
                 }
             )
         }
@@ -62,11 +61,12 @@ fun MenuNavigator(
                 navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val validationStrategy = FormFieldValidationStrategy.valueOf(
+            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
                 requireNotNull(backStackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
             )
-            val viewModel: SamplesFormViewModel =
-                viewModel(factory = SamplesFormViewModelFactory(validationStrategy))
+            val viewModel: SamplesFormViewModel = viewModel {
+                SamplesFormViewModel(validationStrategy)
+            }
 
             SampleFormScreen(
                 title = "Built-in field samples",
@@ -87,9 +87,5 @@ sealed class Route(val route: String) {
     companion object {
         const val KEY_FIELD_SAMPLES_ROOT = "FieldSamples"
         const val KEY_ARG_VALIDATION_STRATEGY = "validationStrategy"
-
-        fun buildFieldSampleRoute(validationStrategy: FormFieldValidationStrategy): String {
-            return "$KEY_FIELD_SAMPLES_ROOT/${validationStrategy.name}"
-        }
     }
 }

@@ -17,7 +17,7 @@ fun <T> SimpleSelectionBottomSheet(
     itemText: (index: Int, item: T) -> String,
     onItemSelected: (index: Int, item: T) -> Unit
 ) {
-    Column(modifier = Modifier.padding(bottom = 24.dp)) {
+    Column(modifier = Modifier.padding(bottom = 48.dp)) {
         items.forEachIndexed { index, item ->
             Text(
                 text = itemText(index, item),

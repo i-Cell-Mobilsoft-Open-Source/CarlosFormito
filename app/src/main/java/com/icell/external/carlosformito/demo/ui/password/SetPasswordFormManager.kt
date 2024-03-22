@@ -2,13 +2,16 @@ package com.icell.external.carlosformito.demo.ui.password
 
 import com.icell.external.carlosformito.core.CarlosFormManager
 import com.icell.external.carlosformito.core.api.getFieldValue
+import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.demo.R
 import com.icell.external.carlosformito.demo.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
 import com.icell.external.carlosformito.demo.ui.password.SetPasswordFields.KEY_PASSWORD
 import kotlinx.coroutines.flow.update
 
-class SetPasswordFormManager : CarlosFormManager(SetPasswordFields.build()) {
+class SetPasswordFormManager(
+    validationStrategy: FormFieldValidationStrategy
+) : CarlosFormManager(SetPasswordFields.build(), validationStrategy) {
 
     private val confirmPasswordState = getFieldStateFlow<String>(KEY_CONFIRM_PASSWORD)
 

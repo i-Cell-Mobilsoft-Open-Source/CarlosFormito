@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.icell.external.carlosformito.core.CarlosFormManager
 import com.icell.external.carlosformito.core.api.FormManager
+import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.launch
 
-class CustomFormViewModel :
-    ViewModel(),
-    FormManager by CarlosFormManager(CustomFormFields.build()) {
+class CustomFormViewModel(
+    validationStrategy: FormFieldValidationStrategy
+) : ViewModel(), FormManager by CarlosFormManager(CustomFormFields.build(), validationStrategy) {
 
     init {
         viewModelScope.launch {
