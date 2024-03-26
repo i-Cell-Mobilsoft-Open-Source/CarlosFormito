@@ -25,7 +25,7 @@ publishing {
         register("GitHubPackagesRelease", MavenPublication::class.java) {
             groupId = "com.icell.external.carlosformito"
             artifactId = "carlosformito-material3"
-            version = "0.0.1-SNAPSHOT"
+            version = "0.0.2-SNAPSHOT"
             artifact("$buildDir/outputs/aar/material3-debug.aar")
         }
     }

@@ -56,9 +56,9 @@ class CommonLibraryGradlePlugin : Plugin<Project> {
                     name = "GitHubPackages"
                     url = project.uri("https://maven.pkg.github.com/icellmobilsoft/CarlosFormito")
                     credentials {
-                        username = project.getLocalProperty("gpr.usr") as? String?
+                        username = getLocalProperty("gpr.usr") as? String?
                             ?: System.getenv("GPR_USER")
-                        password = project.getLocalProperty("gpr.key") as? String?
+                        password = getLocalProperty("gpr.key") as? String?
                             ?: System.getenv("GPR_API_KEY")
                     }
                 }
