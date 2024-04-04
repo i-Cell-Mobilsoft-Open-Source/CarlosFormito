@@ -38,6 +38,7 @@ class SetPasswordFormManager(
                     )
                 )
             }
+            return false
         }
 
         return independentFieldsAreValid
