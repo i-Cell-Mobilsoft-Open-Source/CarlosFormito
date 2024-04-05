@@ -20,6 +20,11 @@ android {
     }
 }
 
+val sourceJar by tasks.registering(Jar::class) {
+    from(android.sourceSets["main"].java.srcDirs)
+    archiveClassifier.set("sources")
+}
+
 publishing {
     publications {
         register("GitHubPackagesRelease", MavenPublication::class.java) {
@@ -27,6 +32,11 @@ publishing {
             artifactId = "carlosformito-material3"
             version = "0.0.2-SNAPSHOT"
             artifact("$buildDir/outputs/aar/material3-debug.aar")
+
+            // Attach sources
+            artifact(sourceJar) {
+                classifier = "sources"
+            }
         }
     }
 }
