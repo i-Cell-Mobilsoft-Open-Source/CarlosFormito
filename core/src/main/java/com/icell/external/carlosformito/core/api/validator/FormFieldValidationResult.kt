@@ -20,5 +20,15 @@ sealed interface FormFieldValidationResult {
             @StringRes override val errorMessageId: Int,
             val formatArgs: List<Any>
         ) : Invalid(errorMessageId)
+
+        companion object {
+            fun of(@StringRes errorMessageId: Int?, formatArgs: List<Any>? = null): Invalid {
+                return when {
+                    errorMessageId == null -> Unknown
+                    formatArgs.isNullOrEmpty() -> Message(errorMessageId)
+                    else -> MessageWithArgs(errorMessageId, formatArgs)
+                }
+            }
+        }
     }
 }

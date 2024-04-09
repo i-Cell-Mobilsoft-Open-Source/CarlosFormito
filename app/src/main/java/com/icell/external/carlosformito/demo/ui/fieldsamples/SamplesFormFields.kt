@@ -6,6 +6,7 @@ import com.icell.external.carlosformito.core.validator.IntegerMinMaxValidator
 import com.icell.external.carlosformito.core.validator.TextMinLengthValidator
 import com.icell.external.carlosformito.core.validator.TimeMinMaxValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
+import com.icell.external.carlosformito.demo.R
 import com.icell.external.carlosformito.demo.ui.fieldsamples.model.PackageType
 import java.time.LocalDate
 import java.time.LocalTime
@@ -25,31 +26,32 @@ object SamplesFormFields {
             FormField(
                 id = KEY_FORM_FIELD_NAME,
                 validators = listOf(
-                    ValueRequiredValidator(),
-                    TextMinLengthValidator(minLength = 3)
+                    ValueRequiredValidator(R.string.value_required_error),
+                    TextMinLengthValidator(minLength = 3, R.string.min_length_error)
                 )
             ),
             FormField(
                 id = KEY_FORM_FIELD_SECRET,
                 validators = listOf(
-                    ValueRequiredValidator(),
+                    ValueRequiredValidator(R.string.value_required_error),
                     TextMinLengthValidator(minLength = 8)
                 )
             ),
             FormField(
                 id = KEY_FORM_FIELD_DATE,
                 validators = listOf(
-                    ValueRequiredValidator(),
+                    ValueRequiredValidator(R.string.value_required_error),
                     DateMinMaxValidator(
                         minValue = LocalDate.now(),
-                        maxValue = LocalDate.now().plusWeeks(1)
+                        maxValue = LocalDate.now().plusWeeks(1),
+                        R.string.date_min_max_error
                     )
                 )
             ),
             FormField(
                 id = KEY_FORM_FIELD_TIME,
                 validators = listOf(
-                    ValueRequiredValidator(),
+                    ValueRequiredValidator(R.string.value_required_error),
                     TimeMinMaxValidator(
                         minValue = LocalTime.NOON,
                         maxValue = LocalTime.of(18, 0)

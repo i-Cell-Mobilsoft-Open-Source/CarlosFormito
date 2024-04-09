@@ -63,7 +63,7 @@ class DateMaxValidatorTest {
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val maxValue = LocalDate.of(2023, 1, 1)
-        val validator = DateMaxValidator(maxValue)
+        val validator = DateMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(maxValue.plusDays(1))
 
         assertThat(validationResult)

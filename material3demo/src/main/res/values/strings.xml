@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Carlos - M3 demo</string>
+
+    <!--Validator error texts-->
+    <string name="min_length_error">Min. length: %1$d character(s)</string>
+    <string name="value_required_error">This field is required!</string>
+    <string name="invalid_format_error">Invalid format!</string>
+    <string name="date_min_error">Must be a date after or equal to: %s!</string>
+    <string name="date_max_error">Must be a date before or equal to: %s!</string>
+    <string name="date_min_max_error">Must be a date between: %1$s and %2$s!</string>
+    <string name="time_min_error">Must be a time after or equal to: %s!</string>
+    <string name="time_max_error">Must be a time before or equal to: %s!</string>
+    <string name="time_min_max_error">Must be a time between: %1$s and %2$s!</string>
+    <string name="integer_min_error">Value must be greater than or equal to %d!</string>
+    <string name="integer_max_error">Value must be lesser than or equal to %d!</string>
+    <string name="integer_min_max_error">Must be a decimal between: %1$d and %2$d!</string>
 </resources>

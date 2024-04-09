@@ -6,7 +6,7 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import java.util.Locale
 
 class ContainsSpecialCharacterValidator(
-    @StringRes private val errorMessageId: Int
+    @StringRes private val errorMessageId: Int? = null
 ) : FormFieldValidator<String> {
 
     override suspend fun validate(value: String?): FormFieldValidationResult {
@@ -15,7 +15,7 @@ class ContainsSpecialCharacterValidator(
             return FormFieldValidationResult.Valid
         }
         return if (!containsSpecialChars(nonNullValue)) {
-            FormFieldValidationResult.Invalid.Message(errorMessageId)
+            FormFieldValidationResult.Invalid.of(errorMessageId)
         } else {
             FormFieldValidationResult.Valid
         }

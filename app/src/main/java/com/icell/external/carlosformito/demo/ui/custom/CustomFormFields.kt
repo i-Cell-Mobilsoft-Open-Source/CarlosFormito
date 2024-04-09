@@ -3,6 +3,7 @@ package com.icell.external.carlosformito.demo.ui.custom
 import com.icell.external.carlosformito.core.api.model.FormField
 import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
+import com.icell.external.carlosformito.demo.R
 import com.icell.external.carlosformito.demo.ui.custom.fields.model.PaymentMethod
 import com.icell.external.carlosformito.demo.ui.custom.fields.validator.ValidityStartValidator
 import java.time.ZonedDateTime
@@ -25,7 +26,7 @@ object CustomFormFields {
             FormField(
                 id = KEY_VALIDITY_START,
                 validators = listOf(
-                    ValueRequiredValidator(),
+                    ValueRequiredValidator(R.string.value_required_error),
                     ValidityStartValidator(
                         minDateTime = ZonedDateTime.now(),
                         maxDateTime = ZonedDateTime.now().plusWeeks(1)
@@ -40,7 +41,7 @@ object CustomFormFields {
             FormField(
                 id = KEY_DEBIT_CARD_NUMBER,
                 validators = listOf(
-                    ValueRequiredValidator()
+                    ValueRequiredValidator(R.string.value_required_error)
                 )
             ),
             FormField(

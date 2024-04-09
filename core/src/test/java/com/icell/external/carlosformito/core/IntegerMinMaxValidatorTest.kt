@@ -79,7 +79,7 @@ class IntegerMinMaxValidatorTest {
         val minValue = 5
         val maxValue = 10
 
-        val validator = IntegerMinMaxValidator(minValue, maxValue)
+        val validator = IntegerMinMaxValidator(minValue, maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(15)
 
         assertThat(validationResult)

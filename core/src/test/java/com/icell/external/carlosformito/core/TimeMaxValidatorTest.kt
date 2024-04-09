@@ -63,7 +63,7 @@ class TimeMaxValidatorTest {
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val maxValue = LocalTime.of(5, 30)
-        val validator = TimeMaxValidator(maxValue)
+        val validator = TimeMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(maxValue.plusHours(1))
 
         assertThat(validationResult)

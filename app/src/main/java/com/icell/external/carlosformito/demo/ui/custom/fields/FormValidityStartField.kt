@@ -1,8 +1,11 @@
 package com.icell.external.carlosformito.demo.ui.custom.fields
 
 import android.text.format.DateFormat
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
@@ -27,10 +30,11 @@ import com.icell.external.carlosformito.demo.ui.custom.fields.model.ValidityStar
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.extension.requireActivity
-import com.icell.external.carlosformito.ui.field.base.BaseFieldFrame
+import com.icell.external.carlosformito.ui.field.base.TextFieldSupportingText
 import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.util.DatePickerBuilder
 import com.icell.external.carlosformito.ui.util.TimePickerBuilder
+import com.icell.external.carlosformito.ui.util.testId
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -51,11 +55,8 @@ fun FormValidityStartField(
         fieldItem.onFieldVisibilityChanged(visible)
     }
 
-    BaseFieldFrame(
-        modifier = modifier,
-        isError = state.isError,
-        errorMessage = state.errorMessage(),
-        supportingText = supportingText
+    Column(
+        modifier = modifier
     ) {
         val context = LocalContext.current
 
@@ -114,6 +115,24 @@ fun FormValidityStartField(
                     }
                 ).show(context.requireActivity().supportFragmentManager, "FormTimePicker")
             }
+        }
+
+        val displayedSupportingText = if (state.isError) {
+            state.errorMessage() ?: supportingText
+        } else {
+            supportingText
+        }
+
+        AnimatedVisibility(visible = !displayedSupportingText.isNullOrBlank()) {
+            TextFieldSupportingText(
+                modifier = Modifier
+                    .testId("text_supported")
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 12.dp)
+                    .padding(horizontal = 16.dp),
+                isError = state.isError,
+                supportingText = displayedSupportingText ?: ""
+            )
         }
     }
 }

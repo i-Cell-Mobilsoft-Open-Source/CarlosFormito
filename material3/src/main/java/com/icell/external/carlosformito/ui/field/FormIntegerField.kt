@@ -41,13 +41,16 @@ fun FormIntegerField(
         trailingContentType = trailingContentType,
         leadingContentType = leadingContentType,
         isError = state.isError,
-        errorMessage = state.errorMessage(),
         enabled = enabled,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = supportingText,
+        supportingText = if (state.isError) {
+            state.errorMessage() ?: supportingText
+        } else {
+            supportingText
+        },
         testTag = testTag,
         onValueChange = { newValue ->
             fieldItem.onFieldValueChanged(newValue)
@@ -67,7 +70,6 @@ private fun FormIntegerField(
     trailingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
-    errorMessage: String? = null,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -88,7 +90,6 @@ private fun FormIntegerField(
         label = label,
         enabled = enabled,
         isError = isError,
-        errorMessage = errorMessage,
         trailingContentType = trailingContentType,
         leadingContentType = leadingContentType,
         keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Number),

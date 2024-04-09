@@ -39,7 +39,6 @@ fun <T> FormPickerField(
         },
         leadingContentType = leadingContentType,
         isError = state.isError,
-        errorMessage = state.errorMessage(),
         enabled = enabled,
         isClearable = isClearable,
         onClick = onClick,
@@ -52,7 +51,11 @@ fun <T> FormPickerField(
         displayedValue = displayedValue,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = supportingText,
+        supportingText = if (state.isError) {
+            state.errorMessage() ?: supportingText
+        } else {
+            supportingText
+        },
         testTag = testTag
     )
 }
@@ -65,7 +68,6 @@ private fun <T> FormPickerField(
     onClear: () -> Unit = {},
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
-    errorMessage: CharSequence? = null,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     onClick: (() -> Unit),
@@ -87,7 +89,6 @@ private fun <T> FormPickerField(
         label = label,
         enabled = enabled,
         isError = isError,
-        errorMessage = errorMessage,
         trailingContentType = TextFieldAffixContentType.Icon(
             value = if (isClearable && value != null) {
                 carlosIcons.clear

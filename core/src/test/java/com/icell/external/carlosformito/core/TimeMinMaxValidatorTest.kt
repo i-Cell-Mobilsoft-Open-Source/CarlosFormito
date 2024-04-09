@@ -70,7 +70,7 @@ class TimeMinMaxValidatorTest {
         val maxValue = LocalTime.MAX
         val testValue = maxValue.plusHours(1)
 
-        val validator = TimeMinMaxValidator(minValue, maxValue)
+        val validator = TimeMinMaxValidator(minValue, maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(testValue)
 
         assertThat(validationResult)

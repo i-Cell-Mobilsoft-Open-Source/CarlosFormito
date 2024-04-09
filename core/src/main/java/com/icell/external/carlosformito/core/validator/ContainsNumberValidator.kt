@@ -5,7 +5,7 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidationRe
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 
 class ContainsNumberValidator(
-    @StringRes private val errorMessageId: Int
+    @StringRes private val errorMessageId: Int? = null
 ) : FormFieldValidator<String> {
 
     override suspend fun validate(value: String?): FormFieldValidationResult {
@@ -14,7 +14,7 @@ class ContainsNumberValidator(
             return FormFieldValidationResult.Valid
         }
         return if (nonNullValue.none { char -> char.isDigit() }) {
-            FormFieldValidationResult.Invalid.Message(errorMessageId)
+            FormFieldValidationResult.Invalid.of(errorMessageId)
         } else {
             FormFieldValidationResult.Valid
         }

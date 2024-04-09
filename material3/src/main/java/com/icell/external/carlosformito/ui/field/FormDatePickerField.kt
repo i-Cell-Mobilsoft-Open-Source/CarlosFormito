@@ -63,7 +63,6 @@ fun FormDatePickerField(
         maxDate = maxDate,
         leadingContentType = leadingContentType,
         isError = state.isError,
-        errorMessage = state.errorMessage(),
         enabled = enabled,
         isClearable = isClearable,
         onClick = onClick,
@@ -71,7 +70,11 @@ fun FormDatePickerField(
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = supportingText,
+        supportingText = if (state.isError) {
+            state.errorMessage() ?: supportingText
+        } else {
+            supportingText
+        },
         testTag = testTag
     )
 }
@@ -89,7 +92,6 @@ private fun FormDatePickerField(
     maxDate: LocalDate? = null,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
-    errorMessage: String? = null,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     onClick: (() -> Unit)? = null,
@@ -131,7 +133,6 @@ private fun FormDatePickerField(
         label = label,
         enabled = enabled,
         isError = isError,
-        errorMessage = errorMessage,
         trailingContentType = TextFieldAffixContentType.Icon(
             value = if (isClearable && value != null) {
                 carlosIcons.clear

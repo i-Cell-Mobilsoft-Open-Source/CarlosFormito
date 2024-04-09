@@ -1,6 +1,7 @@
 package com.icell.external.carlosformito.ui.field.base
 
 import android.view.KeyEvent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,6 @@ fun BaseTextField(
     trailingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
-    errorMessage: CharSequence? = null,
     enabled: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -195,15 +195,16 @@ fun BaseTextField(
                 }
             }
         }
-        TextFieldSupportingText(
-            modifier = Modifier
-                .testId("text_supported")
-                .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 12.dp)
-                .padding(horizontal = 16.dp),
-            isError = isError,
-            errorMessage = errorMessage,
-            supportingText = supportingText
-        )
+        AnimatedVisibility(visible = !supportingText.isNullOrBlank()) {
+            TextFieldSupportingText(
+                modifier = Modifier
+                    .testId("text_supported")
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 12.dp)
+                    .padding(horizontal = 16.dp),
+                isError = isError,
+                supportingText = supportingText ?: ""
+            )
+        }
     }
 }

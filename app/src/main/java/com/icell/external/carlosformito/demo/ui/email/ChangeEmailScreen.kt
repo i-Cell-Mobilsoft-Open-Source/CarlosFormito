@@ -77,15 +77,19 @@ fun ChangeEmailScreen(
                     alpha = if (dataIsLoading) .3f else 1f
                 )
             )
-            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                """
+                    We will send you a verification email to the provided address.
+                """.trimIndent(),
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
 
             FormTextField(
                 fieldItem = viewModel.getFieldItem(ChangeEmailFields.KEY_NEW_EMAIL),
                 label = "New email*",
-                maxLength = 32,
-                supportingText = """
-                    We will send you a verification email to the provided address.
-                """.trimIndent()
+                maxLength = 32
             )
 
             val allRequiredFieldFilled by viewModel.allRequiredFieldFilled.collectAsState()
