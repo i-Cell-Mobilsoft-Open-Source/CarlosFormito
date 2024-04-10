@@ -42,12 +42,15 @@ fun FormPasswordTextField(
         label = label,
         leadingContentType = leadingContentType,
         isError = state.isError,
-        errorMessage = state.errorMessage(),
         enabled = enabled,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         contentDescription = contentDescription,
-        supportingText = supportingText,
+        supportingText = if (state.isError) {
+            state.errorMessage() ?: supportingText
+        } else {
+            supportingText
+        },
         testTag = testTag,
         onValueChange = { value ->
             fieldItem.onFieldValueChanged(value)
@@ -69,7 +72,6 @@ private fun FormPasswordTextField(
     label: String,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
-    errorMessage: String? = null,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -93,7 +95,6 @@ private fun FormPasswordTextField(
         label = label,
         enabled = enabled,
         isError = isError,
-        errorMessage = errorMessage,
         trailingContentType = TextFieldAffixContentType.Icon(
             value = if (isPasswordVisible.value) {
                 carlosIcons.passwordVisible

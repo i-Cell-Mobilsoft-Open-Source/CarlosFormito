@@ -42,13 +42,16 @@ fun FormTextField(
         trailingContentType = trailingContentType,
         leadingContentType = leadingContentType,
         isError = state.isError,
-        errorMessage = state.errorMessage(),
         enabled = enabled,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = supportingText,
+        supportingText = if (state.isError) {
+            state.errorMessage() ?: supportingText
+        } else {
+            supportingText
+        },
         testTag = testTag,
         onValueChange = { value ->
             fieldItem.onFieldValueChanged(value)
@@ -73,7 +76,6 @@ private fun FormTextField(
     trailingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
     isError: Boolean = false,
-    errorMessage: CharSequence? = null,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -96,7 +98,6 @@ private fun FormTextField(
         label = label,
         enabled = enabled,
         isError = isError,
-        errorMessage = errorMessage,
         trailingContentType = trailingContentType,
         leadingContentType = leadingContentType,
         keyboardOptions = keyboardOptions,

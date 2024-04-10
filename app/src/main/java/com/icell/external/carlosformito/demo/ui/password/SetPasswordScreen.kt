@@ -49,13 +49,18 @@ fun SetPasswordScreen(
             FormPasswordTextField(
                 fieldItem = viewModel.getFieldItem(KEY_PASSWORD),
                 label = "Password*",
-                maxLength = KEY_PASSWORD_MAX_LENGTH,
-                supportingText = """
+                maxLength = KEY_PASSWORD_MAX_LENGTH
+            )
+
+            Text(
+                text = """
                     •  Min 8, max 32 characters
                     •  Contains number
                     •  Contains special characters
                     •  Contains both uppercase and lowercase characters
-                """.trimIndent()
+                """.trimIndent(),
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             )
 
             FormPasswordTextField(

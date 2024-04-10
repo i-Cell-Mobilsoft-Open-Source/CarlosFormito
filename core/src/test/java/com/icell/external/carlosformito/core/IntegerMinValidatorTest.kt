@@ -59,7 +59,7 @@ class IntegerMinValidatorTest {
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val minValue = 5
-        val validator = IntegerMinValidator(minValue)
+        val validator = IntegerMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(3)
 
         assertThat(validationResult)

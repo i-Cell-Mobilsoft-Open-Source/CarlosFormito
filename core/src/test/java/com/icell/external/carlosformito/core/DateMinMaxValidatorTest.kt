@@ -70,7 +70,7 @@ class DateMinMaxValidatorTest {
         val maxValue = LocalDate.of(2023, 12, 31)
         val testValue = maxValue.plusDays(1)
 
-        val validator = DateMinMaxValidator(minValue, maxValue)
+        val validator = DateMinMaxValidator(minValue, maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(testValue)
 
         assertThat(validationResult)

@@ -15,8 +15,7 @@ import com.icell.external.carlosformito.ui.theme.LocalCarlosColors
 fun TextFieldSupportingText(
     modifier: Modifier = Modifier,
     isError: Boolean,
-    supportingText: CharSequence?,
-    errorMessage: CharSequence?
+    supportingText: CharSequence,
 ) {
     val carlosColors = LocalCarlosColors.current
     val textColor: Color by animateColorAsState(
@@ -28,17 +27,11 @@ fun TextFieldSupportingText(
         label = "Text color animation"
     )
 
-    val displayedText = if (isError) {
-        errorMessage
-    } else {
-        supportingText
-    }
-
-    when (displayedText) {
+    when (supportingText) {
         is String -> {
             Text(
                 modifier = modifier.animateContentSize(),
-                text = displayedText,
+                text = supportingText,
                 style = MaterialTheme.typography.bodySmall,
                 color = textColor
             )
@@ -47,16 +40,14 @@ fun TextFieldSupportingText(
         is AnnotatedString -> {
             Text(
                 modifier = modifier.animateContentSize(),
-                text = displayedText,
+                text = supportingText,
                 style = MaterialTheme.typography.bodySmall,
                 color = textColor
             )
         }
 
         else -> {
-            displayedText?.let {
-                error("Unsupported type [${displayedText.javaClass.simpleName}] for supportingText!")
-            }
+            error("Unsupported type [${supportingText.javaClass.simpleName}] for supportingText!")
         }
     }
 }

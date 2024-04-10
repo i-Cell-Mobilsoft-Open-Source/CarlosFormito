@@ -68,7 +68,7 @@ class TimeMinValidatorTest {
     fun `test invalid input returns error message args`() = runTest {
         val minValue = LocalTime.of(5, 30)
 
-        val validator = TimeMinValidator(minValue)
+        val validator = TimeMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
         val invalidValue = minValue.minusHours(1)
         val validationResult = validator.validate(invalidValue)
 

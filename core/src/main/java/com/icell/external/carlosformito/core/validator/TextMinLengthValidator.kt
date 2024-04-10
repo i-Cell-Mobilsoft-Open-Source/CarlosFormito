@@ -2,7 +2,6 @@ package com.icell.external.carlosformito.core.validator
 
 import androidx.annotation.IntRange
 import androidx.annotation.StringRes
-import com.icell.external.carlosformito.core.R
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 
@@ -10,7 +9,7 @@ class TextMinLengthValidator(
     @IntRange(from = MIN_LENGTH_RANGE_FROM)
     private val minLength: Int,
     @StringRes
-    private val errorMessageId: Int = R.string.carlos_lbl_validator_min_length
+    private val errorMessageId: Int? = null
 ) : FormFieldValidator<String> {
 
     init {
@@ -25,7 +24,7 @@ class TextMinLengthValidator(
             return FormFieldValidationResult.Valid
         }
         return if (nonNullValue.length < minLength) {
-            FormFieldValidationResult.Invalid.MessageWithArgs(
+            FormFieldValidationResult.Invalid.of(
                 errorMessageId,
                 listOf(minLength)
             )

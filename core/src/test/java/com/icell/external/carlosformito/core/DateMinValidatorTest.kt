@@ -68,7 +68,7 @@ class DateMinValidatorTest {
     fun `test invalid input returns error message args`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
 
-        val validator = DateMinValidator(minValue)
+        val validator = DateMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
         val invalidValue = minValue.minusDays(1)
         val validationResult = validator.validate(invalidValue)
 

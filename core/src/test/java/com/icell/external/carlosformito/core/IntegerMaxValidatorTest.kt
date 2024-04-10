@@ -59,7 +59,7 @@ class IntegerMaxValidatorTest {
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val maxValue = 10
-        val validator = IntegerMaxValidator(maxValue)
+        val validator = IntegerMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(15)
 
         assertThat(validationResult)

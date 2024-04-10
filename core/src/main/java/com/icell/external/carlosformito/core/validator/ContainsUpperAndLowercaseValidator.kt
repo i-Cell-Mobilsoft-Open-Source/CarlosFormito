@@ -5,7 +5,7 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidationRe
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 
 class ContainsUpperAndLowercaseValidator(
-    @StringRes private val errorMessageId: Int
+    @StringRes private val errorMessageId: Int? = null
 ) : FormFieldValidator<String> {
 
     override suspend fun validate(value: String?): FormFieldValidationResult {
@@ -16,7 +16,7 @@ class ContainsUpperAndLowercaseValidator(
         return if (
             nonNullValue.none { it.isUpperCase() } || nonNullValue.none { it.isLowerCase() }
         ) {
-            FormFieldValidationResult.Invalid.Message(errorMessageId)
+            FormFieldValidationResult.Invalid.of(errorMessageId)
         } else {
             FormFieldValidationResult.Valid
         }
