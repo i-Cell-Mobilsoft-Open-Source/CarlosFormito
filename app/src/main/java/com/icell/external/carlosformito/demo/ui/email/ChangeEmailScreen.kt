@@ -86,15 +86,21 @@ fun ChangeEmailScreen(
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
 
+            val sameOldAndNewEmail by viewModel.sameOldAndNewEmail.collectAsState()
             FormTextField(
                 fieldItem = viewModel.getFieldItem(ChangeEmailFields.KEY_NEW_EMAIL),
+                customErrorMessage = if (sameOldAndNewEmail) {
+                    "Same old and new email!"
+                } else {
+                    null
+                },
                 label = "New email*",
                 maxLength = 32
             )
 
-            val allRequiredFieldFilled by viewModel.allRequiredFieldFilled.collectAsState()
+            val submitButtonEnabled by viewModel.submitButtonEnabled.collectAsState()
             Button(
-                enabled = allRequiredFieldFilled && !showLoadingIndicator,
+                enabled = submitButtonEnabled,
                 onClick = viewModel::submit,
                 modifier = Modifier.fillMaxWidth()
             ) {

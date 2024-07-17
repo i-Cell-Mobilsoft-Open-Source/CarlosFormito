@@ -28,12 +28,14 @@ fun FormTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
+    customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
     testTag: String? = null,
     inputPattern: String? = null,
     textChanger: ((String) -> String)? = null
 ) {
     val state by fieldItem.collectFieldState()
+    val isError = state.isError || !customErrorMessage.isNullOrBlank()
     FormTextField(
         modifier = modifier,
         maxLength = maxLength,
@@ -41,14 +43,14 @@ fun FormTextField(
         label = label,
         trailingContentType = trailingContentType,
         leadingContentType = leadingContentType,
-        isError = state.isError,
+        isError = isError,
         enabled = enabled,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = if (state.isError) {
-            state.errorMessage() ?: supportingText
+        supportingText = if (isError) {
+            customErrorMessage ?: state.errorMessage() ?: supportingText
         } else {
             supportingText
         },

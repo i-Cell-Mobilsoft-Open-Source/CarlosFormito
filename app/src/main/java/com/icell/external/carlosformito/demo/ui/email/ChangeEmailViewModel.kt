@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.icell.external.carlosformito.core.CarlosFormManager
 import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
+import com.icell.external.carlosformito.core.api.valueState
+import com.icell.external.carlosformito.demo.ui.email.ChangeEmailFields.KEY_NEW_EMAIL
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -35,11 +38,31 @@ class ChangeEmailViewModel(
     private val mutableIsError = MutableSharedFlow<Throwable>(extraBufferCapacity = 1)
     val isError = mutableIsError.asSharedFlow()
 
+    private val mutableSameOldAndNewEmail = MutableStateFlow(false)
+    val sameOldAndNewEmail = mutableSameOldAndNewEmail.asStateFlow()
+
+    val submitButtonEnabled: StateFlow<Boolean> = combine(
+        allRequiredFieldFilled,
+        sameOldAndNewEmail,
+        showLoadingIndicator
+    ) { allRequiredFilled, sameOldAndNew, showLoadingIndicator ->
+        allRequiredFilled && !sameOldAndNew && !showLoadingIndicator
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+
     init {
         viewModelScope.launch {
             initFormManager()
         }
+        viewModelScope.launch {
+            observeEmailChanges()
+        }
         loadCurrentEmail()
+    }
+
+    private suspend fun observeEmailChanges() {
+        getFieldItem<String>(KEY_NEW_EMAIL).valueState.collectLatest { newEmail ->
+            mutableSameOldAndNewEmail.value = newEmail != null && newEmail == currentEmail.value
+        }
     }
 
     fun submit() {

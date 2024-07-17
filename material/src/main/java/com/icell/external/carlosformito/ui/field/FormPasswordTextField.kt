@@ -31,23 +31,25 @@ fun FormPasswordTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     contentDescription: String? = null,
+    customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
     testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
+    val isError = state.isError || !customErrorMessage.isNullOrBlank()
     FormPasswordTextField(
         modifier = modifier,
         maxLength = maxLength,
         value = state.value,
         label = label,
         leadingContentType = leadingContentType,
-        isError = state.isError,
+        isError = isError,
         enabled = enabled,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         contentDescription = contentDescription,
-        supportingText = if (state.isError) {
-            state.errorMessage() ?: supportingText
+        supportingText = if (isError) {
+            customErrorMessage ?: state.errorMessage() ?: supportingText
         } else {
             supportingText
         },

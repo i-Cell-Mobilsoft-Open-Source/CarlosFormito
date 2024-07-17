@@ -12,7 +12,6 @@ class FakeEmailUniqueValidator(private val fakeNetworkError: Boolean = false) :
 
     // Fake invalid inputs
     private val notUniqueInputs = listOf(
-        "test123@gmail.com",
         "user123@gmail.com",
         "test.user@gmail.com",
         "user.test@gmail.com"
