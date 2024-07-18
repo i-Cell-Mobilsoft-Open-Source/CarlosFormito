@@ -9,8 +9,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.LocalDate
 
+/**
+ * Unit tests for [DateMinValidator].
+ */
 class DateMinValidatorTest {
 
+    /**
+     * Tests validation with null input, which should always return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate null value`() = runTest {
         val validator = DateMinValidator(LocalDate.MIN)
@@ -19,6 +25,9 @@ class DateMinValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a value before the min value, which should return an invalid result.
+     */
     @Test
     fun `validate value before min value`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
@@ -29,6 +38,9 @@ class DateMinValidatorTest {
         assertThat(validationResult).isValidationResultInvalid()
     }
 
+    /**
+     * Tests validation with a value equal to the min value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate value equal to min value`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
@@ -38,6 +50,9 @@ class DateMinValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a value after the min value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate value after min value`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
@@ -48,6 +63,9 @@ class DateMinValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with invalid input that returns a custom error message.
+     */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
@@ -64,6 +82,9 @@ class DateMinValidatorTest {
             .isEqualTo(R.string.carlos_lbl_test_invalid_input)
     }
 
+    /**
+     * Tests validation with invalid input that returns error message arguments.
+     */
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)

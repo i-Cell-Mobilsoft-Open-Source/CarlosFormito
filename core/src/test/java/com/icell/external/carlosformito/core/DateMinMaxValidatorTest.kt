@@ -9,8 +9,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.LocalDate
 
+/**
+ * Unit tests for [DateMinMaxValidator].
+ */
 class DateMinMaxValidatorTest {
 
+    /**
+     * Tests validation with null input, which should always return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate null input`() = runTest {
         val minValue = LocalDate.MIN
@@ -22,6 +28,9 @@ class DateMinMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a date before the min value, which should return an invalid result.
+     */
     @Test
     fun `validate date before min value`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
@@ -34,6 +43,9 @@ class DateMinMaxValidatorTest {
         assertThat(validationResult).isValidationResultInvalid()
     }
 
+    /**
+     * Tests validation with a date after the max value, which should return an invalid result.
+     */
     @Test
     fun `validate date after max value`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
@@ -46,6 +58,9 @@ class DateMinMaxValidatorTest {
         assertThat(validationResult).isValidationResultInvalid()
     }
 
+    /**
+     * Tests validation with invalid input that returns a custom error message.
+     */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
@@ -64,6 +79,9 @@ class DateMinMaxValidatorTest {
             .isEqualTo(R.string.carlos_lbl_test_invalid_input)
     }
 
+    /**
+     * Tests validation with invalid input that returns error message arguments.
+     */
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
@@ -81,6 +99,9 @@ class DateMinMaxValidatorTest {
             .containsExactly(minValue, maxValue)
     }
 
+    /**
+     * Tests validation with a date within the valid range, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate date within the valid range`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
@@ -92,6 +113,9 @@ class DateMinMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a date equal to the min value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate date equal to min value`() = runTest {
         val minValue = LocalDate.of(2023, 1, 1)
@@ -102,6 +126,9 @@ class DateMinMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a date equal to the max value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate date equal to max value`() = runTest {
         val minValue = LocalDate.of(2022, 1, 1)
