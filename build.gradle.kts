@@ -4,6 +4,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 plugins {
     id("io.gitlab.arturbosch.detekt") version Versions.detekt apply true
     id("com.github.ben-manes.versions") version Versions.dependencyUpdates apply true
+    id("org.jetbrains.kotlin.plugin.compose") version Versions.composeCompiler apply false
 }
 
 val projectSource = file(projectDir)

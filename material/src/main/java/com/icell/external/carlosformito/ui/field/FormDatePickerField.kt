@@ -39,10 +39,12 @@ fun FormDatePickerField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
+    customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
     testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
+    val isError = state.isError || !customErrorMessage.isNullOrBlank()
     FormDatePickerField(
         modifier = modifier,
         value = state.value,
@@ -61,7 +63,7 @@ fun FormDatePickerField(
         minDate = minDate,
         maxDate = maxDate,
         leadingContentType = leadingContentType,
-        isError = state.isError,
+        isError = isError,
         enabled = enabled,
         isClearable = isClearable,
         onClick = onClick,
@@ -69,8 +71,8 @@ fun FormDatePickerField(
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = if (state.isError) {
-            state.errorMessage() ?: supportingText
+        supportingText = if (isError) {
+            customErrorMessage ?: state.errorMessage() ?: supportingText
         } else {
             supportingText
         },

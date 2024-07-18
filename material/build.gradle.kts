@@ -2,6 +2,7 @@ plugins {
     `android-library`
     `kotlin-android`
     `maven-publish`
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 apply<CommonLibraryGradlePlugin>()
@@ -11,9 +12,6 @@ android {
 
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeCompiler
     }
     kotlinOptions {
         jvmTarget = Versions.kotlinJvmTarget
@@ -30,8 +28,8 @@ publishing {
         register("GitHubPackagesRelease", MavenPublication::class.java) {
             groupId = "com.icell.external.carlosformito"
             artifactId = "carlosformito-material"
-            version = "0.0.2-SNAPSHOT"
-            artifact("$buildDir/outputs/aar/material-debug.aar")
+            version = "0.0.3-SNAPSHOT"
+            artifact("${layout.buildDirectory}/outputs/aar/material-debug.aar")
 
             // Attach sources
             artifact(sourceJar) {

@@ -18,18 +18,17 @@ class SetPasswordFormManager(
     override fun <T> onFieldValueChanged(id: String, value: T?) {
         super.onFieldValueChanged(id, value)
 
-        if (id == KEY_PASSWORD || id == KEY_CONFIRM_PASSWORD) {
+        if (id == KEY_PASSWORD) {
             confirmPasswordState.update { state ->
                 state.copy(validationResult = null) // Clear validation result on value change
             }
         }
     }
 
-    override suspend fun validateForm(): Boolean {
-        val independentFieldsAreValid = super.validateForm()
-
+    override suspend fun validateFieldConnections(): Boolean {
         val password = getFieldValue<String>(KEY_PASSWORD).orEmpty()
         val confirmPassword = getFieldValue<String>(KEY_CONFIRM_PASSWORD).orEmpty()
+
         if (password != confirmPassword) {
             confirmPasswordState.update { state ->
                 state.copy(
@@ -41,6 +40,6 @@ class SetPasswordFormManager(
             return false
         }
 
-        return independentFieldsAreValid
+        return true
     }
 }

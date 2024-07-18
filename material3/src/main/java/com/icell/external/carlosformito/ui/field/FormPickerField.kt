@@ -26,10 +26,12 @@ fun <T> FormPickerField(
     displayedValue: (T?) -> String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     contentDescription: String? = null,
+    customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
     testTag: String? = null
 ) {
     val state by fieldItem.collectFieldState()
+    val isError = state.isError || !customErrorMessage.isNullOrBlank()
     FormPickerField(
         modifier = modifier,
         value = state.value,
@@ -38,7 +40,7 @@ fun <T> FormPickerField(
             fieldItem.onFieldValueChanged(null)
         },
         leadingContentType = leadingContentType,
-        isError = state.isError,
+        isError = isError,
         enabled = enabled,
         isClearable = isClearable,
         onClick = onClick,
@@ -51,8 +53,8 @@ fun <T> FormPickerField(
         displayedValue = displayedValue,
         visualTransformation = visualTransformation,
         contentDescription = contentDescription,
-        supportingText = if (state.isError) {
-            state.errorMessage() ?: supportingText
+        supportingText = if (isError) {
+            customErrorMessage ?: state.errorMessage() ?: supportingText
         } else {
             supportingText
         },

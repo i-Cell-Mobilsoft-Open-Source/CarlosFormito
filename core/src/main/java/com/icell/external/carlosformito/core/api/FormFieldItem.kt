@@ -1,7 +1,9 @@
 package com.icell.external.carlosformito.core.api
 
 import com.icell.external.carlosformito.core.api.model.FormFieldState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 
 interface FormFieldItem<T> {
 
@@ -13,3 +15,6 @@ interface FormFieldItem<T> {
 
     fun onFieldVisibilityChanged(visible: Boolean)
 }
+
+val <T> FormFieldItem<T>.valueState: Flow<T?>
+    get() = fieldState.map { state -> state.value }

@@ -1,6 +1,7 @@
 package com.icell.external.carlosformito.core
 
 import android.util.Log
+import androidx.annotation.CallSuper
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormField
@@ -59,21 +60,21 @@ open class CarlosFormManager(
     private val mutableAllRequiredFieldFilled: MutableStateFlow<Boolean> = MutableStateFlow(false)
     override val allRequiredFieldFilled = mutableAllRequiredFieldFilled.asStateFlow()
 
-    private var autoValidationJob: Job? = null
-
     private val mutableValidationInProgress = MutableStateFlow(false)
     override val validationInProgress = mutableValidationInProgress.asStateFlow()
 
     private var initialized: Boolean = false
 
-    override var autoValidationScope: CoroutineScope? = null
-    override var autoValidationExceptionHandler: CoroutineExceptionHandler? = null
+    private var autoValidationJob: Job? = null
+    private lateinit var autoValidationScope: CoroutineScope
+    private lateinit var autoValidationContext: CoroutineContext
 
     @OptIn(FlowPreview::class)
-    override suspend fun initFormManager() {
+    override suspend fun initFormManager(autoValidationExceptionHandler: CoroutineExceptionHandler?) {
         coroutineScope {
             initialized = true
             autoValidationScope = this
+            autoValidationContext = autoValidationExceptionHandler ?: EmptyCoroutineContext
 
             fieldVisibility.debounce(FIELD_VISIBILITY_UPDATE_DEBOUNCE).collectLatest { _ ->
                 checkAllRequiredFieldFilled()
@@ -82,12 +83,8 @@ open class CarlosFormManager(
     }
 
     private fun launchAutoValidation(validationBlock: suspend () -> Unit) {
-        val context: CoroutineContext = autoValidationExceptionHandler ?: EmptyCoroutineContext
-        val coroutineScope: CoroutineScope = autoValidationScope
-            ?: error("Should provide a validation scope for auto validation strategies!")
-
         autoValidationJob?.cancel()
-        autoValidationJob = coroutineScope.launch(context) {
+        autoValidationJob = autoValidationScope.launch(autoValidationContext) {
             monitorValidationProgress(validationBlock)
         }
     }
@@ -177,9 +174,7 @@ open class CarlosFormManager(
         var isFormValid = false
 
         monitorValidationProgress {
-            isFormValid = fieldStates.keys
-                .map { id -> validateAndUpdateFieldState(id) }
-                .all { isValid -> isValid }
+            isFormValid = validateIndividualFields() && validateFieldConnections()
         }
 
         if (BuildConfig.DEBUG) {
@@ -187,6 +182,12 @@ open class CarlosFormManager(
         }
 
         return isFormValid
+    }
+
+    private suspend fun validateIndividualFields(): Boolean {
+        return fieldStates.keys
+            .map { id -> validateAndUpdateFieldState(id) }
+            .all { isValid -> isValid }
     }
 
     private suspend fun validateAndUpdateFieldState(id: String): Boolean {
@@ -197,20 +198,15 @@ open class CarlosFormManager(
             return true
         }
         val fieldState = fieldStates.getValue(id)
-        val validationResult = validateField(
-            fieldValue = fieldState.value.value,
-            validators = getValidators(id)
-        )
+        val validationResult = validateField(id, fieldState.value.value)
         fieldState.update { state -> state.copy(validationResult = validationResult) }
         return validationResult is FormFieldValidationResult.Valid
     }
 
-    private suspend fun <T> validateField(
-        fieldValue: T?,
-        validators: List<FormFieldValidator<T>>
-    ): FormFieldValidationResult {
-        validators.forEach { validator ->
-            val result = validator.validate(value = fieldValue)
+    @CallSuper
+    protected suspend fun <T> validateField(id: String, fieldValue: T?): FormFieldValidationResult {
+        getValidators<T>(id).forEach { validator ->
+            val result = validator.validate(fieldValue)
             if (result is FormFieldValidationResult.Invalid) {
                 return result
             }
@@ -221,6 +217,10 @@ open class CarlosFormManager(
     @Suppress("UNCHECKED_CAST")
     private fun <T> getValidators(id: String): List<FormFieldValidator<T>> {
         return formFields.first { item -> item.id == id }.validators as List<FormFieldValidator<T>>
+    }
+
+    protected open suspend fun validateFieldConnections(): Boolean {
+        return true
     }
 
     override fun setFormInvalid() {
