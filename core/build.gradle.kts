@@ -25,7 +25,7 @@ publishing {
             groupId = "com.icell.external.carlosformito"
             artifactId = "carlosformito-core"
             version = "0.0.3-SNAPSHOT"
-            artifact("${layout.buildDirectory}/outputs/aar/core-debug.aar")
+            artifact(layout.buildDirectory.dir("outputs/aar/core-debug.aar"))
 
             // Attach sources
             artifact(sourceJar) {

@@ -29,7 +29,7 @@ publishing {
             groupId = "com.icell.external.carlosformito"
             artifactId = "carlosformito-material3"
             version = "0.0.3-SNAPSHOT"
-            artifact("${layout.buildDirectory}/outputs/aar/material3-debug.aar")
+            artifact(layout.buildDirectory.dir("outputs/aar/material3-debug.aar"))
 
             // Attach sources
             artifact(sourceJar) {
