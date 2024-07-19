@@ -115,7 +115,6 @@ open class CarlosFormManager(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getFieldItem(id: String): FormFieldItem<T> {
-        checkInitialized()
         return requireNotNull(fieldItems[id] as FormFieldItem<T>)
     }
 
