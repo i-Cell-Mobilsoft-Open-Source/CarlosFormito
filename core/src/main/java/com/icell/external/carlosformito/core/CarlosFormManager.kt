@@ -203,7 +203,7 @@ open class CarlosFormManager(
     }
 
     @CallSuper
-    protected suspend fun <T> validateField(id: String, fieldValue: T?): FormFieldValidationResult {
+    protected open suspend fun <T> validateField(id: String, fieldValue: T?): FormFieldValidationResult {
         getValidators<T>(id).forEach { validator ->
             val result = validator.validate(fieldValue)
             if (result is FormFieldValidationResult.Invalid) {
