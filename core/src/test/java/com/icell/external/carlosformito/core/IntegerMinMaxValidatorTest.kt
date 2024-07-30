@@ -8,8 +8,14 @@ import com.icell.external.carlosformito.core.validator.IntegerMinMaxValidator
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+/**
+ * Unit tests for [IntegerMinMaxValidator].
+ */
 class IntegerMinMaxValidatorTest {
 
+    /**
+     * Tests validation with null input, which should always return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate null input`() = runTest {
         val validator = IntegerMinMaxValidator(5, 10)
@@ -18,6 +24,9 @@ class IntegerMinMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with input below the min value, which should return an invalid result.
+     */
     @Test
     fun `validate input below min value`() = runTest {
         val validator = IntegerMinMaxValidator(5, 10)
@@ -26,6 +35,9 @@ class IntegerMinMaxValidatorTest {
         assertThat(validationResult).isValidationResultInvalid()
     }
 
+    /**
+     * Tests validation with input equal to the min value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate input equal to min value`() = runTest {
         val validator = IntegerMinMaxValidator(5, 10)
@@ -34,6 +46,9 @@ class IntegerMinMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with input between min and max values, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate input between min and max values`() = runTest {
         val validator = IntegerMinMaxValidator(5, 10)
@@ -42,6 +57,9 @@ class IntegerMinMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with input equal to the max value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate input equal to max value`() = runTest {
         val validator = IntegerMinMaxValidator(5, 10)
@@ -50,6 +68,9 @@ class IntegerMinMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with input above the max value, which should return an invalid result.
+     */
     @Test
     fun `validate input above max value`() = runTest {
         val validator = IntegerMinMaxValidator(5, 10)
@@ -58,6 +79,9 @@ class IntegerMinMaxValidatorTest {
         assertThat(validationResult).isValidationResultInvalid()
     }
 
+    /**
+     * Tests validation with invalid input that returns a custom error message.
+     */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
         val minValue = 5
@@ -74,6 +98,9 @@ class IntegerMinMaxValidatorTest {
             .isEqualTo(R.string.carlos_lbl_test_invalid_input)
     }
 
+    /**
+     * Tests validation with invalid input that returns error message arguments.
+     */
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val minValue = 5

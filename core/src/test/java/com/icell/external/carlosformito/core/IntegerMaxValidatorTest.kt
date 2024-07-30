@@ -8,8 +8,14 @@ import com.icell.external.carlosformito.core.validator.IntegerMaxValidator
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+/**
+ * Unit tests for [IntegerMaxValidator].
+ */
 class IntegerMaxValidatorTest {
 
+    /**
+     * Tests validation with null input, which should always return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate null input`() = runTest {
         val validator = IntegerMaxValidator(10)
@@ -18,6 +24,9 @@ class IntegerMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with input above the max value, which should return an invalid result.
+     */
     @Test
     fun `validate input above max value`() = runTest {
         val validator = IntegerMaxValidator(10)
@@ -26,6 +35,9 @@ class IntegerMaxValidatorTest {
         assertThat(validationResult).isValidationResultInvalid()
     }
 
+    /**
+     * Tests validation with input equal to the max value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate input equal to max value`() = runTest {
         val validator = IntegerMaxValidator(10)
@@ -34,6 +46,9 @@ class IntegerMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with input below the max value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate input below max value`() = runTest {
         val validator = IntegerMaxValidator(10)
@@ -42,6 +57,9 @@ class IntegerMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with invalid input that returns a custom error message.
+     */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
         val maxValue = 10
@@ -56,6 +74,9 @@ class IntegerMaxValidatorTest {
             .isEqualTo(R.string.carlos_lbl_test_invalid_input)
     }
 
+    /**
+     * Tests validation with invalid input that returns error message arguments.
+     */
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val maxValue = 10

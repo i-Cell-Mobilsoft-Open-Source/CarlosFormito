@@ -5,10 +5,22 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidationRe
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import java.util.Locale
 
+/**
+ * `ContainsSpecialCharacterValidator` validates that a String value contains at least one special character.
+ *
+ * @param errorMessageId Optional resource ID for an error message to be displayed if validation fails.
+ */
 class ContainsSpecialCharacterValidator(
     @StringRes private val errorMessageId: Int? = null
 ) : FormFieldValidator<String> {
 
+    /**
+     * Validates the given String value.
+     *
+     * @param value The String value to be validated.
+     * @return [FormFieldValidationResult.Valid] if the value is valid (contains at least one special character),
+     *         [FormFieldValidationResult.Invalid] otherwise.
+     */
     override suspend fun validate(value: String?): FormFieldValidationResult {
         val nonNullValue = value.orEmpty()
         if (nonNullValue.isEmpty()) {
@@ -21,6 +33,12 @@ class ContainsSpecialCharacterValidator(
         }
     }
 
+    /**
+     * Checks if the input String contains any special characters.
+     *
+     * @param value The String value to check.
+     * @return `true` if the input String contains at least one special character, `false` otherwise.
+     */
     private fun containsSpecialChars(value: String): Boolean {
         if (value.isBlank()) return false
 

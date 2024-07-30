@@ -9,8 +9,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.LocalDate
 
+/**
+ * Unit tests for [DateMaxValidator].
+ */
 class DateMaxValidatorTest {
 
+    /**
+     * Tests validation with null input, which should always return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate null input`() = runTest {
         val validator = DateMaxValidator(LocalDate.now())
@@ -19,6 +25,9 @@ class DateMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a date before the max value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate date before max value`() = runTest {
         val maxValue = LocalDate.of(2023, 1, 1)
@@ -28,6 +37,9 @@ class DateMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a date equal to the max value, which should return [FormFieldValidationResult.Valid].
+     */
     @Test
     fun `validate date equal to max value`() = runTest {
         val maxValue = LocalDate.of(2023, 1, 1)
@@ -37,6 +49,9 @@ class DateMaxValidatorTest {
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
 
+    /**
+     * Tests validation with a date after the max value, which should return an invalid result.
+     */
     @Test
     fun `validate date after max value`() = runTest {
         val maxValue = LocalDate.of(2023, 1, 1)
@@ -46,6 +61,9 @@ class DateMaxValidatorTest {
         assertThat(validationResult).isValidationResultInvalid()
     }
 
+    /**
+     * Tests validation with invalid input that returns a custom error message.
+     */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
         val maxValue = LocalDate.of(2023, 1, 1)
@@ -60,6 +78,9 @@ class DateMaxValidatorTest {
             .isEqualTo(R.string.carlos_lbl_test_invalid_input)
     }
 
+    /**
+     * Tests validation with invalid input that returns error message arguments.
+     */
     @Test
     fun `test invalid input returns error message args`() = runTest {
         val maxValue = LocalDate.of(2023, 1, 1)
