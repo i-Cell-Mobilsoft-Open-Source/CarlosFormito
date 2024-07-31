@@ -1,7 +1,6 @@
 package com.icell.external.carlosformito.core
 
 import android.util.Log
-import androidx.annotation.CallSuper
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormField
@@ -184,6 +183,7 @@ open class CarlosFormManager(
         if (validationStrategy == FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR) {
             launchAutoValidation {
                 validateAndUpdateFieldState(id)
+                validateFieldConnections()
             }
         }
     }
@@ -212,6 +212,7 @@ open class CarlosFormManager(
         if (validationStrategy == FormFieldValidationStrategy.AUTO_INLINE) {
             launchAutoValidation {
                 validateAndUpdateFieldState(id)
+                validateFieldConnections()
             }
         }
     }
@@ -304,8 +305,7 @@ open class CarlosFormManager(
      * @param fieldValue The current value of the field.
      * @return The validation result for the field.
      */
-    @CallSuper
-    protected open suspend fun <T> validateField(id: String, fieldValue: T?): FormFieldValidationResult {
+    private suspend fun <T> validateField(id: String, fieldValue: T?): FormFieldValidationResult {
         getValidators<T>(id).forEach { validator ->
             val result = validator.validate(fieldValue)
             if (result is FormFieldValidationResult.Invalid) {
