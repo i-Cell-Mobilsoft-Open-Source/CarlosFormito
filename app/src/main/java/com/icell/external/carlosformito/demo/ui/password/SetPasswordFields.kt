@@ -4,6 +4,7 @@ import com.icell.external.carlosformito.core.api.model.FormField
 import com.icell.external.carlosformito.core.validator.ContainsNumberValidator
 import com.icell.external.carlosformito.core.validator.ContainsSpecialCharacterValidator
 import com.icell.external.carlosformito.core.validator.ContainsUpperAndLowercaseValidator
+import com.icell.external.carlosformito.core.validator.MatchValueValidator
 import com.icell.external.carlosformito.core.validator.TextMinLengthValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import com.icell.external.carlosformito.demo.R
@@ -31,7 +32,8 @@ object SetPasswordFields {
             FormField(
                 id = KEY_CONFIRM_PASSWORD,
                 validators = listOf(
-                    ValueRequiredValidator(R.string.value_required_error)
+                    ValueRequiredValidator(R.string.value_required_error),
+                    MatchValueValidator(KEY_PASSWORD, R.string.confirm_password_not_match_error)
                 )
             )
         )

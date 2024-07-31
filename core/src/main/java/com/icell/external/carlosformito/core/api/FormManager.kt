@@ -1,12 +1,13 @@
 package com.icell.external.carlosformito.core.api
 
+import com.icell.external.carlosformito.core.api.validator.FormValueContext
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Interface representing a form manager, responsible for managing form fields and validation.
  */
-interface FormManager : FormFieldItemListener {
+interface FormManager : FormFieldItemListener, FormValueContext {
 
     /**
      * State flow indicating whether all required fields are filled.

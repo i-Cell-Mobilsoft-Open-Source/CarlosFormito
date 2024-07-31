@@ -38,7 +38,7 @@ fun MenuScreen(
     onNavigateToFieldSamples: (validationStrategy: FormFieldValidationStrategy) -> Unit,
     onNavigateToCustomFormFieldsSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
     onNavigateToLongRunningValidationSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
-    onNavigateToInterdependentFieldsSample: (validationStrategy: FormFieldValidationStrategy) -> Unit
+    onNavigateToCrossFieldValidationSample: (validationStrategy: FormFieldValidationStrategy) -> Unit
 ) {
     val validationStrategyField =
         viewModel.getFieldItem<FormFieldValidationStrategy>(KEY_VALIDATION_STRATEGY_FIELD)
@@ -127,8 +127,8 @@ fun MenuScreen(
                             validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
                         )
                     }
-                    MenuListItem(title = "Interdependent fields sample") {
-                        onNavigateToInterdependentFieldsSample.invoke(
+                    MenuListItem(title = "Cross field validation sample") {
+                        onNavigateToCrossFieldValidationSample.invoke(
                             validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
                         )
                     }

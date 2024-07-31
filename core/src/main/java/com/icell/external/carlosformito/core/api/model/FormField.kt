@@ -1,6 +1,6 @@
 package com.icell.external.carlosformito.core.api.model
 
-import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
+import com.icell.external.carlosformito.core.api.validator.IsFormFieldValidator
 
 /**
  * Represents a form field with an identifier, initial state, and validators.
@@ -12,5 +12,5 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 data class FormField<T>(
     val id: String,
     val initialState: FormFieldState<T> = FormFieldState(),
-    val validators: List<FormFieldValidator<T>> = emptyList()
+    val validators: List<IsFormFieldValidator<T>> = emptyList()
 )
