@@ -8,12 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import com.google.android.material.timepicker.TimeFormat
-import com.icell.external.carlosformito.ui.theme.CarlosColors
-import com.icell.external.carlosformito.ui.theme.CarlosFormattingDefaults
-import com.icell.external.carlosformito.ui.theme.DefaultOutlinedCarlosIcons
-import com.icell.external.carlosformito.ui.theme.LocalCarlosColors
+import com.icell.external.carlosformito.ui.theme.CarlosFieldConfigs
+import com.icell.external.carlosformito.ui.theme.CarlosFormatDefaults
+import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
-import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -48,13 +46,14 @@ fun CarlosTheme(
      * Here you can define your custom colors, icons and formats used by built-in field types
      */
     CompositionLocalProvider(
-        LocalCarlosColors provides CarlosColors(),
-        LocalCarlosFormats provides CarlosFormattingDefaults(
+        LocalCarlosConfigs provides CarlosFieldConfigs(
+            outlined = false
+        ),
+        LocalCarlosFormats provides CarlosFormatDefaults(
             dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG),
             timeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
             timeFormat = TimeFormat.CLOCK_24H
-        ),
-        LocalCarlosIcons provides DefaultOutlinedCarlosIcons
+        )
     ) {
         MaterialTheme(
             colors = colors,

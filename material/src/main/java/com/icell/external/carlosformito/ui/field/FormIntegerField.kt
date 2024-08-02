@@ -1,33 +1,44 @@
 package com.icell.external.carlosformito.ui.field
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
-import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
-import com.icell.external.carlosformito.ui.util.focusStepper
-import com.icell.external.carlosformito.ui.util.onFocusCleared
+import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 
 @Composable
 fun FormIntegerField(
     modifier: Modifier = Modifier,
-    fieldItem: FormFieldItem<Int>,
-    label: String,
     maxLength: Int? = null,
-    trailingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
+    fieldItem: FormFieldItem<Int>,
+    textStyle: TextStyle = LocalCarlosConfigs.current.textStyle,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    readOnly: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    singleLine: Boolean = false,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    outlined: Boolean = LocalCarlosConfigs.current.outlined,
+    shape: Shape = LocalCarlosConfigs.current.shape,
+    colors: TextFieldColors = LocalCarlosConfigs.current.colors,
     contentDescription: String? = null,
     customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
@@ -35,18 +46,28 @@ fun FormIntegerField(
 ) {
     val state by fieldItem.collectFieldState()
     val isError = state.isError || !customErrorMessage.isNullOrBlank()
-    FormIntegerField(
+
+    BaseTextField(
         modifier = modifier,
-        value = state.value,
+        value = state.value?.toString() ?: "",
+        textStyle = textStyle,
         label = label,
-        maxLength = maxLength,
-        trailingContentType = trailingContentType,
-        leadingContentType = leadingContentType,
-        isError = isError,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         enabled = enabled,
+        readOnly = readOnly,
+        isError = isError,
+        visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        minLines = minLines,
+        interactionSource = interactionSource,
+        outlined = outlined,
+        shape = shape,
+        colors = colors,
         contentDescription = contentDescription,
         supportingText = if (isError) {
             customErrorMessage ?: state.errorMessage() ?: supportingText
@@ -55,64 +76,21 @@ fun FormIntegerField(
         },
         testTag = testTag,
         onValueChange = { newValue ->
-            fieldItem.onFieldValueChanged(newValue)
-        },
-        onFocusCleared = {
-            fieldItem.onFieldFocusCleared()
-        },
-        onVisibilityChanged = { visible ->
-            fieldItem.onFieldVisibilityChanged(visible)
-        }
-    )
-}
-
-@Composable
-private fun FormIntegerField(
-    modifier: Modifier = Modifier,
-    value: Int?,
-    label: String,
-    maxLength: Int? = null,
-    trailingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    isError: Boolean = false,
-    enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    contentDescription: String? = null,
-    supportingText: CharSequence? = null,
-    testTag: String? = null,
-    onValueChange: (Int?) -> Unit,
-    onFocusCleared: () -> Unit = {},
-    onVisibilityChanged: (visible: Boolean) -> Unit = {},
-) {
-    TrackVisibilityEffect(onVisibilityChanged)
-    BaseTextField(
-        modifier = modifier
-            .focusStepper()
-            .onFocusCleared(onFocusCleared),
-        value = value?.toString() ?: "",
-        label = label,
-        enabled = enabled,
-        isError = isError,
-        trailingContentType = trailingContentType,
-        leadingContentType = leadingContentType,
-        keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Number),
-        keyboardActions = keyboardActions,
-        contentDescription = contentDescription,
-        visualTransformation = visualTransformation,
-        supportingText = supportingText,
-        testTag = testTag,
-        onValueChange = { newValue ->
             if (newValue.isBlank()) {
-                onValueChange(null)
+                fieldItem.onFieldValueChanged(null)
             } else if (maxLength != null && newValue.length > maxLength) {
                 return@BaseTextField
             } else {
                 newValue.trim().toIntOrNull()?.let { integerValue ->
-                    onValueChange(integerValue)
+                    fieldItem.onFieldValueChanged(integerValue)
                 }
             }
+        },
+        onVisibilityChange = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
+        },
+        onFocusCleared = {
+            fieldItem.onFieldFocusCleared()
         }
     )
 }

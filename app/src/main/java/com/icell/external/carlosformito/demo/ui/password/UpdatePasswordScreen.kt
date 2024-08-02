@@ -53,13 +53,17 @@ fun UpdatePasswordScreen(
 
             FormPasswordTextField(
                 fieldItem = viewModel.getFieldItem(KEY_OLD_PASSWORD),
-                label = "Old password*",
+                label = {
+                    Text("Old password*")
+                },
                 maxLength = KEY_PASSWORD_MAX_LENGTH
             )
 
             FormPasswordTextField(
                 fieldItem = viewModel.getFieldItem(KEY_NEW_PASSWORD),
-                label = "New password*",
+                label = {
+                    Text("New password*")
+                },
                 maxLength = KEY_PASSWORD_MAX_LENGTH
             )
 
@@ -76,7 +80,9 @@ fun UpdatePasswordScreen(
 
             FormPasswordTextField(
                 fieldItem = viewModel.getFieldItem(KEY_CONFIRM_PASSWORD),
-                label = "Confirm password*",
+                label = {
+                    Text("Confirm password*")
+                },
                 maxLength = KEY_PASSWORD_MAX_LENGTH
             )
 

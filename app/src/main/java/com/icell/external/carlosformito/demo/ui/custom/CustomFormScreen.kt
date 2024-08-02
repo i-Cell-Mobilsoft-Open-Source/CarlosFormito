@@ -175,7 +175,9 @@ fun DebitCardForm(
         )
         FormTextField(
             fieldItem = debitCardNumberField,
-            label = "Debit card number*",
+            label = {
+                Text("Debit card number*")
+            },
             maxLength = 32,
             supportingText = """
                 This is a required field which is visible only when debit card option is selected.

@@ -90,7 +90,9 @@ fun SetPhoneNumberScreen(
 
                 FormPickerField(
                     fieldItem = countryItem,
-                    label = "Country*",
+                    label = {
+                        Text("Country*")
+                    },
                     onClick = {
                         coroutineScope.launch {
                             modalSheetState.show()
@@ -107,7 +109,9 @@ fun SetPhoneNumberScreen(
 
                 FormTextField(
                     fieldItem = viewModel.getFieldItem(KEY_LOCAL_NUMBER),
-                    label = "Phone number*",
+                    label = {
+                        Text("Phone number*")
+                    },
                     maxLength = SetPhoneNumberFields.PHONE_NUMBER_MAX_LENGTH,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                 )

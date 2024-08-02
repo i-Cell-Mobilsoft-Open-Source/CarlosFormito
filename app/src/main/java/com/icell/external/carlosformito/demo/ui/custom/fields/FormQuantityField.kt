@@ -13,16 +13,17 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircleOutline
+import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.demo.R
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.TextFieldSupportingText
@@ -68,7 +69,7 @@ fun FormQuantityField(
                     }
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.ic_remove_circle),
+                        Icons.Default.RemoveCircleOutline,
                         contentDescription = "Minus",
                         modifier = Modifier.size(32.dp)
                     )
@@ -88,7 +89,7 @@ fun FormQuantityField(
                     }
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.ic_add_circle),
+                        Icons.Default.AddCircleOutline,
                         contentDescription = "Plus",
                         modifier = Modifier.size(32.dp)
                     )

@@ -1,12 +1,23 @@
 package com.icell.external.carlosformito.ui.field
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
+import androidx.compose.material.TextFieldColors
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -14,39 +25,71 @@ import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
-import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
-import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
-import com.icell.external.carlosformito.ui.util.focusStepper
-import com.icell.external.carlosformito.ui.util.onFocusCleared
+import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 
 @Composable
 fun FormPasswordTextField(
     modifier: Modifier = Modifier,
     maxLength: Int? = null,
     fieldItem: FormFieldItem<String>,
-    label: String,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
+    textStyle: TextStyle = LocalCarlosConfigs.current.textStyle,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    passwordVisibleIcon: ImageVector = Icons.Default.Visibility,
+    passwordInvisibleIcon: ImageVector = Icons.Default.VisibilityOff,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    outlined: Boolean = LocalCarlosConfigs.current.outlined,
+    shape: Shape = LocalCarlosConfigs.current.shape,
+    colors: TextFieldColors = LocalCarlosConfigs.current.colors,
     contentDescription: String? = null,
     customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
     testTag: String? = null
 ) {
+    val isPasswordVisible = rememberSaveable { mutableStateOf(false) }
     val state by fieldItem.collectFieldState()
     val isError = state.isError || !customErrorMessage.isNullOrBlank()
-    FormPasswordTextField(
+
+    BaseTextField(
         modifier = modifier,
-        maxLength = maxLength,
-        value = state.value,
+        value = state.value ?: "",
+        textStyle = textStyle,
         label = label,
-        leadingContentType = leadingContentType,
-        isError = isError,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
         enabled = enabled,
-        keyboardOptions = keyboardOptions,
+        readOnly = readOnly,
+        visualTransformation = if (isPasswordVisible.value) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
+        keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Password),
         keyboardActions = keyboardActions,
+        interactionSource = interactionSource,
+        outlined = outlined,
+        shape = shape,
+        colors = colors,
+        trailingIcon = {
+            Icon(
+                imageVector = if (isPasswordVisible.value) {
+                    passwordVisibleIcon
+                } else {
+                    passwordInvisibleIcon
+                },
+                contentDescription = "",
+                modifier = Modifier
+                    .clickable {
+                        isPasswordVisible.value = !isPasswordVisible.value
+                    }
+            )
+        },
+        isError = isError,
         contentDescription = contentDescription,
         supportingText = if (isError) {
             customErrorMessage ?: state.errorMessage() ?: supportingText
@@ -54,75 +97,17 @@ fun FormPasswordTextField(
             supportingText
         },
         testTag = testTag,
-        onValueChange = { value ->
-            fieldItem.onFieldValueChanged(value)
-        },
-        onFocusCleared = {
-            fieldItem.onFieldFocusCleared()
-        },
-        onVisibilityChanged = { visible ->
-            fieldItem.onFieldVisibilityChanged(visible)
-        }
-    )
-}
-
-@Composable
-private fun FormPasswordTextField(
-    modifier: Modifier = Modifier,
-    maxLength: Int? = null,
-    value: String?,
-    label: String,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    isError: Boolean = false,
-    enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    contentDescription: String? = null,
-    supportingText: CharSequence? = null,
-    testTag: String? = null,
-    onValueChange: (String) -> Unit,
-    onFocusCleared: () -> Unit = {},
-    onVisibilityChanged: (visible: Boolean) -> Unit = {},
-) {
-    val carlosIcons = LocalCarlosIcons.current
-    val isPasswordVisible = rememberSaveable { mutableStateOf(false) }
-
-    TrackVisibilityEffect(onVisibilityChanged)
-
-    BaseTextField(
-        modifier = modifier
-            .focusStepper()
-            .onFocusCleared(onFocusCleared),
-        value = value ?: "",
-        label = label,
-        enabled = enabled,
-        isError = isError,
-        trailingContentType = TextFieldAffixContentType.Icon(
-            value = if (isPasswordVisible.value) {
-                carlosIcons.passwordVisible
-            } else {
-                carlosIcons.passwordInvisible
-            },
-            onClick = {
-                isPasswordVisible.value = !isPasswordVisible.value
-            }
-        ),
-        leadingContentType = leadingContentType,
-        keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Password),
-        keyboardActions = keyboardActions,
-        contentDescription = contentDescription,
-        visualTransformation = if (isPasswordVisible.value) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        supportingText = supportingText,
-        testTag = testTag,
         onValueChange = { newValue ->
             if (maxLength != null && newValue.length > maxLength) {
                 return@BaseTextField
             }
-            onValueChange(newValue)
+            fieldItem.onFieldValueChanged(newValue)
+        },
+        onVisibilityChange = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
+        },
+        onFocusCleared = {
+            fieldItem.onFieldFocusCleared()
         }
     )
 }
