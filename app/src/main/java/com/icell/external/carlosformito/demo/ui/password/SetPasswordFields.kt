@@ -4,9 +4,9 @@ import com.icell.external.carlosformito.core.api.model.FormField
 import com.icell.external.carlosformito.core.validator.ContainsNumberValidator
 import com.icell.external.carlosformito.core.validator.ContainsSpecialCharacterValidator
 import com.icell.external.carlosformito.core.validator.ContainsUpperAndLowercaseValidator
-import com.icell.external.carlosformito.core.validator.MatchValueValidator
 import com.icell.external.carlosformito.core.validator.TextMinLengthValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
+import com.icell.external.carlosformito.core.validator.connections.MatchValueValidator
 import com.icell.external.carlosformito.demo.R
 
 object SetPasswordFields {

@@ -2,6 +2,7 @@ package com.icell.external.carlosformito.demo.ui.password
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.commondemo.clearFocusOnTap
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.demo.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
 import com.icell.external.carlosformito.demo.ui.password.SetPasswordFields.KEY_PASSWORD
@@ -35,7 +37,9 @@ fun SetPasswordScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .clearFocusOnTap()
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {

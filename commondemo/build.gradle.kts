@@ -1,0 +1,29 @@
+plugins {
+    `android-library`
+    `kotlin-android`
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+
+apply<CommonLibraryGradlePlugin>()
+
+android {
+    namespace = "com.icell.external.carlosformito.commondemo"
+
+    buildFeatures {
+        compose = true
+    }
+    kotlinOptions {
+        jvmTarget = Versions.kotlinJvmTarget
+    }
+}
+
+dependencies {
+    implementation(Dependencies.coreKtx)
+    implementation(Dependencies.appcompat)
+
+    composeCore()
+
+    testImplementation(Dependencies.junit)
+    androidTestImplementation(Dependencies.extJunit)
+    androidTestImplementation(Dependencies.espresso)
+}
