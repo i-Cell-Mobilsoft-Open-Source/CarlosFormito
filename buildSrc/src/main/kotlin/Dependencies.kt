@@ -33,24 +33,29 @@ object Dependencies {
     const val detektFormattingPlugin = "io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detekt}"
 }
 
+fun DependencyHandler.composeCore() {
+    implementation(platform(Dependencies.composeBom))
+    composeCoreDependencies()
+}
+
 fun DependencyHandler.composeMaterial() {
     implementation(platform(Dependencies.composeBom))
-    implementation(Dependencies.composeFoundation)
-    implementation(Dependencies.composeUi)
-    implementation(Dependencies.composeUiGraphics)
-    implementation(Dependencies.composeUiTooling)
-    implementation(Dependencies.composeUiToolingPreview)
+    composeCoreDependencies()
     implementation(Dependencies.composeMaterial)
 }
 
 fun DependencyHandler.composeMaterial3() {
     implementation(platform(Dependencies.composeBom))
+    composeCoreDependencies()
+    implementation(Dependencies.composeMaterial3)
+}
+
+private fun DependencyHandler.composeCoreDependencies() {
     implementation(Dependencies.composeFoundation)
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeUiGraphics)
     implementation(Dependencies.composeUiTooling)
     implementation(Dependencies.composeUiToolingPreview)
-    implementation(Dependencies.composeMaterial3)
 }
 
 fun DependencyHandler.desugaring() {
@@ -67,4 +72,8 @@ fun DependencyHandler.carlosMaterial() {
 
 fun DependencyHandler.carlosMaterial3() {
     implementation(project(mapOf("path" to ":material3")))
+}
+
+fun DependencyHandler.carlosCommonDemo() {
+    implementation(project(mapOf("path" to ":commondemo")))
 }

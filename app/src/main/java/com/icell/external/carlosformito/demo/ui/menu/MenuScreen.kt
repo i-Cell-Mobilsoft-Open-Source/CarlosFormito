@@ -38,7 +38,8 @@ fun MenuScreen(
     onNavigateToFieldSamples: (validationStrategy: FormFieldValidationStrategy) -> Unit,
     onNavigateToCustomFormFieldsSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
     onNavigateToLongRunningValidationSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
-    onNavigateToCrossFieldValidationSample: (validationStrategy: FormFieldValidationStrategy) -> Unit
+    onNavigateToMatchValidationSample: (validationStrategy: FormFieldValidationStrategy) -> Unit,
+    onNavigateToConnectedFieldValidationSample: (validationStrategy: FormFieldValidationStrategy) -> Unit
 ) {
     val validationStrategyField =
         viewModel.getFieldItem<FormFieldValidationStrategy>(KEY_VALIDATION_STRATEGY_FIELD)
@@ -127,8 +128,13 @@ fun MenuScreen(
                             validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
                         )
                     }
-                    MenuListItem(title = "Cross field validation sample") {
-                        onNavigateToCrossFieldValidationSample.invoke(
+                    MenuListItem(title = "Match validation sample") {
+                        onNavigateToMatchValidationSample.invoke(
+                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                        )
+                    }
+                    MenuListItem(title = "Connected fields validation sample") {
+                        onNavigateToConnectedFieldValidationSample.invoke(
                             validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
                         )
                     }

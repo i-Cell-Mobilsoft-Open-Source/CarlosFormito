@@ -10,8 +10,8 @@ import com.icell.external.carlosformito.core.api.validator.CrossFormFieldValidat
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import com.icell.external.carlosformito.core.api.validator.IsFormFieldValidator
-import com.icell.external.carlosformito.core.validator.MatchValueValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
+import com.icell.external.carlosformito.core.validator.connections.ConnectionValidator
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -34,7 +34,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * @property validationStrategy The strategy for field validation, defaults to [FormFieldValidationStrategy.MANUAL].
  */
 @Suppress("TooManyFunctions")
-open class CarlosFormManager(
+class CarlosFormManager(
     private val formFields: List<FormField<*>>,
     private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL
 ) : FormManager {
@@ -50,9 +50,9 @@ open class CarlosFormManager(
     private val fieldItems: HashMap<String, FormFieldItem<*>> = hashMapOf()
 
     /**
-     * Map for quick accessing [MatchValueValidator]s matchFieldId by field ID
+     * Map for quick accessing connected field IDs by field ID
      */
-    private val matchFieldIds: HashMap<String, String> = hashMapOf()
+    private val fieldConnections: HashMap<String, Set<String>> = hashMapOf()
 
     /**
      * A state flow for tracking the visibility of each form field
@@ -85,10 +85,13 @@ open class CarlosFormManager(
             fieldStates[field.id] = MutableStateFlow(field.initialState)
             fieldItems[field.id] = createFieldItem(field)
 
-            field.validators.forEach { fieldValidator ->
-                when (fieldValidator) {
+            field.validators.forEach { validator ->
+                when (validator) {
                     is ValueRequiredValidator -> requiredFieldIds.add(field.id)
-                    is MatchValueValidator<*> -> matchFieldIds[fieldValidator.matchFieldId] = field.id
+                    is ConnectionValidator<*> -> {
+                        val connections = fieldConnections[validator.connectedFieldId]?.toMutableSet() ?: mutableSetOf()
+                        fieldConnections[validator.connectedFieldId] = connections.apply { add(field.id) }
+                    }
                     else -> Unit
                 }
             }
@@ -162,7 +165,7 @@ open class CarlosFormManager(
      * @return The state flow of [FormFieldState].
      */
     @Suppress("UNCHECKED_CAST")
-    protected fun <T> getFieldStateFlow(id: String): MutableStateFlow<FormFieldState<T>> {
+    private fun <T> getFieldStateFlow(id: String): MutableStateFlow<FormFieldState<T>> {
         return requireNotNull(fieldStates[id] as MutableStateFlow<FormFieldState<T>>)
     }
 
@@ -188,12 +191,7 @@ open class CarlosFormManager(
         if (validationStrategy == FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR) {
             launchAutoValidation {
                 validateAndUpdateFieldState(id)
-                validateFieldConnections()
-                matchFieldIds[id]?.let { matchFieldId ->
-                    if (checkFieldFilled(matchFieldId)) {
-                        validateAndUpdateFieldState(matchFieldId)
-                    }
-                }
+                validateFieldConnections(id)
             }
         }
     }
@@ -217,8 +215,8 @@ open class CarlosFormManager(
         }
         when (validationStrategy) {
             FormFieldValidationStrategy.MANUAL -> {
-                matchFieldIds[id]?.let { matchFieldId ->
-                    getFieldStateFlow<T>(matchFieldId).update { state ->
+                fieldConnections[id]?.forEach { connectedFieldId ->
+                    getFieldStateFlow<T>(connectedFieldId).update { state ->
                         state.copy(validationResult = null)
                     }
                 }
@@ -227,12 +225,7 @@ open class CarlosFormManager(
             FormFieldValidationStrategy.AUTO_INLINE -> {
                 launchAutoValidation {
                     validateAndUpdateFieldState(id)
-                    validateFieldConnections()
-                    matchFieldIds[id]?.let { matchFieldId ->
-                        if (checkFieldFilled(matchFieldId)) {
-                            validateAndUpdateFieldState(matchFieldId)
-                        }
-                    }
+                    validateFieldConnections(id)
                 }
             }
 
@@ -296,7 +289,7 @@ open class CarlosFormManager(
         var isFormValid = false
 
         monitorValidationProgress {
-            isFormValid = validateIndividualFields() && validateFieldConnections()
+            isFormValid = validateIndividualFields()
         }
 
         if (BuildConfig.DEBUG) {
@@ -368,16 +361,16 @@ open class CarlosFormManager(
     }
 
     /**
-     * Validates connections between fields in the form.
+     * Validates a fields connections by field ID.
      *
-     * Note:
-     * You should override this function to perform custom field connection validation logic in your
-     * custom [CarlosFormManager] implementation.
-     *
-     * @return `true` if all field connections are valid, otherwise `false`.
+     * Note: a connected field is validated only if it is filled.
      */
-    protected open suspend fun validateFieldConnections(): Boolean {
-        return true
+    private suspend fun validateFieldConnections(id: String) {
+        fieldConnections[id]?.forEach { connectedFieldId ->
+            if (checkFieldFilled(connectedFieldId)) {
+                validateAndUpdateFieldState(connectedFieldId)
+            }
+        }
     }
 
     /**

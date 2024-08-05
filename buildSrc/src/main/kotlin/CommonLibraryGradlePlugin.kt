@@ -2,7 +2,6 @@ import com.android.build.gradle.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.publish.PublishingExtension
 
 class CommonLibraryGradlePlugin : Plugin<Project> {
 
@@ -50,21 +49,6 @@ class CommonLibraryGradlePlugin : Plugin<Project> {
             }
         }
 
-        project.publishing().apply {
-            repositories {
-                maven {
-                    name = "GitHubPackages"
-                    url = project.uri("https://maven.pkg.github.com/icellmobilsoft/CarlosFormito")
-                    credentials {
-                        username = getLocalProperty("gpr.usr") as? String?
-                            ?: System.getenv("GPR_USER")
-                        password = getLocalProperty("gpr.key") as? String?
-                            ?: System.getenv("GPR_API_KEY")
-                    }
-                }
-            }
-        }
-
         project.dependencies.apply {
             desugaring()
         }
@@ -72,9 +56,5 @@ class CommonLibraryGradlePlugin : Plugin<Project> {
 
     private fun Project.android(): LibraryExtension {
         return extensions.getByType(LibraryExtension::class.java)
-    }
-
-    private fun Project.publishing(): PublishingExtension {
-        return extensions.getByType(PublishingExtension::class.java)
     }
 }

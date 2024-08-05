@@ -20,6 +20,7 @@ val sourceJar by tasks.registering(Jar::class) {
 }
 
 publishing {
+    registerCarlosRepository(project)
     publications {
         register("GitHubPackagesRelease", MavenPublication::class.java) {
             groupId = "com.icell.external.carlosformito"

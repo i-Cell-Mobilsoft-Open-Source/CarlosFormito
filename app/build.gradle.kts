@@ -54,6 +54,7 @@ dependencies {
 
     carlosCore()
     carlosMaterial()
+    carlosCommonDemo()
 
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.lifecycleRuntimeKtx)

@@ -23,4 +23,13 @@
     <string name="password_not_contains_special_char_error">The password should contain a special char!</string>
     <string name="password_not_contains_uppercase_or_lowercase_error">The password should contain both uppercase and lowercase characters!</string>
 
+    <string name="country_usa">United States (+1)</string>
+    <string name="country_de">Germany (+49)</string>
+    <string name="country_jp">Japan (+81)</string>
+    <string name="country_hu">Hungary (+36)</string>
+    <string name="country_es">Spain (+34)</string>
+    <string name="country_test">Test country (+888)</string>
+
+    <string name="invalid_phone_number_error">The phone number is invalid! Please provide a mobile number.</string>
+
 </resources>

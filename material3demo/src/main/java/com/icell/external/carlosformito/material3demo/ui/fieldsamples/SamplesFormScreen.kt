@@ -2,6 +2,7 @@ package com.icell.external.carlosformito.material3demo.ui.fieldsamples
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.commondemo.clearFocusOnTap
 import com.icell.external.carlosformito.material3demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.material3demo.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.material3demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_DATE
@@ -102,7 +104,9 @@ fun SampleFormScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .clearFocusOnTap()
                 .padding(horizontal = 16.dp)
                 .padding(innerPadding)
         ) {

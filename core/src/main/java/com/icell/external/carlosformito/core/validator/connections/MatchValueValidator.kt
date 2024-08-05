@@ -1,7 +1,6 @@
-package com.icell.external.carlosformito.core.validator
+package com.icell.external.carlosformito.core.validator.connections
 
 import androidx.annotation.StringRes
-import com.icell.external.carlosformito.core.api.validator.CrossFormFieldValidator
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormValueContext
 
@@ -12,13 +11,13 @@ import com.icell.external.carlosformito.core.api.validator.FormValueContext
  * form field. If the values do not match, the validation will fail.
  *
  * @param T The type of the form field value.
- * @property matchFieldId The ID of the form field whose value should match.
+ * @property connectedFieldId The ID of the form field whose value should match.
  * @property errorMessageId Optional resource ID for an error message to be displayed if validation fails.
  */
 class MatchValueValidator<T>(
-    val matchFieldId: String,
+    override val connectedFieldId: String,
     @StringRes private val errorMessageId: Int? = null
-) : CrossFormFieldValidator<T> {
+) : ConnectionValidator<T>() {
 
     /**
      * Validates that the value of the current form field matches the value of the specified form field.
@@ -28,7 +27,7 @@ class MatchValueValidator<T>(
      * @return A [FormFieldValidationResult] indicating whether the validation was successful.
      */
     override suspend fun validate(value: T?, context: FormValueContext): FormFieldValidationResult {
-        val matchFieldValue = context.getFieldValue<T>(matchFieldId)
+        val matchFieldValue = context.getFieldValue<T>(connectedFieldId)
 
         return if (value != matchFieldValue) {
             FormFieldValidationResult.Invalid.of(errorMessageId)

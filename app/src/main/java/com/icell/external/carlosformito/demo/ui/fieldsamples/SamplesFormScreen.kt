@@ -2,6 +2,7 @@ package com.icell.external.carlosformito.demo.ui.fieldsamples
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.commondemo.clearFocusOnTap
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_DATE
@@ -48,6 +51,7 @@ import com.icell.external.carlosformito.ui.field.FormTimePickerField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
+@Suppress("LongMethod")
 @Composable
 fun SampleFormScreen(
     title: String,
@@ -81,6 +85,7 @@ fun SampleFormScreen(
         )
     }
 
+    val focusManager = LocalFocusManager.current
     val packageFieldItem = viewModel.getFieldItem<PackageType>(KEY_FORM_FIELD_PACKAGE)
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
@@ -93,6 +98,7 @@ fun SampleFormScreen(
                     packageFieldItem.onFieldValueChanged(item)
                     coroutineScope.launch {
                         modalSheetState.hide()
+                        focusManager.clearFocus()
                     }
                 }
             )
@@ -120,7 +126,9 @@ fun SampleFormScreen(
         ) { innerPadding ->
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .verticalScroll(rememberScrollState())
+                    .clearFocusOnTap()
                     .padding(innerPadding)
                     .padding(horizontal = 16.dp)
             ) {

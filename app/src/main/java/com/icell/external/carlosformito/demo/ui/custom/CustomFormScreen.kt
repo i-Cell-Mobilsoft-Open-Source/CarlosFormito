@@ -3,6 +3,7 @@ package com.icell.external.carlosformito.demo.ui.custom
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +24,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.commondemo.clearFocusOnTap
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
@@ -55,6 +58,7 @@ fun CustomFormScreen(
         skipHalfExpanded = false
     )
 
+    val focusManager = LocalFocusManager.current
     val paymentMethodItem = viewModel.getFieldItem<PaymentMethod>(KEY_PAYMENT_METHOD_TYPE)
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
@@ -67,6 +71,7 @@ fun CustomFormScreen(
                     paymentMethodItem.onFieldValueChanged(item)
                     coroutineScope.launch {
                         modalSheetState.hide()
+                        focusManager.clearFocus()
                     }
                 }
             )
@@ -79,7 +84,9 @@ fun CustomFormScreen(
         ) { innerPadding ->
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .verticalScroll(rememberScrollState())
+                    .clearFocusOnTap()
                     .padding(innerPadding)
                     .padding(horizontal = 16.dp)
             ) {
