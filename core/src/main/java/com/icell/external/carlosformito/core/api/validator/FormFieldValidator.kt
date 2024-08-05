@@ -5,7 +5,7 @@ package com.icell.external.carlosformito.core.api.validator
  *
  * @param T The type of value that this validator can validate.
  */
-interface FormFieldValidator<T> {
+interface FormFieldValidator<T> : IsFormFieldValidator<T> {
     /**
      * Validates the given value of type T.
      *

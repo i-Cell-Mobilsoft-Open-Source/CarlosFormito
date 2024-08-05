@@ -6,8 +6,11 @@ import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormField
 import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
+import com.icell.external.carlosformito.core.api.validator.CrossFormFieldValidator
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
+import com.icell.external.carlosformito.core.api.validator.IsFormFieldValidator
+import com.icell.external.carlosformito.core.validator.MatchValueValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -39,40 +42,27 @@ open class CarlosFormManager(
     /**
      * Map for quick accessing the flow of [FormFieldState]s by field ID
      */
-    private val fieldStates: Map<String, MutableStateFlow<FormFieldState<*>>> =
-        buildMap {
-            formFields.forEach { formField ->
-                put(formField.id, MutableStateFlow(formField.initialState))
-            }
-        }
+    private val fieldStates: HashMap<String, MutableStateFlow<FormFieldState<*>>> = hashMapOf()
 
     /**
      * Map for quick accessing the [FormFieldItem]s by field ID
      */
-    private val fieldItems: Map<String, FormFieldItem<*>> =
-        buildMap {
-            formFields.forEach { formField ->
-                put(formField.id, createFieldItem(formField))
-            }
-        }
+    private val fieldItems: HashMap<String, FormFieldItem<*>> = hashMapOf()
 
     /**
-     * List of IDs for required fields
+     * Map for quick accessing [MatchValueValidator]s matchFieldId by field ID
      */
-    private val requiredFieldIds: List<String> = formFields
-        .filter { formField ->
-            formField.validators.any { validator -> validator is ValueRequiredValidator }
-        }
-        .map { formField -> formField.id }
+    private val matchFieldIds: HashMap<String, String> = hashMapOf()
 
     /**
      * A state flow for tracking the visibility of each form field
      */
-    private val fieldVisibility = MutableStateFlow(
-        buildMap {
-            formFields.forEach { formField -> put(formField.id, false) }
-        }
-    )
+    private val fieldVisibility: MutableStateFlow<Map<String, Boolean>> = MutableStateFlow(emptyMap())
+
+    /**
+     * List of IDs for required fields
+     */
+    private val requiredFieldIds: MutableList<String> = mutableListOf()
 
     // State flow for tracking whether all required fields are filled
     private val mutableAllRequiredFieldFilled: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -89,6 +79,21 @@ open class CarlosFormManager(
     private var autoValidationJob: Job? = null
     private lateinit var autoValidationScope: CoroutineScope
     private lateinit var autoValidationContext: CoroutineContext
+
+    init {
+        formFields.forEach { field ->
+            fieldStates[field.id] = MutableStateFlow(field.initialState)
+            fieldItems[field.id] = createFieldItem(field)
+
+            field.validators.forEach { fieldValidator ->
+                when (fieldValidator) {
+                    is ValueRequiredValidator -> requiredFieldIds.add(field.id)
+                    is MatchValueValidator<*> -> matchFieldIds[fieldValidator.matchFieldId] = field.id
+                    else -> Unit
+                }
+            }
+        }
+    }
 
     /**
      * Initializes the form manager, setting up auto-validation and field visibility checks.
@@ -184,6 +189,11 @@ open class CarlosFormManager(
             launchAutoValidation {
                 validateAndUpdateFieldState(id)
                 validateFieldConnections()
+                matchFieldIds[id]?.let { matchFieldId ->
+                    if (checkFieldFilled(matchFieldId)) {
+                        validateAndUpdateFieldState(matchFieldId)
+                    }
+                }
             }
         }
     }
@@ -199,20 +209,35 @@ open class CarlosFormManager(
      */
     override fun <T> onFieldValueChanged(id: String, value: T?) {
         checkInitialized()
-        val currentFieldState = getFieldStateFlow<T>(id)
-        currentFieldState.update { state ->
-            state.copy(
-                value = value,
-                validationResult = null // Clear validation result on value change
-            )
+        getFieldStateFlow<T>(id).update { state ->
+            state.copy(value, validationResult = null)
         }
         if (requiredFieldIds.contains(id)) {
             checkAllRequiredFieldFilled()
         }
-        if (validationStrategy == FormFieldValidationStrategy.AUTO_INLINE) {
-            launchAutoValidation {
-                validateAndUpdateFieldState(id)
-                validateFieldConnections()
+        when (validationStrategy) {
+            FormFieldValidationStrategy.MANUAL -> {
+                matchFieldIds[id]?.let { matchFieldId ->
+                    getFieldStateFlow<T>(matchFieldId).update { state ->
+                        state.copy(validationResult = null)
+                    }
+                }
+            }
+
+            FormFieldValidationStrategy.AUTO_INLINE -> {
+                launchAutoValidation {
+                    validateAndUpdateFieldState(id)
+                    validateFieldConnections()
+                    matchFieldIds[id]?.let { matchFieldId ->
+                        if (checkFieldFilled(matchFieldId)) {
+                            validateAndUpdateFieldState(matchFieldId)
+                        }
+                    }
+                }
+            }
+
+            else -> {
+                // no - op
             }
         }
     }
@@ -238,15 +263,28 @@ open class CarlosFormManager(
     private fun checkAllRequiredFieldFilled() {
         mutableAllRequiredFieldFilled.value = requiredFieldIds
             .filter { id -> fieldVisibility.value[id] == true }
-            .map { id -> fieldStates[id]?.value?.value }
-            .all { fieldValue ->
-                if (fieldValue is String) {
-                    fieldValue.isNotBlank()
-                } else {
-                    fieldValue != null
-                }
-            }
+            .all { id -> checkFieldFilled(id) }
     }
+
+    /**
+     * Checks if the form field with the specified ID is filled.
+     *
+     * This function retrieves the state of the form field identified by the given ID
+     * and determines if it is filled.
+     *
+     * @param id The identifier of the form field to check.
+     * @return `true` if the form field is filled, `false` otherwise.
+     */
+    private fun checkFieldFilled(id: String): Boolean = fieldStates.getValue(id).value.isFilled
+
+    /**
+     * Retrieves the current value of the form field associated with the given ID.
+     *
+     * @param id The unique identifier of the form field.
+     * @return The current value of the form field, or `null` if the field is not found or its value is `null`.
+     * @throws NoSuchElementException If the field with the specified ID does not exist.
+     */
+    override fun <T> getFieldValue(id: String): T? = getFieldItem<T>(id).fieldState.value.value
 
     /**
      * Validates the entire form, including individual field validations and connections between fields.
@@ -307,7 +345,10 @@ open class CarlosFormManager(
      */
     private suspend fun <T> validateField(id: String, fieldValue: T?): FormFieldValidationResult {
         getValidators<T>(id).forEach { validator ->
-            val result = validator.validate(fieldValue)
+            val result = when (validator) {
+                is FormFieldValidator -> validator.validate(fieldValue)
+                is CrossFormFieldValidator -> validator.validate(fieldValue, context = this)
+            }
             if (result is FormFieldValidationResult.Invalid) {
                 return result
             }
@@ -322,8 +363,8 @@ open class CarlosFormManager(
      * @return The list of validators for the field.
      */
     @Suppress("UNCHECKED_CAST")
-    private fun <T> getValidators(id: String): List<FormFieldValidator<T>> {
-        return formFields.first { item -> item.id == id }.validators as List<FormFieldValidator<T>>
+    private fun <T> getValidators(id: String): List<IsFormFieldValidator<T>> {
+        return formFields.first { item -> item.id == id }.validators as List<IsFormFieldValidator<T>>
     }
 
     /**

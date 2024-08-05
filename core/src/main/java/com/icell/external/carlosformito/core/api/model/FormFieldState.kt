@@ -18,4 +18,16 @@ data class FormFieldState<T>(
      */
     val isError: Boolean
         get() = validationResult is FormFieldValidationResult.Invalid
+
+    /**
+     * Checks if the form field is filled.
+     */
+    val isFilled: Boolean
+        get() {
+            return if (value is String) {
+                value.isNotBlank()
+            } else {
+                value != null
+            }
+        }
 }
