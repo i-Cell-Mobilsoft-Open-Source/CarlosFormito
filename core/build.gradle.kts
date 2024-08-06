@@ -40,6 +40,7 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.lifecycleRuntimeKtx)
 
+    testImplementation(Dependencies.mockk)
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.truthAssert)
     testImplementation(Dependencies.coroutinesTest)

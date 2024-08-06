@@ -23,6 +23,7 @@ object Dependencies {
     const val navigationRuntimeKtx = "androidx.navigation:navigation-runtime-ktx:${Versions.navigation}"
     const val navigationCompose = "androidx.navigation:navigation-compose:${Versions.navigation}"
 
+    const val mockk = "io.mockk:mockk:${Versions.mockk}"
     const val junit = "junit:junit:${Versions.junit}"
     const val extJunit = "androidx.test.ext:junit:${Versions.extJunit}"
     const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"

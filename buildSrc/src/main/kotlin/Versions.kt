@@ -6,6 +6,7 @@ object Versions {
     const val coreKtx = "1.13.1"
     const val lifecycleRuntimeKtx = "2.8.3"
     const val activityCompose = "1.9.0"
+    const val mockk = "1.13.9"
     const val junit = "4.13.2"
     const val extJunit = "1.2.1"
     const val espresso = "3.6.1"
