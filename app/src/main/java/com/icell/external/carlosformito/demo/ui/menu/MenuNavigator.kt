@@ -18,8 +18,8 @@ import com.icell.external.carlosformito.demo.ui.email.ChangeEmailViewModel
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormViewModel
 import com.icell.external.carlosformito.demo.ui.menu.Route.Companion.KEY_ARG_VALIDATION_STRATEGY
-import com.icell.external.carlosformito.demo.ui.password.SetPasswordScreen
-import com.icell.external.carlosformito.demo.ui.password.SetPasswordViewModel
+import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordScreen
+import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordViewModel
 import com.icell.external.carlosformito.demo.ui.phonenumber.SetPhoneNumberScreen
 import com.icell.external.carlosformito.demo.ui.phonenumber.SetPhoneNumberViewModel
 
@@ -69,7 +69,7 @@ fun MenuNavigator(
                     navController.navigate("${Route.KEY_LONG_RUNNING_SAMPLE_ROOT}/${validationStrategy.name}")
                 },
                 onNavigateToMatchValidationSample = { validationStrategy ->
-                    navController.navigate("${Route.KEY_MATCH_VALIDATION_SAMPLE_ROOT}/${validationStrategy.name}")
+                    navController.navigate("${Route.KEY_EQUALS_TO_VALIDATION_SAMPLE_ROOT}/${validationStrategy.name}")
                 },
                 onNavigateToConnectedFieldValidationSample = { validationStrategy ->
                     navController.navigate(
@@ -142,7 +142,7 @@ fun MenuNavigator(
             )
         }
         composable(
-            route = Route.MatchValidationSample.route,
+            route = Route.EqualsToValidationSample.route,
             arguments = listOf(
                 navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
             )
@@ -150,12 +150,12 @@ fun MenuNavigator(
             val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
                 requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
             )
-            val viewModel: SetPasswordViewModel = viewModel {
-                SetPasswordViewModel(validationStrategy)
+            val viewModel: UpdatePasswordViewModel = viewModel {
+                UpdatePasswordViewModel(validationStrategy)
             }
 
-            SetPasswordScreen(
-                title = "Match validation sample",
+            UpdatePasswordScreen(
+                title = "EqualsTo validation sample",
                 viewModel = viewModel,
                 onBackPressed = {
                     navController.navigateUp()
@@ -199,8 +199,8 @@ sealed class Route(val route: String) {
     data object LongRunningValidationSample :
         Route("$KEY_LONG_RUNNING_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
 
-    data object MatchValidationSample :
-        Route("$KEY_MATCH_VALIDATION_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
+    data object EqualsToValidationSample :
+        Route("$KEY_EQUALS_TO_VALIDATION_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
 
     data object ConnectedFieldValidationSample :
         Route("$KEY_CONNECTED_FIELD_VALIDATION_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
@@ -209,7 +209,7 @@ sealed class Route(val route: String) {
         const val KEY_FIELD_SAMPLES_ROOT = "FieldSamples"
         const val KEY_CUSTOM_FORM_SAMPLES_ROOT = "CustomFormFieldsSample"
         const val KEY_LONG_RUNNING_SAMPLE_ROOT = "LongRunningValidationSample"
-        const val KEY_MATCH_VALIDATION_SAMPLE_ROOT = "MatchValidationSample"
+        const val KEY_EQUALS_TO_VALIDATION_SAMPLE_ROOT = "EqualsToValidationSample"
         const val KEY_CONNECTED_FIELD_VALIDATION_SAMPLE_ROOT = "ConnectedFieldValidationSample"
         const val KEY_ARG_VALIDATION_STRATEGY = "validationStrategy"
     }

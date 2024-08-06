@@ -8,9 +8,9 @@ import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.launch
 
-class SetPasswordViewModel(
+class UpdatePasswordViewModel(
     validationStrategy: FormFieldValidationStrategy,
-) : ViewModel(), FormManager by CarlosFormManager(SetPasswordFields.build(), validationStrategy) {
+) : ViewModel(), FormManager by CarlosFormManager(UpdatePasswordFields.build(), validationStrategy) {
 
     init {
         viewModelScope.launch {
@@ -21,7 +21,7 @@ class SetPasswordViewModel(
     fun submit() {
         viewModelScope.launch {
             if (validateForm()) {
-                Log.i("SetPasswordViewModel", "Form is valid")
+                Log.i("UpdatePasswordViewModel", "Form is valid")
             }
         }
     }

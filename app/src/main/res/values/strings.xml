@@ -18,6 +18,7 @@
     <string name="integer_min_max_error">Must be a decimal between: %1$d and %2$d!</string>
 
     <string name="email_not_unique_error">The email you entered is already taken!</string>
+    <string name="new_password_equals_old_password_error">The new password cannot be the same as the old password!</string>
     <string name="confirm_password_not_match_error">The two passwords does not match!</string>
     <string name="password_not_contains_number_error">The password should contain a number!</string>
     <string name="password_not_contains_special_char_error">The password should contain a special char!</string>

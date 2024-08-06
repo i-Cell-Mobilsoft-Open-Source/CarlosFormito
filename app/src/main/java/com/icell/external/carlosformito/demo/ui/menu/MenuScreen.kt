@@ -128,7 +128,7 @@ fun MenuScreen(
                             validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
                         )
                     }
-                    MenuListItem(title = "Match validation sample") {
+                    MenuListItem(title = "EqualsTo validation sample") {
                         onNavigateToMatchValidationSample.invoke(
                             validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
                         )

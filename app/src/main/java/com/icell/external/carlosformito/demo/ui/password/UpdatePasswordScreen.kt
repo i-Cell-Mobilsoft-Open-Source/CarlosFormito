@@ -19,15 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.commondemo.clearFocusOnTap
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
-import com.icell.external.carlosformito.demo.ui.password.SetPasswordFields.KEY_CONFIRM_PASSWORD
-import com.icell.external.carlosformito.demo.ui.password.SetPasswordFields.KEY_PASSWORD
-import com.icell.external.carlosformito.demo.ui.password.SetPasswordFields.KEY_PASSWORD_MAX_LENGTH
+import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordFields.KEY_CONFIRM_PASSWORD
+import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordFields.KEY_NEW_PASSWORD
+import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordFields.KEY_OLD_PASSWORD
+import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordFields.KEY_PASSWORD_MAX_LENGTH
 import com.icell.external.carlosformito.ui.field.FormPasswordTextField
 
 @Composable
-fun SetPasswordScreen(
+fun UpdatePasswordScreen(
     title: String,
-    viewModel: SetPasswordViewModel,
+    viewModel: UpdatePasswordViewModel,
     onBackPressed: () -> Unit
 ) {
     Scaffold(
@@ -44,15 +45,21 @@ fun SetPasswordScreen(
                 .padding(horizontal = 16.dp)
         ) {
             Text(
-                text = "Set your password",
+                text = "Update your password",
                 style = MaterialTheme.typography.subtitle1
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             FormPasswordTextField(
-                fieldItem = viewModel.getFieldItem(KEY_PASSWORD),
-                label = "Password*",
+                fieldItem = viewModel.getFieldItem(KEY_OLD_PASSWORD),
+                label = "Old password*",
+                maxLength = KEY_PASSWORD_MAX_LENGTH
+            )
+
+            FormPasswordTextField(
+                fieldItem = viewModel.getFieldItem(KEY_NEW_PASSWORD),
+                label = "New password*",
                 maxLength = KEY_PASSWORD_MAX_LENGTH
             )
 
