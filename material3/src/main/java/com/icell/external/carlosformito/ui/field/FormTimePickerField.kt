@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.KeyboardAlt
 import androidx.compose.material3.BasicAlertDialog
@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerDefaults
@@ -38,113 +39,52 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.extension.collectFieldState
-import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.extension.selectedTime
-import com.icell.external.carlosformito.ui.field.base.BaseTextField
-import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
-import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
+import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
-import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
-import com.icell.external.carlosformito.ui.util.onFocusCleared
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormTimePickerField(
     modifier: Modifier = Modifier,
     fieldItem: FormFieldItem<LocalTime>,
-    label: String,
+    textStyle: TextStyle = LocalCarlosConfigs.current.textStyle,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    pickerIcon: ImageVector = Icons.Default.AccessTime,
+    outlined: Boolean = LocalCarlosConfigs.current.outlined,
+    shape: Shape = LocalCarlosConfigs.current.shape,
+    colors: TextFieldColors = LocalCarlosConfigs.current.colors,
     timeFormatter: DateTimeFormatter = LocalCarlosFormats.current.timeFormatter,
-    dialogTitle: String = label,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    enabled: Boolean = true,
-    isClearable: Boolean = true,
+    dialogTitle: String,
     onClick: (() -> Unit)? = null,
     is24HourFormat: Boolean = LocalCarlosFormats.current.is24HourFormat,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    enabled: Boolean = true,
+    isClearable: Boolean = true,
+    clearIcon: ImageVector = Icons.Default.Clear,
     contentDescription: String? = null,
     customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
-    testTag: String? = null
-) {
-    val state by fieldItem.collectFieldState()
-    val isError = state.isError || !customErrorMessage.isNullOrBlank()
-    FormTimePickerField(
-        modifier = modifier,
-        value = state.value,
-        label = label,
-        timeFormatter = timeFormatter,
-        onValueChange = { value ->
-            fieldItem.onFieldValueChanged(value)
-        },
-        onFocusCleared = {
-            fieldItem.onFieldFocusCleared()
-        },
-        onVisibilityChanged = { visible ->
-            fieldItem.onFieldVisibilityChanged(visible)
-        },
-        dialogTitle = dialogTitle,
-        leadingContentType = leadingContentType,
-        isError = isError,
-        enabled = enabled,
-        isClearable = isClearable,
-        onClick = onClick,
-        is24HourFormat = is24HourFormat,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation,
-        contentDescription = contentDescription,
-        supportingText = if (isError) {
-            customErrorMessage ?: state.errorMessage() ?: supportingText
-        } else {
-            supportingText
-        },
-        testTag = testTag
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun FormTimePickerField(
-    modifier: Modifier = Modifier,
-    value: LocalTime?,
-    label: String,
-    timeFormatter: DateTimeFormatter = LocalCarlosFormats.current.timeFormatter,
-    onValueChange: (LocalTime?) -> Unit,
-    dialogTitle: String = label,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    isError: Boolean = false,
-    enabled: Boolean = true,
-    isClearable: Boolean = true,
-    onClick: (() -> Unit)? = null,
-    onFocusCleared: () -> Unit = {},
-    onVisibilityChanged: (visible: Boolean) -> Unit = {},
-    is24HourFormat: Boolean = LocalCarlosFormats.current.is24HourFormat,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    contentDescription: String? = null,
-    supportingText: CharSequence? = null,
-    testTag: String? = null
+    testTag: String? = null,
 ) {
     val context = LocalContext.current
-    val carlosIcons = LocalCarlosIcons.current
-
-    TrackVisibilityEffect(onVisibilityChanged)
+    val state by fieldItem.collectFieldState()
 
     val displayMode = remember { mutableStateOf(DisplayMode.Picker) }
     var dialogVisible by remember { mutableStateOf(false) }
 
     if (dialogVisible) {
-        val currentValue = value ?: LocalTime.now()
+        val currentValue = state.value ?: LocalTime.now()
         val timePickerState = rememberTimePickerState(
             initialHour = currentValue.hour,
             initialMinute = currentValue.minute,
@@ -156,7 +96,7 @@ private fun FormTimePickerField(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onValueChange(timePickerState.selectedTime)
+                        fieldItem.onFieldValueChanged(timePickerState.selectedTime)
                         dialogVisible = false
                     }
                 ) {
@@ -182,36 +122,30 @@ private fun FormTimePickerField(
         }
     }
 
-    BaseTextField(
-        modifier = modifier.onFocusCleared(onFocusCleared),
-        value = value?.let { timeFormatter.format(value) } ?: "",
+    FormPickerField(
+        modifier = modifier,
+        fieldItem = fieldItem,
+        textStyle = textStyle,
         label = label,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        pickerIcon = pickerIcon,
+        outlined = outlined,
+        shape = shape,
+        colors = colors,
+        onClick = onClick ?: { dialogVisible = true },
         enabled = enabled,
-        isError = isError,
-        trailingContentType = TextFieldAffixContentType.Icon(
-            value = if (isClearable && value != null) {
-                carlosIcons.clear
-            } else {
-                carlosIcons.schedule
-            }
-        ),
-        leadingContentType = leadingContentType,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        contentDescription = contentDescription,
-        visualTransformation = visualTransformation,
-        supportingText = supportingText,
-        testTag = testTag,
-        onValueChange = {
-            // intentionally blank
+        isClearable = isClearable,
+        clearIcon = clearIcon,
+        displayedValue = { value ->
+            value?.let {
+                timeFormatter.format(value)
+            } ?: ""
         },
-        inputMode = TextFieldInputMode.Picker(
-            onClick = onClick ?: { dialogVisible = true },
-            isClearable = isClearable,
-            onClear = {
-                onValueChange(null)
-            }
-        )
+        contentDescription = contentDescription,
+        customErrorMessage = customErrorMessage,
+        supportingText = supportingText,
+        testTag = testTag
     )
 }
 
