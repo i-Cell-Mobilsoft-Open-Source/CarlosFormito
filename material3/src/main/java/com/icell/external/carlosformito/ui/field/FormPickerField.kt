@@ -1,115 +1,90 @@
 package com.icell.external.carlosformito.ui.field
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.extension.errorMessage
-import com.icell.external.carlosformito.ui.field.base.BaseTextField
-import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
-import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
-import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
-import com.icell.external.carlosformito.ui.util.onFocusCleared
+import com.icell.external.carlosformito.ui.field.base.BasePickerField
+import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 
 @Composable
 fun <T> FormPickerField(
     modifier: Modifier = Modifier,
     fieldItem: FormFieldItem<T>,
-    label: String,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    enabled: Boolean = true,
-    isClearable: Boolean = true,
+    textStyle: TextStyle = LocalCarlosConfigs.current.textStyle,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    pickerIcon: ImageVector = Icons.Default.Edit,
+    prefix: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    outlined: Boolean = LocalCarlosConfigs.current.outlined,
+    shape: Shape = LocalCarlosConfigs.current.shape,
+    colors: TextFieldColors = LocalCarlosConfigs.current.colors,
     onClick: () -> Unit,
     displayedValue: (T?) -> String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    enabled: Boolean = true,
+    isClearable: Boolean = true,
+    clearIcon: ImageVector = Icons.Default.Clear,
     contentDescription: String? = null,
     customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
-    testTag: String? = null
+    testTag: String? = null,
 ) {
     val state by fieldItem.collectFieldState()
     val isError = state.isError || !customErrorMessage.isNullOrBlank()
-    FormPickerField(
+
+    BasePickerField(
         modifier = modifier,
-        value = state.value,
-        label = label,
+        value = displayedValue(state.value),
+        onClick = onClick,
+        isClearable = isClearable,
         onClear = {
             fieldItem.onFieldValueChanged(null)
         },
-        leadingContentType = leadingContentType,
-        isError = isError,
+        textStyle = textStyle,
+        label = label,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        trailingIcon = {
+            Icon(
+                imageVector = if (!isClearable || state.value == null) {
+                    pickerIcon
+                } else {
+                    clearIcon
+                },
+                contentDescription = ""
+            )
+        },
+        prefix = prefix,
+        suffix = suffix,
+        outlined = outlined,
+        shape = shape,
+        colors = colors,
         enabled = enabled,
-        isClearable = isClearable,
-        onClick = onClick,
-        onFocusCleared = {
-            fieldItem.onFieldFocusCleared()
-        },
-        onVisibilityChanged = { visible ->
-            fieldItem.onFieldVisibilityChanged(visible)
-        },
-        displayedValue = displayedValue,
-        visualTransformation = visualTransformation,
+        isError = isError,
         contentDescription = contentDescription,
         supportingText = if (isError) {
             customErrorMessage ?: state.errorMessage() ?: supportingText
         } else {
             supportingText
         },
-        testTag = testTag
-    )
-}
-
-@Composable
-private fun <T> FormPickerField(
-    modifier: Modifier = Modifier,
-    value: T?,
-    label: String,
-    onClear: () -> Unit = {},
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    isError: Boolean = false,
-    enabled: Boolean = true,
-    isClearable: Boolean = true,
-    onClick: (() -> Unit),
-    onFocusCleared: () -> Unit = {},
-    onVisibilityChanged: (visible: Boolean) -> Unit = {},
-    displayedValue: (T?) -> String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    contentDescription: String? = null,
-    supportingText: CharSequence? = null,
-    testTag: String? = null
-) {
-    val carlosIcons = LocalCarlosIcons.current
-
-    TrackVisibilityEffect(onVisibilityChanged)
-
-    BaseTextField(
-        modifier = modifier.onFocusCleared(onFocusCleared),
-        value = displayedValue(value),
-        label = label,
-        enabled = enabled,
-        isError = isError,
-        trailingContentType = TextFieldAffixContentType.Icon(
-            value = if (isClearable && value != null) {
-                carlosIcons.clear
-            } else {
-                carlosIcons.arrowDropDown
-            }
-        ),
-        leadingContentType = leadingContentType,
-        contentDescription = contentDescription,
-        visualTransformation = visualTransformation,
-        supportingText = supportingText,
         testTag = testTag,
-        onValueChange = {
-            // intentionally blank
+        onVisibilityChange = { visible ->
+            fieldItem.onFieldVisibilityChanged(visible)
         },
-        inputMode = TextFieldInputMode.Picker(
-            onClick = onClick,
-            isClearable = isClearable,
-            onClear = onClear
-        )
+        onFocusCleared = {
+            fieldItem.onFieldFocusCleared()
+        }
     )
 }

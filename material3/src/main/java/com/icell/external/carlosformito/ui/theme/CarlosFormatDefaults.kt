@@ -7,7 +7,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import java.time.format.DateTimeFormatter
 
-class CarlosFormattingDefaults(
+class CarlosFormatDefaults(
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE,
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
     is24HourFormat: Boolean? = true
@@ -21,4 +21,4 @@ class CarlosFormattingDefaults(
         get() = is24HourFormatParam ?: DateFormat.is24HourFormat(LocalContext.current)
 }
 
-val LocalCarlosFormats = staticCompositionLocalOf { CarlosFormattingDefaults() }
+val LocalCarlosFormats = staticCompositionLocalOf { CarlosFormatDefaults() }

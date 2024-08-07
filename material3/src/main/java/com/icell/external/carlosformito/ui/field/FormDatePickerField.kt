@@ -1,25 +1,23 @@
 package com.icell.external.carlosformito.ui.field
 
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.ui.datepicker.CarlosDatePicker
 import com.icell.external.carlosformito.ui.extension.collectFieldState
-import com.icell.external.carlosformito.ui.extension.errorMessage
-import com.icell.external.carlosformito.ui.field.base.BaseTextField
-import com.icell.external.carlosformito.ui.field.base.TextFieldAffixContentType
-import com.icell.external.carlosformito.ui.field.base.TextFieldInputMode
-import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
+import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats
-import com.icell.external.carlosformito.ui.theme.LocalCarlosIcons
-import com.icell.external.carlosformito.ui.util.onFocusCleared
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -27,98 +25,43 @@ import java.time.format.DateTimeFormatter
 fun FormDatePickerField(
     modifier: Modifier = Modifier,
     fieldItem: FormFieldItem<LocalDate>,
-    label: String,
+    textStyle: TextStyle = LocalCarlosConfigs.current.textStyle,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    pickerIcon: ImageVector = Icons.Default.CalendarMonth,
+    prefix: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    outlined: Boolean = LocalCarlosConfigs.current.outlined,
+    shape: Shape = LocalCarlosConfigs.current.shape,
+    colors: TextFieldColors = LocalCarlosConfigs.current.colors,
     dateFormatter: DateTimeFormatter = LocalCarlosFormats.current.dateFormatter,
-    dialogTitle: String = label,
-    minDate: LocalDate? = null,
-    maxDate: LocalDate? = null,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    enabled: Boolean = true,
-    isClearable: Boolean = true,
-    onClick: (() -> Unit)? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    contentDescription: String? = null,
-    customErrorMessage: String? = null,
-    supportingText: CharSequence? = null,
-    testTag: String? = null
-) {
-    val state by fieldItem.collectFieldState()
-    val isError = state.isError || !customErrorMessage.isNullOrBlank()
-    FormDatePickerField(
-        modifier = modifier,
-        value = state.value,
-        label = label,
-        dateFormatter = dateFormatter,
-        onValueChange = { value ->
-            fieldItem.onFieldValueChanged(value)
-        },
-        onFocusCleared = {
-            fieldItem.onFieldFocusCleared()
-        },
-        onVisibilityChanged = { visible ->
-            fieldItem.onFieldVisibilityChanged(visible)
-        },
-        dialogTitle = dialogTitle,
-        minDate = minDate,
-        maxDate = maxDate,
-        leadingContentType = leadingContentType,
-        isError = isError,
-        enabled = enabled,
-        isClearable = isClearable,
-        onClick = onClick,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation,
-        contentDescription = contentDescription,
-        supportingText = if (isError) {
-            customErrorMessage ?: state.errorMessage() ?: supportingText
-        } else {
-            supportingText
-        },
-        testTag = testTag
-    )
-}
-
-@Composable
-private fun FormDatePickerField(
-    modifier: Modifier = Modifier,
-    value: LocalDate?,
-    label: String,
-    dateFormatter: DateTimeFormatter = LocalCarlosFormats.current.dateFormatter,
-    onValueChange: (LocalDate?) -> Unit,
-    dialogTitle: String = label,
+    dialogTitle: String,
     dialogHeadline: String? = null,
     minDate: LocalDate? = null,
     maxDate: LocalDate? = null,
-    leadingContentType: TextFieldAffixContentType = TextFieldAffixContentType.None,
-    isError: Boolean = false,
+    onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
     isClearable: Boolean = true,
-    onClick: (() -> Unit)? = null,
-    onFocusCleared: () -> Unit = {},
-    onVisibilityChanged: (visible: Boolean) -> Unit = {},
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    clearIcon: ImageVector = Icons.Default.Clear,
     contentDescription: String? = null,
+    customErrorMessage: String? = null,
     supportingText: CharSequence? = null,
-    testTag: String? = null
+    testTag: String? = null,
 ) {
-    val carlosIcons = LocalCarlosIcons.current
-    var dialogVisible by remember { mutableStateOf(false) }
+    val state by fieldItem.collectFieldState()
 
+    var dialogVisible by remember { mutableStateOf(false) }
     if (dialogVisible) {
         CarlosDatePicker(
             dialogTitle = dialogTitle,
             dialogHeadline = dialogHeadline,
             formatter = dateFormatter,
-            selectedDate = value,
+            selectedDate = state.value,
             minDate = minDate,
             maxDate = maxDate,
             onSelectDate = { selectedDate ->
-                onValueChange(selectedDate)
+                fieldItem.onFieldValueChanged(selectedDate)
                 dialogVisible = false
             },
             hideDialog = {
@@ -127,37 +70,31 @@ private fun FormDatePickerField(
         )
     }
 
-    TrackVisibilityEffect(onVisibilityChanged)
-
-    BaseTextField(
-        modifier = modifier.onFocusCleared(onFocusCleared),
-        value = value?.let { dateFormatter.format(value) } ?: "",
+    FormPickerField(
+        modifier = modifier,
+        fieldItem = fieldItem,
+        textStyle = textStyle,
         label = label,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        pickerIcon = pickerIcon,
+        prefix = prefix,
+        suffix = suffix,
+        outlined = outlined,
+        shape = shape,
+        colors = colors,
+        onClick = onClick ?: { dialogVisible = true },
         enabled = enabled,
-        isError = isError,
-        trailingContentType = TextFieldAffixContentType.Icon(
-            value = if (isClearable && value != null) {
-                carlosIcons.clear
-            } else {
-                carlosIcons.calendar
-            }
-        ),
-        leadingContentType = leadingContentType,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        contentDescription = contentDescription,
-        visualTransformation = visualTransformation,
-        supportingText = supportingText,
-        testTag = testTag,
-        onValueChange = {
-            // intentionally blank
+        isClearable = isClearable,
+        clearIcon = clearIcon,
+        displayedValue = { value ->
+            value?.let {
+                dateFormatter.format(value)
+            } ?: ""
         },
-        inputMode = TextFieldInputMode.Picker(
-            onClick = onClick ?: { dialogVisible = true },
-            isClearable = isClearable,
-            onClear = {
-                onValueChange(null)
-            }
-        )
+        contentDescription = contentDescription,
+        customErrorMessage = customErrorMessage,
+        supportingText = supportingText,
+        testTag = testTag
     )
 }

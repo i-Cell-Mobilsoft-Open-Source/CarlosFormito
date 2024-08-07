@@ -67,7 +67,9 @@ fun MenuScreen(
             FormPickerField(
                 modifier = Modifier.padding(top = 24.dp),
                 fieldItem = validationStrategyField,
-                label = "Field validation strategy",
+                label = {
+                    Text("Field validation strategy")
+                },
                 onClick = { openBottomSheet = true },
                 displayedValue = { validationStrategy ->
                     validationStrategy?.displayedValue() ?: ""

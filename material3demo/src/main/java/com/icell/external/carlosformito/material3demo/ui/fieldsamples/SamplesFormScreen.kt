@@ -50,6 +50,7 @@ import com.icell.external.carlosformito.ui.field.FormTimePickerField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun SampleFormScreen(
     title: String,
@@ -114,37 +115,51 @@ fun SampleFormScreen(
 
             FormTextField(
                 fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_NAME),
-                label = "Name*",
+                label = {
+                    Text("Name*")
+                },
                 supportingText = "Please enter your full name."
             )
 
             FormPasswordTextField(
                 fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_SECRET),
-                label = "Secret*",
+                label = {
+                    Text("Secret*")
+                },
                 supportingText = "Please give a strong password (min 8 characters)."
             )
 
             FormDatePickerField(
                 fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_DATE),
-                label = "Date*",
+                label = {
+                    Text("Date*")
+                },
+                dialogTitle = "Select date",
                 supportingText = "Please select a date from next week."
             )
 
             FormTimePickerField(
                 fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_TIME),
-                label = "Time*",
+                label = {
+                    Text("Time*")
+                },
+                dialogTitle = "Select time",
                 supportingText = "Please choose a time between noon and 6 p.m."
             )
 
             FormIntegerField(
                 fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_SIZE),
-                label = "Size (optional field)",
+                label = {
+                    Text("Size (optional field)")
+                },
                 supportingText = "Please enter a value between 100 and 200."
             )
 
             FormPickerField(
                 fieldItem = packageFieldItem,
-                label = "Package type*",
+                label = {
+                    Text("Package type*")
+                },
                 supportingText = "Please pick a Package type.",
                 onClick = { openBottomSheet = true },
                 displayedValue = { packageType -> packageType?.displayedValue() ?: "" }
