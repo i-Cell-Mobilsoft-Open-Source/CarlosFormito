@@ -62,6 +62,7 @@ dependencies {
     implementation(Dependencies.navigationCompose)
     implementation(Dependencies.navigationRuntimeKtx)
     implementation(Dependencies.material)
+    implementation(Dependencies.extendedMaterialIcons)
 
     composeMaterial()
 

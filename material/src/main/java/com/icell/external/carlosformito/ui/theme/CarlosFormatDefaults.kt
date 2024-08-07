@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.android.material.timepicker.TimeFormat
 import java.time.format.DateTimeFormatter
 
-class CarlosFormattingDefaults(
+class CarlosFormatDefaults(
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE,
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
     timeFormat: Int? = null
@@ -29,4 +29,4 @@ class CarlosFormattingDefaults(
     }
 }
 
-val LocalCarlosFormats = staticCompositionLocalOf { CarlosFormattingDefaults() }
+val LocalCarlosFormats = staticCompositionLocalOf { CarlosFormatDefaults() }

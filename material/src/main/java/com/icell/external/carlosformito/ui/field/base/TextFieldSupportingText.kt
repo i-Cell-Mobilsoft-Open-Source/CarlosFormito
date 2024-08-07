@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
-import com.icell.external.carlosformito.ui.theme.LocalCarlosColors
+import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 
 @Composable
 fun TextFieldSupportingText(
@@ -17,7 +17,7 @@ fun TextFieldSupportingText(
     isError: Boolean,
     supportingText: CharSequence
 ) {
-    val carlosColors = LocalCarlosColors.current
+    val carlosColors = LocalCarlosConfigs.current
     val textColor: Color by animateColorAsState(
         if (isError) {
             carlosColors.errorTextColor

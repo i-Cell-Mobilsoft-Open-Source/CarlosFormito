@@ -46,6 +46,7 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.appcompat)
     implementation(Dependencies.material)
+    implementation(Dependencies.extendedMaterialIcons)
 
     composeMaterial()
 

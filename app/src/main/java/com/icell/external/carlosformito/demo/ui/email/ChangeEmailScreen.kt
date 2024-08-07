@@ -98,7 +98,9 @@ fun ChangeEmailScreen(
                 } else {
                     null
                 },
-                label = "New email*",
+                label = {
+                    Text("New email*")
+                },
                 maxLength = 32
             )
 
