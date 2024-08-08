@@ -22,8 +22,27 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+/**
+ * The absolute minimum date that can be selected, set to January 1, 1900.
+ */
 private val ABSOLUTE_MIN_DATE: LocalDate = LocalDate.of(1900, 1, 1)
 
+/**
+ * A composable function that displays a date picker dialog.
+ *
+ * This function shows a [DatePickerDialog] with the provided title, optional headline, and selectable date range.
+ * The selected date is formatted using the provided [formatter] and passed to the
+ * [onSelectDate] callback upon confirmation. The dialog can be dismissed using the [hideDialog] callback.
+ *
+ * @param dialogTitle The title of the date picker dialog.
+ * @param dialogHeadline An optional headline to display above the date picker.
+ * @param selectedDate The initially selected date. If `null`, no date is initially selected.
+ * @param minDate The minimum selectable date. If null, defaults to [ABSOLUTE_MIN_DATE].
+ * @param maxDate The maximum selectable date. If `null`, there is no maximum date restriction.
+ * @param formatter The [DateTimeFormatter] used to format the selected date for display.
+ * @param onSelectDate Lambda function to be invoked when a date is selected. Receives the selected date as a parameter.
+ * @param hideDialog Lambda function to be invoked to dismiss the dialog.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarlosDatePicker(
@@ -92,6 +111,16 @@ fun CarlosDatePicker(
     }
 }
 
+/**
+ * Helper function to create an instance of [SelectableDates] for the given date range.
+ *
+ * This function creates a [SelectableDates] object that determines whether a given date in milliseconds
+ * is within the specified range of [minDate] and [maxDate].
+ *
+ * @param minDate The minimum selectable date. If `null`, there is no minimum date restriction.
+ * @param maxDate The maximum selectable date. If `null`, there is no maximum date restriction.
+ * @return An instance of [SelectableDates] that implements date selection logic based on the provided range.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun rememberSelectableDates(

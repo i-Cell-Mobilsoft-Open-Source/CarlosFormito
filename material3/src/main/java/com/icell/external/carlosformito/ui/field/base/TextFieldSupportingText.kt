@@ -11,6 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 
+/**
+ * A composable function that displays supporting text below a text field. The text can change color
+ * based on whether there is an error state or not.
+ *
+ * @param modifier a [Modifier] to be applied to the supporting text.
+ * @param isError indicates if the text field is in an error state. Changes the color of the supporting text.
+ * @param supportingText the supporting text to be displayed. Can be either a [String] or [AnnotatedString].
+ */
 @Composable
 fun TextFieldSupportingText(
     modifier: Modifier = Modifier,
