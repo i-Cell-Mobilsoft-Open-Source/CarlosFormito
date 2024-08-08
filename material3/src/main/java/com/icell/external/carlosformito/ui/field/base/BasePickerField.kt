@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -35,6 +39,51 @@ import com.icell.external.carlosformito.ui.util.focusStepper
 import com.icell.external.carlosformito.ui.util.onFocusCleared
 import com.icell.external.carlosformito.ui.util.testId
 
+/**
+ * A base composable function for a picker field with various customization options.
+ *
+ * @param value the input text to be shown in the picker field
+ * @param onClick the callback that is triggered when the picker field is clicked
+ * @param onVisibilityChange the callback that is triggered when the picker field visibility changes.
+ * It is called with visible = `true` when the picker field is composed for the first time
+ * And called with `false` when the picker field leaves composition (onDispose)
+ * @param onFocusCleared the callback that is triggered when the picker field looses focus
+ * @param modifier a [Modifier] for this picker field
+ * @param onClear the callback that is triggered when the picker field's clear button is clicked
+ * @param isClearable indicates if the picked value of the picker field can be cleared
+ * @param enabled controls the enabled state of the picker field. When `false`, the picker field will
+ * be neither editable nor focusable, the input of the picker field will not be selectable,
+ * visually picker field will appear in the disabled UI state
+ * @param textStyle the style to be applied to the input text. The default [textStyle] uses the
+ * [LocalCarlosConfigs]'s textStyle defined by the theme.
+ * @param label the optional label to be displayed inside the text field container. The default
+ * text style for internal [Text] is [Typography.bodySmall] when the text field is in focus and
+ * [Typography.bodyLarge] when the text field is not in focus
+ * @param placeholder the optional placeholder to be displayed when the text field is in focus and
+ * the input text is empty. The default text style for internal [Text] is [Typography.bodyLarge]
+ * @param leadingIcon the optional leading icon to be displayed at the beginning of the picker field
+ * container
+ * @param trailingIcon the optional trailing icon to be displayed at the end of the picker field
+ * container
+ * @param prefix the optional prefix to be displayed before the displayed value in the picker field
+ * @param suffix the optional suffix to be displayed after the displayed value in the picker field
+ * @param isError indicates if the picker field's current value is in error. If set to true, the
+ * label, bottom indicator and trailing icon by default will be displayed in error color
+ * @param outlined boolean indicating if the picker field should be outlined.
+ * The default [outlined] uses the [LocalCarlosConfigs]'s outlined param defined by the theme.
+ * @param shape the shape of the picker field's border
+ * The default [shape] uses the [LocalCarlosConfigs]'s shape defined by the theme, which defaults to
+ * [OutlinedTextFieldDefaults.shape] if the field is outlined or [TextFieldDefaults.shape] otherwise.
+ * @param colors [TextFieldColors] that will be used to resolve color of the text and content
+ * (including label, placeholder, leading and trailing icons, border) for this picker field in
+ * different states. The default [colors] uses the [LocalCarlosConfigs]'s colors defined by the theme, which defaults to
+ * [OutlinedTextFieldDefaults.colors] if the field is outlined or [TextFieldDefaults.colors] otherwise
+ * @param textSelectionColors the colors to be used for text selection
+ * The default [textSelectionColors] uses the [LocalCarlosConfigs]'s text selection colors defined by the theme.
+ * @param contentDescription optional content description for accessibility
+ * @param supportingText the optional supporting text to be displayed below the picker field
+ * @param testTag optional test tag for testing purposes
+ */
 @Composable
 fun BasePickerField(
     value: String,
