@@ -10,10 +10,28 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 
+/**
+ * Object that provides a builder function for creating and configuring a [MaterialDatePicker].
+ */
 object DatePickerBuilder {
 
+    /**
+     * The absolute minimum date that can be selected, set to January 1, 1900.
+     * */
     private val ABSOLUTE_MIN_DATE: LocalDate = LocalDate.of(1900, 1, 1)
 
+    /**
+     * Builds a [MaterialDatePicker] dialog with the specified configuration.
+     *
+     * @param dialogTitle The title to be displayed on the date picker dialog.
+     * @param minDate The minimum selectable date in the date picker. If null, defaults to [absoluteMinDate].
+     * @param maxDate The maximum selectable date in the date picker. If null, there is no upper limit.
+     * @param selectedDate The initial date to be selected in the date picker. If null, no date is preselected.
+     * @param onDateSelected A callback that is invoked when the user selects a date.
+     * The selected [LocalDate] is passed as an argument to this callback.
+     * @param absoluteMinDate The absolute minimum date that can be selected, defaults to [ABSOLUTE_MIN_DATE].
+     * @return A configured instance of [MaterialDatePicker].
+     */
     fun build(
         dialogTitle: String,
         minDate: LocalDate? = null,
@@ -56,10 +74,22 @@ object DatePickerBuilder {
         }
     }
 
+    /**
+     * Converts a [LocalDate] to UTC milliseconds since the epoch.
+     *
+     * @param localDate The [LocalDate] to be converted.
+     * @return The UTC milliseconds since the epoch corresponding to the start of the day in UTC.
+     */
     private fun localDateToUtcMillis(localDate: LocalDate): Long {
         return localDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
     }
 
+    /**
+     * Converts UTC milliseconds since the epoch to a [LocalDate].
+     *
+     * @param utcMillis The UTC milliseconds since the epoch.
+     * @return The corresponding [LocalDate].
+     */
     private fun localDateFromUtcMillis(utcMillis: Long): LocalDate {
         return Instant.ofEpochMilli(utcMillis).atZone(ZoneId.systemDefault()).toLocalDate()
     }
