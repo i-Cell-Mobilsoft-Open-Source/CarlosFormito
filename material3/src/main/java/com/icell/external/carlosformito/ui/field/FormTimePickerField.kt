@@ -48,7 +48,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.ui.extension.collectFieldState
+import com.icell.external.carlosformito.core.ui.collectFieldState
 import com.icell.external.carlosformito.ui.extension.selectedTime
 import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats

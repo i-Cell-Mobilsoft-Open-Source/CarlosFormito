@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.util
+package com.icell.external.carlosformito.core.ui
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier

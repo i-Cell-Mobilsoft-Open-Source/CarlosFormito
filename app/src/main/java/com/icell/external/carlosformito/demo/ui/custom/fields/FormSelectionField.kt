@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.ui.extension.collectFieldState
-import com.icell.external.carlosformito.ui.extension.errorMessage
+import com.icell.external.carlosformito.core.ui.TrackVisibilityEffect
+import com.icell.external.carlosformito.core.ui.collectFieldState
+import com.icell.external.carlosformito.core.ui.errorMessage
+import com.icell.external.carlosformito.core.ui.testId
 import com.icell.external.carlosformito.ui.field.base.TextFieldSupportingText
-import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
-import com.icell.external.carlosformito.ui.util.testId
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

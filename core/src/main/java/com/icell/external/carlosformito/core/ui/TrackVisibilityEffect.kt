@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.field.base
+package com.icell.external.carlosformito.core.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
