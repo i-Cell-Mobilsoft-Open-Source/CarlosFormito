@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.commondemo.clearFocusOnTap
 import com.icell.external.carlosformito.core.api.FormFieldItem
+import com.icell.external.carlosformito.core.ui.collectFieldState
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.demo.ui.custom.CustomFormFields.KEY_DEBIT_CARD_NUMBER
@@ -40,7 +41,6 @@ import com.icell.external.carlosformito.demo.ui.custom.fields.FormSelectionField
 import com.icell.external.carlosformito.demo.ui.custom.fields.FormSwitchField
 import com.icell.external.carlosformito.demo.ui.custom.fields.FormValidityStartField
 import com.icell.external.carlosformito.demo.ui.custom.fields.model.PaymentMethod
-import com.icell.external.carlosformito.ui.extension.collectFieldState
 import com.icell.external.carlosformito.ui.field.FormTextField
 import kotlinx.coroutines.launch
 

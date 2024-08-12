@@ -1,4 +1,4 @@
-package com.icell.external.carlosformito.ui.util
+package com.icell.external.carlosformito.core.ui
 
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.KeyEvent.KEYCODE_TAB

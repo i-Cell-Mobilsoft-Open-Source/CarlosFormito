@@ -26,15 +26,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.material.timepicker.TimeFormat
 import com.icell.external.carlosformito.core.api.FormFieldItem
+import com.icell.external.carlosformito.core.ui.TrackVisibilityEffect
+import com.icell.external.carlosformito.core.ui.collectFieldState
+import com.icell.external.carlosformito.core.ui.errorMessage
+import com.icell.external.carlosformito.core.ui.testId
 import com.icell.external.carlosformito.demo.ui.custom.fields.model.ValidityStart
-import com.icell.external.carlosformito.ui.extension.collectFieldState
-import com.icell.external.carlosformito.ui.extension.errorMessage
 import com.icell.external.carlosformito.ui.extension.requireActivity
 import com.icell.external.carlosformito.ui.field.base.TextFieldSupportingText
-import com.icell.external.carlosformito.ui.field.base.TrackVisibilityEffect
 import com.icell.external.carlosformito.ui.util.DatePickerBuilder
 import com.icell.external.carlosformito.ui.util.TimePickerBuilder
-import com.icell.external.carlosformito.ui.util.testId
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

@@ -29,10 +29,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.icell.external.carlosformito.core.ui.TrackVisibilityEffect
+import com.icell.external.carlosformito.core.ui.focusStepper
+import com.icell.external.carlosformito.core.ui.onFocusCleared
+import com.icell.external.carlosformito.core.ui.testId
 import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
-import com.icell.external.carlosformito.ui.util.focusStepper
-import com.icell.external.carlosformito.ui.util.onFocusCleared
-import com.icell.external.carlosformito.ui.util.testId
 
 /**
  * A base composable function for a text field with various customization options.

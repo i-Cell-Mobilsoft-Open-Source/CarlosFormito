@@ -2,6 +2,7 @@ plugins {
     `android-library`
     `kotlin-android`
     `maven-publish`
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 apply<CommonLibraryGradlePlugin>()
@@ -9,6 +10,9 @@ apply<CommonLibraryGradlePlugin>()
 android {
     namespace = "com.icell.external.carlosformito.core"
 
+    buildFeatures {
+        compose = true
+    }
     kotlinOptions {
         jvmTarget = Versions.kotlinJvmTarget
     }
@@ -25,7 +29,7 @@ publishing {
         register("GitHubPackagesRelease", MavenPublication::class.java) {
             groupId = "com.icell.external.carlosformito"
             artifactId = "carlosformito-core"
-            version = "0.0.3-SNAPSHOT"
+            version = "0.0.4-SNAPSHOT"
             artifact(layout.buildDirectory.dir("outputs/aar/core-debug.aar"))
 
             // Attach sources
@@ -39,6 +43,8 @@ publishing {
 dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.lifecycleRuntimeKtx)
+
+    composeCore()
 
     testImplementation(Dependencies.mockk)
     testImplementation(Dependencies.junit)
