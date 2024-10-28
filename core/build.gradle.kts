@@ -5,6 +5,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+apply(plugin = "org.jetbrains.dokka")
+
 apply<CommonLibraryGradlePlugin>()
 
 android {

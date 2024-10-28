@@ -1,8 +1,11 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import org.jetbrains.dokka.base.DokkaBase
+import org.jetbrains.dokka.base.DokkaBaseConfiguration
 
 plugins {
     id("io.gitlab.arturbosch.detekt") version Versions.detekt apply true
+    id("org.jetbrains.dokka") version Versions.dokka apply true
     id("com.github.ben-manes.versions") version Versions.dependencyUpdates apply true
     id("org.jetbrains.kotlin.plugin.compose") version Versions.composeCompiler apply false
 }
@@ -33,6 +36,13 @@ tasks.register<Detekt>("detektAll") {
 
 dependencies {
     detektPlugins(Dependencies.detektFormattingPlugin)
+    dokkaPlugin(Dependencies.dokkaPlugin)
+}
+
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.dokka:dokka-base:${Versions.dokka}")
+    }
 }
 
 fun isNonStable(version: String): Boolean {
@@ -46,5 +56,14 @@ fun isNonStable(version: String): Boolean {
 tasks.withType<DependencyUpdatesTask> {
     rejectVersionIf {
         isNonStable(candidate.version)
+    }
+}
+
+tasks.dokkaHtmlMultiModule {
+    outputDirectory.set(layout.projectDirectory.dir("documentation/dokka"))
+
+    pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
+        // setup generated dokka documentation
+        footerMessage = "© 2024 | i-Cell Mobilsoft Open Source"
     }
 }
