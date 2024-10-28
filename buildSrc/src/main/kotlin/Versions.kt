@@ -16,6 +16,7 @@ object Versions {
     const val extendedMaterialIcons = "1.6.4"
     const val composeCompiler = "2.0.0"
     const val detekt = "1.23.6"
+    const val dokka = "1.9.20"
     const val kotlinJvmTarget = "17"
     const val dependencyUpdates = "0.51.0"
 }

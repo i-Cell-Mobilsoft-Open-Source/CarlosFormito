@@ -32,6 +32,7 @@ object Dependencies {
 
     const val desugaring = "com.android.tools:desugar_jdk_libs:${Versions.desugaring}"
     const val detektFormattingPlugin = "io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detekt}"
+    const val dokkaPlugin = "org.jetbrains.dokka:android-documentation-plugin:${Versions.dokka}"
 }
 
 fun DependencyHandler.composeCore() {
