@@ -44,7 +44,7 @@
                     </a>
             </div>
             <div class="library-version">
-            </div>
+v0.0.4            </div>
         </div>
     </div>
     <div class="navigation-controls">
@@ -60,6 +60,261 @@
 <div class="main-content" id="content" pageIds="CarlosFormito::.ext/allModules///PointingToDeclaration//0">
   <div class="breadcrumbs"></div>
   <div class="cover ">
+    <div class="cover ">
+      <h1 class="">CarlosFormito</h1>
+<img src="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/images/carlos_logo.png" height="200" alt="Carlos Logo"/>      <p class="paragraph">Easy form state management for Jetpack Compose.</p>
+      <h2 class="">Introduction</h2>
+      <p class="paragraph">Working with forms in your application? Carlos can be your ultimate wingman.<br>While building forms might seem straightforward, a closer look reveals the need to manage:</p>
+      <ol>
+        <li>
+          <p class="paragraph">Validation strategies</p>
+        </li>
+        <li>
+          <p class="paragraph">Field state changes</p>
+        </li>
+        <li>
+          <p class="paragraph">Cross-field dependencies, and more... <br></br></p>
+        </li>
+      </ol>
+      <blockquote class="quotation">
+        <p class="paragraph">&quot;I don't want to reinvent the wheel.<br>Many common user flows and use cases appear across mobile applications.&quot;</p>
+      </blockquote>
+      <p class="paragraph"><br>There’s an effective solution for this, right? - The answer is yes!<br>Carlos handles the heavy lifting so you can focus on creating forms effectively and quickly.</p>
+      <h2 class="">Adding Carlos to Your project</h2>
+      <div class="sample-container">
+        <pre><code class="block lang-groovy" theme="idea">repositories {<br>    mavenCentral()<br>}<br><br>dependencies {<br>    // Carlos core functionality<br>    implementation(&quot;com.icell.external.carlosformito:carlosformito-core:$carlos_version&quot;)<br><br>    // Carlos built-in FormFields for material3 (optional usage)<br>    implementation(&quot;com.icell.external.carlosformito:carlosformito-material3:$carlos_version&quot;)<br><br>    // Carlos built-in FormFields for material (optional usage)<br>    implementation(&quot;com.icell.external.carlosformito:carlosformito-material:$carlos_version&quot;)<br>}</code></pre>
+<span class="top-right-position"><span class="copy-icon"></span>
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+        </span></div>
+      <h2 class="">Using Carlos</h2>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">// Define the form fields, initial states and it's validators<br>val formFields = listOf(<br>    FormField(<br>        id = KEY_USERNAME,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 3, R.string.min_length_error)<br>        )<br>    ),<br>    FormField(<br>        id = KEY_PASSWORD,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 8)<br>        )<br>    )<br>)<br><br>// Initialize the form manager with the fields and a validation strategy<br>val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.MANUAL)<br><br>// Implement a form using the formManager<br>@Composable<br>fun LoginForm(formManager: FormManager) {<br>    val scope = rememberCoroutineScope()<br><br>    // Initialize the form manager<br>    LaunchedEffect(Unit) {<br>        formManager.initFormManager()<br>    }<br><br>    Column {<br><br>        // Bind the FieldItem to the FormField composable<br>        FormTextField(<br>            fieldItem = formManager.getFieldItem(KEY_USERNAME),<br>            label = {<br>                Text(&quot;Name*&quot;)<br>            },<br>            supportingText = &quot;Please enter your username.&quot;<br>        )<br><br>        FormPasswordTextField(<br>            fieldItem = formManager.getFieldItem(KEY_PASSWORD),<br>            label = {<br>                Text(&quot;Password*&quot;)<br>            },<br>            supportingText = &quot;Please enter your password.&quot;<br>        )<br><br>        Button(<br>            onClick = {<br>                // Validate the form when clicking the submit button<br>                scope.launch {<br>                    formManager.validateForm()<br>                }<br>            },<br>            modifier = Modifier.fillMaxWidth()<br>        ) {<br>            Text(&quot;Submit&quot;)<br>        }<br>    }<br>}</code></pre>
+<span class="top-right-position"><span class="copy-icon"></span>
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+        </span></div>
+      <h3 class="">Steps to build a Carlos form</h3>
+      <ol>
+        <li>
+          <p class="paragraph">Define <code class="lang-kotlin">FormField</code> elements, specifying field keys, initial states, and validators.</p>
+        </li>
+        <li>
+          <p class="paragraph">Create a <code class="lang-kotlin">CarlosFormManager</code>, configure it with the fields, and select a validation strategy.</p>
+        </li>
+        <li>
+          <p class="paragraph">Build a Composable form UI using Carlos's built-in fields or your custom fields.</p>
+        </li>
+        <li>
+          <p class="paragraph">Bind <code class="lang-kotlin">FieldItem</code>s to the respective UI elements.</p>
+        </li>
+      </ol>
+      <h3 class="">Validation strategies</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Validation strategy</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Manual (default)</td>
+            <td>Validates the form manually in a sequential top-down order.</td>
+          </tr>
+          <tr>
+            <td>Automatic on focus clear</td>
+            <td>Validates each field automatically when its focus is cleared.</td>
+          </tr>
+          <tr>
+            <td>Automatic inline</td>
+            <td>Validates each field automatically upon any value change event.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="paragraph">Try each strategy using the provided demo to determine the best fit for your project.</p>
+      <h3 class="">Built-in validators</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Validator</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ValueRequiredValidator</td>
+            <td>Ensures that a value is not null or blank (for <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> types).</td>
+          </tr>
+          <tr>
+            <td>TextMinLengthValidator</td>
+            <td>Checks if a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> value meets the minimum length requirement.</td>
+          </tr>
+          <tr>
+            <td>TextRegexValidator</td>
+            <td>Verifies that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> value matches a specified regex pattern.</td>
+          </tr>
+          <tr>
+            <td>IntegerMinValidator</td>
+            <td>Ensures that an integer value is no less than a specified minimum.</td>
+          </tr>
+          <tr>
+            <td>IntegerMaxValidator</td>
+            <td>Ensures that an integer value does not exceed a specified maximum value.</td>
+          </tr>
+          <tr>
+            <td>IntegerMinMaxValidator</td>
+            <td>Confirms that an integer value is within a specified range.</td>
+          </tr>
+          <tr>
+            <td>DateMinValidator</td>
+            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalDate</code> value is not earlier than a specified minimum date.</td>
+          </tr>
+          <tr>
+            <td>DateMaxValidator</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalDate</code> value does not exceed a specified maximum date.</td>
+          </tr>
+          <tr>
+            <td>DateMinMaxValidator</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalDate</code> value falls within a specific date range.</td>
+          </tr>
+          <tr>
+            <td>TimeMinValidator</td>
+            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalTime</code> value is not earlier than a minimum time.</td>
+          </tr>
+          <tr>
+            <td>TimeMaxValidator</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalTime</code> value does not exceed a maximum time.</td>
+          </tr>
+          <tr>
+            <td>TimeMinMaxValidator</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalTime</code> falls within a specified range.</td>
+          </tr>
+          <tr>
+            <td>ContainsNumberValidator</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> contains at least one numeric digit.</td>
+          </tr>
+          <tr>
+            <td>ContainsSpecialCharacterValidator</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> contains at least one special character.</td>
+          </tr>
+          <tr>
+            <td>ContainsUpperAndLowercaseValidator</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> includes both uppercase and lowercase characters.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="paragraph"><i>Note: To create custom validators, inherit from </i><code class="italic lang-kotlin"><i>FormFieldValidator</i></code><i> - learn more </i><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_long_running_validation.md"><i>here</i></a><i>.</i></p>
+      <h3 class="">Cross-field validation</h3>
+      <p class="paragraph">Carlos leverages cross-field validation. In the validation callback, alongside the field input, a <code class="lang-kotlin">FormContext</code> parameter provides access to other field states, enabling comprehensive validation. <br></br> By specifying a <code class="lang-kotlin">connectedFieldId</code>, Carlos supports automatic validation between connected fields through the <code class="lang-kotlin">ConnectionValidator</code>, tracking field changes and interactions seamlessly.</p>
+      <h4 class="">Connection validator</h4>
+      <p class="paragraph">The <code class="lang-kotlin">ConnectionValidator</code> facilitates validation in various scenarios:</p>
+      <ul>
+        <li>
+          <p class="paragraph">Ensuring a field’s value matches another field’s value (e.g., password confirmation).</p>
+        </li>
+        <li>
+          <p class="paragraph">Validating a field whose value depends on another field (e.g., country code + phone number).</p>
+        </li>
+      </ul>
+      <p class="paragraph">Carlos manages field connections during user interactions:</p>
+      <ol>
+        <li>
+          <p class="paragraph"><strong>Manual strategy</strong>: Clears the validation results for both the field and connected field when the field’s value changes.</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Auto on focus clear strategy</strong>: If the connected field has a value, triggers auto-validation on the connected field when the primary field loses focus.</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Auto inline strategy</strong>: If the connected field has a value, runs auto-validation on the connected field when the primary field’s value changes.</p>
+        </li>
+      </ol>
+      <h5 class="">Built-in connection validators</h5>
+      <table>
+        <thead>
+          <tr>
+            <th>Validator</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>EqualsToValidator</td>
+            <td>Ensures that a field’s value matches another field’s value.</td>
+          </tr>
+          <tr>
+            <td>NotEqualsToValidator</td>
+            <td>Confirms that a field’s value differs from another field’s value.</td>
+          </tr>
+          <tr>
+            <td>CompareToValidator</td>
+            <td>Compares a field’s value against another field’s value.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="paragraph"><i>Note: create a custom connection validator, inherit from </i><code class="italic lang-kotlin"><i>ConnectionValidator</i></code><i> - learn more </i><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields.md"><i>here</i></a><i>.</i></p>
+      <h3 class="">Built-in form fields</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Form field name</th>
+            <th>Purpose & key features</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>FormTextField</td>
+            <td>A customizable text field ideal for general input, with placeholder text, character limits, and input patterns.</td>
+          </tr>
+          <tr>
+            <td>FormPasswordTextField</td>
+            <td>A password field with a toggle to show/hide text, ensuring secure input.</td>
+          </tr>
+          <tr>
+            <td>FormIntegerField</td>
+            <td>A text field that accepts only integer values. Ideal for numerical data like age or quantity.</td>
+          </tr>
+          <tr>
+            <td>FormPickerField</td>
+            <td>A picker for selecting from predefined options. Suitable for lists like countries or categories.</td>
+          </tr>
+          <tr>
+            <td>FormDatePickerField</td>
+            <td>A date picker field with support for min/max dates and custom formats, perfect for selecting dates.</td>
+          </tr>
+          <tr>
+            <td>FormTimePickerField</td>
+            <td>A time picker field supporting both AM/PM and 24-hour formats, ideal for time selection.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2 class="">Use cases</h2>
+      <ol>
+        <li>
+          <p class="paragraph"><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_built_in_fields.md"><strong>USE CASE 1</strong> - Using the built-in fields</a></p>
+        </li>
+        <li>
+          <p class="paragraph"><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_custom_field.md"><strong>USE CASE 2</strong> - Creating a custom field</a></p>
+        </li>
+        <li>
+          <p class="paragraph"><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_long_running_validation.md"><strong>USE CASE 3</strong> - Long running validations</a></p>
+        </li>
+        <li>
+          <p class="paragraph"><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_equals_to_validation.md"><strong>USE CASE 4</strong> - EqualsTo validation</a></p>
+        </li>
+        <li>
+          <p class="paragraph"><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields.md"><strong>USE CASE 5</strong> - Connected fields validation</a></p>
+        </li>
+      </ol>
+      <h2 class="">Contribution</h2>
+      <p class="paragraph">Want to contribute to Carlos? Have suggestions or issues with a specific feature or use case?</p>
+      <ol>
+        <li>
+          <p class="paragraph">Open an issue to discuss your solution or idea.</p>
+        </li>
+        <li>
+          <p class="paragraph">After validating your approach, feel free to open a PR.</p>
+        </li>
+      </ol>
+    </div>
     <h2 class="">All modules:</h2>
     <div class="table"><a data-name="-387464810%2FMain%2F0" anchor-label="core" id="-387464810%2FMain%2F0" data-filterable-set=""></a>
       <div class="table-row">
@@ -98,7 +353,7 @@
   </div>
 </div>
       <div class="footer">
-        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 | i-Cell Mobilsoft Open Source</span><span
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
                 class="pull-right"><span>Generated by </span><a
                 href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
       </div>
