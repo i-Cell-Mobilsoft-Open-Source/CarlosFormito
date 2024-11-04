@@ -242,7 +242,6 @@ class CarlosFormManager(
      * @param visible The new visibility state of the field.
      */
     override fun onFieldVisibilityChanged(id: String, visible: Boolean) {
-        checkInitialized()
         if (fieldVisibility.value[id] != visible) {
             fieldVisibility.update { visibilityMap ->
                 visibilityMap.toMutableMap().apply { put(id, visible) }
