@@ -41,8 +41,8 @@ fun ChangeEmailScreen(
         }
     }
 
-    val showLoadingIndicator by viewModel.showLoadingIndicator.collectAsState()
-    if (showLoadingIndicator) {
+    val validationInProgress by viewModel.validationInProgress.collectAsState()
+    if (validationInProgress) {
         FullScreenProgressDialog()
     }
 
@@ -72,14 +72,9 @@ fun ChangeEmailScreen(
             )
             Spacer(modifier = Modifier.height(4.dp))
 
-            val currentEmail by viewModel.currentEmail.collectAsState()
-            val dataIsLoading by viewModel.dataIsLoading.collectAsState()
             Text(
-                text = currentEmail ?: "Loading...",
-                style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onSurface.copy(
-                    alpha = if (dataIsLoading) .3f else 1f
-                )
+                text = viewModel.currentEmail,
+                style = MaterialTheme.typography.body1
             )
 
             Text(

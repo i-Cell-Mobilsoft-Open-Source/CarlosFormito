@@ -5,7 +5,7 @@ import com.icell.external.carlosformito.core.validator.TextRegexValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import com.icell.external.carlosformito.core.validator.regex.Regexp
 import com.icell.external.carlosformito.demo.R
-import com.icell.external.carlosformito.demo.ui.email.validator.FakeEmailUniqueValidator
+import com.icell.external.carlosformito.demo.ui.email.validator.FakeEmailAvailableValidator
 
 object ChangeEmailFields {
 
@@ -18,7 +18,7 @@ object ChangeEmailFields {
                 validators = listOf(
                     ValueRequiredValidator(R.string.value_required_error),
                     TextRegexValidator(Regexp.EMAIL_REGEXP, R.string.invalid_format_error),
-                    FakeEmailUniqueValidator(fakeNetworkError = false)
+                    FakeEmailAvailableValidator(fakeNetworkError = false)
                 )
             )
         )
