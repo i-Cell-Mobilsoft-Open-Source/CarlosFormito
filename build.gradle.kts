@@ -60,10 +60,12 @@ tasks.withType<DependencyUpdatesTask> {
 }
 
 tasks.dokkaHtmlMultiModule {
-    outputDirectory.set(layout.projectDirectory.dir("documentation/dokka"))
+    val documentationDir = layout.projectDirectory.dir("documentation")
+    outputDirectory.set(documentationDir.dir("dokka"))
 
     pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
-        // setup generated dokka documentation
-        footerMessage = "© 2024 | i-Cell Mobilsoft Open Source"
+        // Setting project README.md to the dokka documentation landing page
+        includes.from("README.md")
+        version = "v0.0.4"
     }
 }
