@@ -1,7 +1,11 @@
 package com.icell.external.carlosformito.demo.ui.common
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -43,6 +47,7 @@ fun CarlosTopAppBar(
         actions = {
             actions()
             Modifier.width(16.dp)
-        }
+        },
+        windowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
     )
 }

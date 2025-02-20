@@ -2,8 +2,13 @@ package com.icell.external.carlosformito.demo.ui.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,7 +22,13 @@ fun <T> SimpleSelectionBottomSheet(
     itemText: (index: Int, item: T) -> String,
     onItemSelected: (index: Int, item: T) -> Unit
 ) {
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .windowInsetsPadding(
+                WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
+            )
+    ) {
         items.forEachIndexed { index, item ->
             Text(
                 text = itemText(index, item),

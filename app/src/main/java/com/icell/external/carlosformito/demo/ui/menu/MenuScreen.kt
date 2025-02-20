@@ -3,14 +3,15 @@ package com.icell.external.carlosformito.demo.ui.menu
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -31,7 +32,6 @@ import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomShee
 import com.icell.external.carlosformito.ui.field.FormPickerField
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MenuScreen(
     viewModel: MenuViewModel,
@@ -67,7 +67,9 @@ fun MenuScreen(
             )
         }
     ) {
-        Scaffold { innerPadding ->
+        Scaffold(
+            contentWindowInsets = WindowInsets.systemBars
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()

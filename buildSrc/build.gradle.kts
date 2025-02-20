@@ -8,6 +8,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
-    implementation("com.android.tools.build:gradle:8.5.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.10")
+    implementation("com.android.tools.build:gradle:8.8.0")
 }

@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -183,8 +182,7 @@ fun SampleFormScreen(
     if (openBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet = false },
-            sheetState = bottomSheetState,
-            windowInsets = BottomSheetDefaults.windowInsets
+            sheetState = bottomSheetState
         ) {
             SimpleSelectionBottomSheet(
                 items = PackageType.entries,
