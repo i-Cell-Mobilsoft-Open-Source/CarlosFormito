@@ -5,11 +5,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import com.icell.external.carlosformito.demo.ui.custom.CustomFormScreen
 import com.icell.external.carlosformito.demo.ui.custom.CustomFormViewModel
@@ -17,7 +15,6 @@ import com.icell.external.carlosformito.demo.ui.email.ChangeEmailScreen
 import com.icell.external.carlosformito.demo.ui.email.ChangeEmailViewModel
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormViewModel
-import com.icell.external.carlosformito.demo.ui.menu.Route.Companion.KEY_ARG_VALIDATION_STRATEGY
 import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordScreen
 import com.icell.external.carlosformito.demo.ui.password.UpdatePasswordViewModel
 import com.icell.external.carlosformito.demo.ui.phonenumber.SetPhoneNumberScreen
@@ -60,35 +57,32 @@ fun MenuNavigator(
             MenuScreen(
                 viewModel = viewModel<MenuViewModel>(),
                 onNavigateToFieldSamples = { validationStrategy ->
-                    navController.navigate("${Route.KEY_FIELD_SAMPLES_ROOT}/${validationStrategy.name}")
+                    Route.validationStrategy = validationStrategy
+                    navController.navigate(Route.FieldSamples.route)
                 },
                 onNavigateToCustomFormFieldsSample = { validationStrategy ->
-                    navController.navigate("${Route.KEY_CUSTOM_FORM_SAMPLES_ROOT}/${validationStrategy.name}")
+                    Route.validationStrategy = validationStrategy
+                    navController.navigate(Route.CustomFormFieldsSample.route)
                 },
                 onNavigateToLongRunningValidationSample = { validationStrategy ->
-                    navController.navigate("${Route.KEY_LONG_RUNNING_SAMPLE_ROOT}/${validationStrategy.name}")
+                    Route.validationStrategy = validationStrategy
+                    navController.navigate(Route.LongRunningValidationSample.route)
                 },
                 onNavigateToMatchValidationSample = { validationStrategy ->
-                    navController.navigate("${Route.KEY_EQUALS_TO_VALIDATION_SAMPLE_ROOT}/${validationStrategy.name}")
+                    Route.validationStrategy = validationStrategy
+                    navController.navigate(Route.EqualsToValidationSample.route)
                 },
                 onNavigateToConnectedFieldValidationSample = { validationStrategy ->
-                    navController.navigate(
-                        "${Route.KEY_CONNECTED_FIELD_VALIDATION_SAMPLE_ROOT}/${validationStrategy.name}"
-                    )
+                    Route.validationStrategy = validationStrategy
+                    navController.navigate(Route.ConnectedFieldValidationSample.route)
                 }
             )
         }
         composable(
             route = Route.FieldSamples.route,
-            arguments = listOf(
-                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
-            )
         ) { backstackEntry ->
-            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
-                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
-            )
             val viewModel: SamplesFormViewModel = viewModel {
-                SamplesFormViewModel(validationStrategy)
+                SamplesFormViewModel(Route.validationStrategy)
             }
 
             SampleFormScreen(
@@ -101,15 +95,9 @@ fun MenuNavigator(
         }
         composable(
             route = Route.CustomFormFieldsSample.route,
-            arguments = listOf(
-                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
-            )
         ) { backstackEntry ->
-            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
-                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
-            )
             val viewModel: CustomFormViewModel = viewModel {
-                CustomFormViewModel(validationStrategy)
+                CustomFormViewModel(Route.validationStrategy)
             }
 
             CustomFormScreen(
@@ -122,15 +110,9 @@ fun MenuNavigator(
         }
         composable(
             route = Route.LongRunningValidationSample.route,
-            arguments = listOf(
-                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
-            )
         ) { backstackEntry ->
-            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
-                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
-            )
             val viewModel: ChangeEmailViewModel = viewModel {
-                ChangeEmailViewModel(validationStrategy)
+                ChangeEmailViewModel(Route.validationStrategy)
             }
 
             ChangeEmailScreen(
@@ -143,15 +125,9 @@ fun MenuNavigator(
         }
         composable(
             route = Route.EqualsToValidationSample.route,
-            arguments = listOf(
-                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
-            )
         ) { backstackEntry ->
-            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
-                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
-            )
             val viewModel: UpdatePasswordViewModel = viewModel {
-                UpdatePasswordViewModel(validationStrategy)
+                UpdatePasswordViewModel(Route.validationStrategy)
             }
 
             UpdatePasswordScreen(
@@ -164,15 +140,9 @@ fun MenuNavigator(
         }
         composable(
             route = Route.ConnectedFieldValidationSample.route,
-            arguments = listOf(
-                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
-            )
         ) { backstackEntry ->
-            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
-                requireNotNull(backstackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
-            )
             val viewModel: SetPhoneNumberViewModel = viewModel {
-                SetPhoneNumberViewModel(validationStrategy)
+                SetPhoneNumberViewModel(Route.validationStrategy)
             }
 
             SetPhoneNumberScreen(
@@ -189,28 +159,13 @@ fun MenuNavigator(
 sealed class Route(val route: String) {
 
     data object SamplesMenu : Route("MenuRoute")
-
-    data object FieldSamples :
-        Route("$KEY_FIELD_SAMPLES_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
-
-    data object CustomFormFieldsSample :
-        Route("$KEY_CUSTOM_FORM_SAMPLES_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
-
-    data object LongRunningValidationSample :
-        Route("$KEY_LONG_RUNNING_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
-
-    data object EqualsToValidationSample :
-        Route("$KEY_EQUALS_TO_VALIDATION_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
-
-    data object ConnectedFieldValidationSample :
-        Route("$KEY_CONNECTED_FIELD_VALIDATION_SAMPLE_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
+    data object FieldSamples : Route("FieldSamples")
+    data object CustomFormFieldsSample : Route("CustomFormFieldsSample")
+    data object LongRunningValidationSample : Route("LongRunningValidationSample")
+    data object EqualsToValidationSample : Route("EqualsToValidationSample")
+    data object ConnectedFieldValidationSample : Route("ConnectedFieldValidationSample")
 
     companion object {
-        const val KEY_FIELD_SAMPLES_ROOT = "FieldSamples"
-        const val KEY_CUSTOM_FORM_SAMPLES_ROOT = "CustomFormFieldsSample"
-        const val KEY_LONG_RUNNING_SAMPLE_ROOT = "LongRunningValidationSample"
-        const val KEY_EQUALS_TO_VALIDATION_SAMPLE_ROOT = "EqualsToValidationSample"
-        const val KEY_CONNECTED_FIELD_VALIDATION_SAMPLE_ROOT = "ConnectedFieldValidationSample"
-        const val KEY_ARG_VALIDATION_STRATEGY = "validationStrategy"
+        var validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.Manual
     }
 }

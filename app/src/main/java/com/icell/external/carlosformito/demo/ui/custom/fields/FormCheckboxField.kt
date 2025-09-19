@@ -19,8 +19,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.core.api.FormFieldItem
 import com.icell.external.carlosformito.core.ui.TrackVisibilityEffect
-import com.icell.external.carlosformito.core.ui.collectFieldState
-import com.icell.external.carlosformito.core.ui.errorMessage
+import com.icell.external.carlosformito.core.ui.extensions.collectFieldState
+import com.icell.external.carlosformito.core.ui.extensions.errorMessage
 import com.icell.external.carlosformito.core.ui.testId
 import com.icell.external.carlosformito.ui.field.base.TextFieldSupportingText
 

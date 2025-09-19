@@ -1,7 +1,5 @@
 package com.icell.external.carlosformito.core.api.validator
 
-import androidx.annotation.StringRes
-
 /**
  * Sealed interface representing the result of a form field validation.
  */
@@ -19,7 +17,7 @@ sealed interface FormFieldValidationResult {
         /**
          * Optional resource ID of the error message.
          */
-        @StringRes open val errorMessageId: Int? = null
+        open val errorMessageId: Int? = null
     ) : FormFieldValidationResult {
 
         /**
@@ -33,7 +31,7 @@ sealed interface FormFieldValidationResult {
          * @property errorMessageId Resource ID of the error message.
          */
         data class Message(
-            @StringRes override val errorMessageId: Int
+            override val errorMessageId: Int
         ) : Invalid(errorMessageId)
 
         /**
@@ -43,7 +41,7 @@ sealed interface FormFieldValidationResult {
          * @property formatArgs List of format arguments for the error message.
          */
         data class MessageWithArgs(
-            @StringRes override val errorMessageId: Int,
+            override val errorMessageId: Int,
             val formatArgs: List<Any>
         ) : Invalid(errorMessageId)
 
@@ -55,7 +53,7 @@ sealed interface FormFieldValidationResult {
              * @param formatArgs List of format arguments for the error message.
              * @return Invalid instance representing the validation error.
              */
-            fun of(@StringRes errorMessageId: Int?, formatArgs: List<Any>? = null): Invalid {
+            fun of(errorMessageId: Int?, formatArgs: List<Any>? = null): Invalid {
                 return when {
                     errorMessageId == null -> Unknown
                     formatArgs.isNullOrEmpty() -> Message(errorMessageId)

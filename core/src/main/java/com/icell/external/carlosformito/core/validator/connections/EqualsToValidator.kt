@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.core.validator.connections
 
-import androidx.annotation.StringRes
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormValueContext
 
@@ -13,7 +12,7 @@ import com.icell.external.carlosformito.core.api.validator.FormValueContext
  */
 class EqualsToValidator<T>(
     override val connectedFieldId: String,
-    @StringRes private val errorMessageId: Int? = null
+    private val errorMessageId: Int? = null
 ) : ConnectionValidator<T>() {
 
     /**

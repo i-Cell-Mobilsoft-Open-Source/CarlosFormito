@@ -44,7 +44,7 @@
                     </a>
             </div>
             <div class="library-version">
-v0.0.4            </div>
+v0.1.0            </div>
         </div>
     </div>
     <div class="navigation-controls">
@@ -88,7 +88,7 @@ v0.0.4            </div>
         </span></div>
       <h2 class="">Using Carlos</h2>
       <div class="sample-container">
-        <pre><code class="block lang-kotlin" theme="idea">// Define the form fields, initial states and it's validators<br>val formFields = listOf(<br>    FormField(<br>        id = KEY_USERNAME,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 3, R.string.min_length_error)<br>        )<br>    ),<br>    FormField(<br>        id = KEY_PASSWORD,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 8)<br>        )<br>    )<br>)<br><br>// Initialize the form manager with the fields and a validation strategy<br>val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.MANUAL)<br><br>// Implement a form using the formManager<br>@Composable<br>fun LoginForm(formManager: FormManager) {<br>    val scope = rememberCoroutineScope()<br><br>    // Initialize the form manager<br>    LaunchedEffect(Unit) {<br>        formManager.initFormManager()<br>    }<br><br>    Column {<br><br>        // Bind the FieldItem to the FormField composable<br>        FormTextField(<br>            fieldItem = formManager.getFieldItem(KEY_USERNAME),<br>            label = {<br>                Text(&quot;Name*&quot;)<br>            },<br>            supportingText = &quot;Please enter your username.&quot;<br>        )<br><br>        FormPasswordTextField(<br>            fieldItem = formManager.getFieldItem(KEY_PASSWORD),<br>            label = {<br>                Text(&quot;Password*&quot;)<br>            },<br>            supportingText = &quot;Please enter your password.&quot;<br>        )<br><br>        Button(<br>            onClick = {<br>                // Validate the form when clicking the submit button<br>                scope.launch {<br>                    formManager.validateForm()<br>                }<br>            },<br>            modifier = Modifier.fillMaxWidth()<br>        ) {<br>            Text(&quot;Submit&quot;)<br>        }<br>    }<br>}</code></pre>
+        <pre><code class="block lang-kotlin" theme="idea">// Define the form fields, initial states and it's validators<br>val formFields = listOf(<br>    FormField(<br>        id = KEY_USERNAME,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 3, R.string.min_length_error)<br>        )<br>    ),<br>    FormField(<br>        id = KEY_PASSWORD,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 8)<br>        )<br>    )<br>)<br><br>// Initialize the form manager with the fields and a validation strategy<br>val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.Manual)<br><br>// Implement a form using the formManager<br>@Composable<br>fun LoginForm(formManager: FormManager) {<br>    val scope = rememberCoroutineScope()<br><br>    // Initialize the form manager<br>    LaunchedEffect(Unit) {<br>        formManager.initFormManager()<br>    }<br><br>    Column {<br><br>        // Bind the FieldItem to the FormField composable<br>        FormTextField(<br>            fieldItem = formManager.getFieldItem(KEY_USERNAME),<br>            label = {<br>                Text(&quot;Name*&quot;)<br>            },<br>            supportingText = &quot;Please enter your username.&quot;<br>        )<br><br>        FormPasswordTextField(<br>            fieldItem = formManager.getFieldItem(KEY_PASSWORD),<br>            label = {<br>                Text(&quot;Password*&quot;)<br>            },<br>            supportingText = &quot;Please enter your password.&quot;<br>        )<br><br>        Button(<br>            onClick = {<br>                // Validate the form when clicking the submit button<br>                scope.launch {<br>                    formManager.validateForm()<br>                }<br>            },<br>            modifier = Modifier.fillMaxWidth()<br>        ) {<br>            Text(&quot;Submit&quot;)<br>        }<br>    }<br>}</code></pre>
 <span class="top-right-position"><span class="copy-icon"></span>
           <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
         </span></div>
@@ -142,15 +142,15 @@ v0.0.4            </div>
         <tbody>
           <tr>
             <td>ValueRequiredValidator</td>
-            <td>Ensures that a value is not null or blank (for <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> types).</td>
+            <td>Ensures that a value is not null or blank (for <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">String</code> types).</td>
           </tr>
           <tr>
             <td>TextMinLengthValidator</td>
-            <td>Checks if a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> value meets the minimum length requirement.</td>
+            <td>Checks if a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">String</code> value meets the minimum length requirement.</td>
           </tr>
           <tr>
             <td>TextRegexValidator</td>
-            <td>Verifies that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> value matches a specified regex pattern.</td>
+            <td>Verifies that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">String</code> value matches a specified regex pattern.</td>
           </tr>
           <tr>
             <td>IntegerMinValidator</td>
@@ -166,39 +166,39 @@ v0.0.4            </div>
           </tr>
           <tr>
             <td>DateMinValidator</td>
-            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalDate</code> value is not earlier than a specified minimum date.</td>
+            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">LocalDate</code> value is not earlier than a specified minimum date.</td>
           </tr>
           <tr>
             <td>DateMaxValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalDate</code> value does not exceed a specified maximum date.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">LocalDate</code> value does not exceed a specified maximum date.</td>
           </tr>
           <tr>
             <td>DateMinMaxValidator</td>
-            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalDate</code> value falls within a specific date range.</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">LocalDate</code> value falls within a specific date range.</td>
           </tr>
           <tr>
             <td>TimeMinValidator</td>
-            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalTime</code> value is not earlier than a minimum time.</td>
+            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">LocalTime</code> value is not earlier than a minimum time.</td>
           </tr>
           <tr>
             <td>TimeMaxValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalTime</code> value does not exceed a maximum time.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">LocalTime</code> value does not exceed a maximum time.</td>
           </tr>
           <tr>
             <td>TimeMinMaxValidator</td>
-            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">LocalTime</code> falls within a specified range.</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">LocalTime</code> falls within a specified range.</td>
           </tr>
           <tr>
             <td>ContainsNumberValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> contains at least one numeric digit.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">String</code> contains at least one numeric digit.</td>
           </tr>
           <tr>
             <td>ContainsSpecialCharacterValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> contains at least one special character.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">String</code> contains at least one special character.</td>
           </tr>
           <tr>
             <td>ContainsUpperAndLowercaseValidator</td>
-            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@591edb61 lang-kotlin">String</code> includes both uppercase and lowercase characters.</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@51aa1d7e lang-kotlin">String</code> includes both uppercase and lowercase characters.</td>
           </tr>
         </tbody>
       </table>
@@ -251,6 +251,10 @@ v0.0.4            </div>
         </tbody>
       </table>
       <p class="paragraph"><i>Note: create a custom connection validator, inherit from </i><code class="italic lang-kotlin"><i>ConnectionValidator</i></code><i> - learn more </i><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields.md"><i>here</i></a><i>.</i></p>
+      <h4 class="">Multi-connection validator</h4>
+      <p class="paragraph"><code class="lang-kotlin">MultiConnectionValidator</code> extends the idea of <code class="lang-kotlin">ConnectionValidator</code> by supporting validation across multiple field connections simultaneously.</p>
+      <p class="paragraph">This is especially useful for context-aware validation, where a field’s validity depends on related field values. For example: verifying that a price is correct based on the selected unit type, VAT rate, or applied discounts.</p>
+      <p class="paragraph"><i>Note: to implement your own connection logic, create a custom validator by inheriting from </i><code class="italic lang-kotlin"><i>MultiConnectionValidator</i></code><i>. Learn more in the </i><i>(https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields_multi.md)</i><i>.</i></p>
       <h3 class="">Built-in form fields</h3>
       <table>
         <thead>
@@ -303,6 +307,9 @@ v0.0.4            </div>
         <li>
           <p class="paragraph"><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields.md"><strong>USE CASE 5</strong> - Connected fields validation</a></p>
         </li>
+        <li>
+          <p class="paragraph"><a href="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields_multi.md"><strong>USE CASE 6</strong> - Multi connection validation</a></p>
+        </li>
       </ol>
       <h2 class="">Contribution</h2>
       <p class="paragraph">Want to contribute to Carlos? Have suggestions or issues with a specific feature or use case?</p>
@@ -353,7 +360,7 @@ v0.0.4            </div>
   </div>
 </div>
       <div class="footer">
-        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2025 Copyright</span><span
                 class="pull-right"><span>Generated by </span><a
                 href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
       </div>

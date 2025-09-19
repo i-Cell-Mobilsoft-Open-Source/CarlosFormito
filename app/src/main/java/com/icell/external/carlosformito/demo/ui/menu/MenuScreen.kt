@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
-import com.icell.external.carlosformito.core.ui.collectFieldState
+import com.icell.external.carlosformito.core.ui.extensions.collectFieldState
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.ui.field.FormPickerField
 import kotlinx.coroutines.launch
@@ -56,7 +56,11 @@ fun MenuScreen(
         sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         sheetContent = {
             SimpleSelectionBottomSheet(
-                items = FormFieldValidationStrategy.entries,
+                items = listOf(
+                    FormFieldValidationStrategy.Manual,
+                    FormFieldValidationStrategy.AutoOnFocusClear,
+                    FormFieldValidationStrategy.AutoInline(),
+                ),
                 itemText = { _, item -> item.displayedValue() },
                 onItemSelected = { _, item ->
                     validationStrategyField.onFieldValueChanged(item)
@@ -119,27 +123,27 @@ fun MenuScreen(
                 ) {
                     MenuListItem(title = "Built-in field samples") {
                         onNavigateToFieldSamples.invoke(
-                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                            validationStrategyState.value ?: FormFieldValidationStrategy.Manual
                         )
                     }
                     MenuListItem(title = "Custom field samples") {
                         onNavigateToCustomFormFieldsSample.invoke(
-                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                            validationStrategyState.value ?: FormFieldValidationStrategy.Manual
                         )
                     }
                     MenuListItem(title = "Long running validation sample") {
                         onNavigateToLongRunningValidationSample.invoke(
-                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                            validationStrategyState.value ?: FormFieldValidationStrategy.Manual
                         )
                     }
                     MenuListItem(title = "EqualsTo validation sample") {
                         onNavigateToMatchValidationSample.invoke(
-                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                            validationStrategyState.value ?: FormFieldValidationStrategy.Manual
                         )
                     }
                     MenuListItem(title = "Connected fields validation sample") {
                         onNavigateToConnectedFieldValidationSample.invoke(
-                            validationStrategyState.value ?: FormFieldValidationStrategy.MANUAL
+                            validationStrategyState.value ?: FormFieldValidationStrategy.Manual
                         )
                     }
                 }
@@ -150,23 +154,23 @@ fun MenuScreen(
 
 private fun FormFieldValidationStrategy.displayedValue(): String {
     return when (this) {
-        FormFieldValidationStrategy.MANUAL -> "Manual"
-        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> "Automatic on focus clear"
-        FormFieldValidationStrategy.AUTO_INLINE -> "Automatic inline"
+        is FormFieldValidationStrategy.Manual -> "Manual"
+        is FormFieldValidationStrategy.AutoOnFocusClear -> "Automatic on focus clear"
+        is FormFieldValidationStrategy.AutoInline -> "Automatic inline"
     }
 }
 
 private fun FormFieldValidationStrategy.description(): String {
     return when (this) {
-        FormFieldValidationStrategy.MANUAL -> """
+        is FormFieldValidationStrategy.Manual -> """
             The validation of the form is executed manually and performed in order from top to bottom consecutively.
         """.trimIndent()
 
-        FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR -> """
+        is FormFieldValidationStrategy.AutoOnFocusClear -> """
             The validation of each individual form field is executed automatically by focus clear event of the particular field.
         """.trimIndent()
 
-        FormFieldValidationStrategy.AUTO_INLINE -> """
+        is FormFieldValidationStrategy.AutoInline -> """
             The validation of each individual form field is executed automatically by any value change event of the particular field.
         """.trimIndent()
     }

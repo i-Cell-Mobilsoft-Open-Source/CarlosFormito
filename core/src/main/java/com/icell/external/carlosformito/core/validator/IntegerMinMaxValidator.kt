@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.core.validator
 
-import androidx.annotation.StringRes
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 
@@ -14,7 +13,6 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 class IntegerMinMaxValidator(
     private val minValue: Int,
     private val maxValue: Int,
-    @StringRes
     private val errorMessageId: Int? = null
 ) : FormFieldValidator<Int> {
 

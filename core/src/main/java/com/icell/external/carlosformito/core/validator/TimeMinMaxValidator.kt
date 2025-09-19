@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.core.validator
 
-import androidx.annotation.StringRes
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import java.time.LocalTime
@@ -15,7 +14,7 @@ import java.time.LocalTime
 class TimeMinMaxValidator(
     private val minValue: LocalTime,
     private val maxValue: LocalTime,
-    @StringRes private val errorMessageId: Int? = null
+    private val errorMessageId: Int? = null
 ) : FormFieldValidator<LocalTime> {
 
     /**

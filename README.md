@@ -61,7 +61,7 @@ val formFields = listOf(
 )
 
 // Initialize the form manager with the fields and a validation strategy
-val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.MANUAL)
+val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.Manual)
 
 // Implement a form using the formManager
 @Composable
@@ -174,6 +174,15 @@ Carlos manages field connections during user interactions:
 
 _Note: create a custom connection validator, inherit from `ConnectionValidator` - learn more [here](https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields.md)._
 
+#### Multi-connection validator
+
+`MultiConnectionValidator` extends the idea of `ConnectionValidator` by supporting validation across multiple field connections simultaneously.
+
+This is especially useful for context-aware validation, where a field’s validity depends on related field values.
+For example: verifying that a price is correct based on the selected unit type, VAT rate, or applied discounts.
+
+_Note: to implement your own connection logic, create a custom validator by inheriting from `MultiConnectionValidator`. Learn more in the [documentation]((https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields_multi.md))._
+
 ### Built-in form fields
 
 | Form field name       | Purpose & key features                                                                                          |
@@ -191,6 +200,7 @@ _Note: create a custom connection validator, inherit from `ConnectionValidator` 
 3. [**USE CASE 3** - Long running validations](https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_long_running_validation.md)
 4. [**USE CASE 4** - EqualsTo validation](https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_equals_to_validation.md)
 5. [**USE CASE 5** - Connected fields validation](https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields.md)
+6. [**USE CASE 6** - Multi connection validation](https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/markdown/uc_connected_fields_multi.md)
 
 ## Contribution
 

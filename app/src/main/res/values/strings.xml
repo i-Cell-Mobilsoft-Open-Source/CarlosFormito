@@ -32,5 +32,6 @@
     <string name="country_test">Test country (+888)</string>
 
     <string name="invalid_phone_number_error">The phone number is invalid! Please provide a mobile number.</string>
+    <string name="username_is_already_taken_error">Sorry, the username is already taken!</string>
 
 </resources>

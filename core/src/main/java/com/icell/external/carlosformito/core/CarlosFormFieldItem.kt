@@ -38,12 +38,28 @@ internal class CarlosFormFieldItem<T>(
     }
 
     /**
+     * Notifies the form field item that its value has been reset to the initial value.
+     */
+    override fun onFieldValueReset() {
+        listener?.onFieldValueReset(fieldId)
+    }
+
+    /**
      * Notifies the listener when the visibility of the field changes.
      *
      * @param visible The new visibility state of the field.
      */
     override fun onFieldVisibilityChanged(visible: Boolean) {
         listener?.onFieldVisibilityChanged(fieldId, visible)
+    }
+
+    /**
+     * Validates the form field item.
+     *
+     * @return `true` if the field is valid after validation, `false` otherwise.
+     */
+    override suspend fun validateField(): Boolean {
+        return listener?.validateField(fieldId) ?: error("FormFieldItemListener not set!")
     }
 
     /**

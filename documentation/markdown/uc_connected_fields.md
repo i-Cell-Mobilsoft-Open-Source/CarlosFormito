@@ -18,7 +18,7 @@ _Read more about the `ConnectionValidator` class [here](https://github.com/icell
 // First step: let's create a custom validator for validating international phone numbers
 class InternationalPhoneNumberValidator(
     override val connectedFieldId: String,
-    @StringRes private val errorMessageId: Int? = null
+    private val errorMessageId: Int? = null
 ) : ConnectionValidator<String>() {
 
     override suspend fun validate(value: String?, context: FormValueContext): FormFieldValidationResult {

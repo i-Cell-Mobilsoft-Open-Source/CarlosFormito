@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.icell.external.carlosformito.core.CarlosFormManager
 import com.icell.external.carlosformito.core.api.FormManager
 import com.icell.external.carlosformito.core.api.model.FormField
-import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
 import kotlinx.coroutines.launch
 
@@ -17,7 +16,7 @@ class MenuViewModel :
         formFields = listOf(
             FormField(
                 id = KEY_VALIDATION_STRATEGY_FIELD,
-                initialState = FormFieldState(FormFieldValidationStrategy.MANUAL),
+                initialValue = FormFieldValidationStrategy.Manual,
             )
         )
     ) {

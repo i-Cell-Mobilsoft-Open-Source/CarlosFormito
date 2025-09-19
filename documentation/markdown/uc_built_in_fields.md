@@ -64,7 +64,7 @@ val formFields = listOf(
 )
 
 // Initialize the form manager with the fields and a validation strategy
-val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR)
+val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.AutoOnFocusClear)
 
 // Implement a form using the formManager
 @Composable

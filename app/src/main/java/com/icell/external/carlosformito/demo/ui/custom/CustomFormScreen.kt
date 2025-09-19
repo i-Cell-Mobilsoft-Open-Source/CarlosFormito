@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.commondemo.clearFocusOnTap
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.core.ui.collectFieldState
+import com.icell.external.carlosformito.core.ui.extensions.collectFieldState
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.demo.ui.custom.CustomFormFields.KEY_DEBIT_CARD_NUMBER
