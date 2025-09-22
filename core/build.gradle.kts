@@ -1,7 +1,7 @@
 plugins {
     `android-library`
     `kotlin-android`
-    `maven-publish`
+    id("com.vanniktech.maven.publish") version Versions.gradleMavenPublishPlugin
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -20,24 +20,39 @@ android {
     }
 }
 
-val sourceJar by tasks.registering(Jar::class) {
-    from(android.sourceSets["main"].java.srcDirs)
-    archiveClassifier.set("sources")
-}
+mavenPublishing {
+    coordinates(
+        groupId = "hu.icellmobilsoft.carlosformito",
+        artifactId = "carlosformito-core",
+        version = "1.0.0"
+    )
 
-publishing {
-    registerCarlosRepository(project)
-    publications {
-        register("GitHubPackagesRelease", MavenPublication::class.java) {
-            groupId = "hu.icellmobilsoft.carlosformito"
-            artifactId = "carlosformito-core"
-            version = "0.1.0-SNAPSHOT"
-            artifact(layout.buildDirectory.dir("outputs/aar/core-debug.aar"))
+    pom {
+        name.set("CarlosFormito library")
+        description.set("Easy form state management for Jetpack Compose.")
+        inceptionYear.set("2025")
+        url.set("https://github.com/i-Cell-Mobilsoft-Open-Source/CarlosFormito")
 
-            // Attach sources
-            artifact(sourceJar) {
-                classifier = "sources"
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://opensource.org/licenses/MIT")
+                distribution.set("https://opensource.org/licenses/MIT")
             }
+        }
+
+        developers {
+            developer {
+                id.set("stoicamark")
+                name.set("Stoica Márk")
+                email.set("mark.stoica@icellmobilsoft.hu")
+            }
+        }
+
+        scm {
+            url.set("https://github.com/i-Cell-Mobilsoft-Open-Source/CarlosFormito")
+            connection.set("scm:git:git://github.com/i-Cell-Mobilsoft-Open-Source/CarlosFormito.git")
+            developerConnection.set("scm:git:ssh://git@github.com/i-Cell-Mobilsoft-Open-Source/CarlosFormito.git")
         }
     }
 }
