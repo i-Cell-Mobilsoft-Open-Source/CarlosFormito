@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.demo.ui.phonenumber.validator
 
-import androidx.annotation.StringRes
 import com.icell.external.carlosformito.core.api.requireFieldValue
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormValueContext
@@ -9,7 +8,7 @@ import com.icell.external.carlosformito.demo.ui.phonenumber.model.Country
 
 class InternationalPhoneNumberValidator(
     override val connectedFieldId: String,
-    @StringRes private val errorMessageId: Int? = null
+    private val errorMessageId: Int? = null
 ) : ConnectionValidator<String>() {
 
     override suspend fun validate(value: String?, context: FormValueContext): FormFieldValidationResult {

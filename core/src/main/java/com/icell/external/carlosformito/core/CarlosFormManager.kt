@@ -12,11 +12,13 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 import com.icell.external.carlosformito.core.api.validator.IsFormFieldValidator
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import com.icell.external.carlosformito.core.validator.connections.ConnectionValidator
+import com.icell.external.carlosformito.core.validator.connections.MultiConnectionValidator
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,18 +27,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.coroutineContext
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Manages a collection of form fields, providing validation, state management, and visibility control.
  *
  * @property formFields The list of form fields to manage.
- * @property validationStrategy The strategy for field validation, defaults to [FormFieldValidationStrategy.MANUAL].
+ * @property validationStrategy The strategy for field validation, defaults to [FormFieldValidationStrategy.Manual].
  */
 @Suppress("TooManyFunctions")
 class CarlosFormManager(
     private val formFields: List<FormField<*>>,
-    private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.MANUAL
+    private val validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.Manual
 ) : FormManager {
 
     /**
@@ -48,6 +52,11 @@ class CarlosFormManager(
      * Map for quick accessing the [FormFieldItem]s by field ID
      */
     private val fieldItems: HashMap<String, FormFieldItem<*>> = hashMapOf()
+
+    /**
+     * Map for quick accessing the fields custom validation strategies
+     */
+    private val fieldCustomValidationStrategies: HashMap<String, FormFieldValidationStrategy> = hashMapOf()
 
     /**
      * Map for quick accessing connected field IDs by field ID
@@ -85,13 +94,26 @@ class CarlosFormManager(
             fieldStates[field.id] = MutableStateFlow(field.initialState)
             fieldItems[field.id] = createFieldItem(field)
 
+            field.customValidationStrategy?.let { strategy ->
+                fieldCustomValidationStrategies[field.id] = strategy
+            }
+
             field.validators.forEach { validator ->
                 when (validator) {
-                    is ValueRequiredValidator -> requiredFieldIds.add(field.id)
-                    is ConnectionValidator<*> -> {
-                        val connections = fieldConnections[validator.connectedFieldId]?.toMutableSet() ?: mutableSetOf()
-                        fieldConnections[validator.connectedFieldId] = connections.apply { add(field.id) }
+                    is ValueRequiredValidator -> {
+                        requiredFieldIds.add(field.id)
                     }
+
+                    is ConnectionValidator<*> -> {
+                        setFieldConnection(field, validator.connectedFieldId)
+                    }
+
+                    is MultiConnectionValidator<*> -> {
+                        validator.connectedFieldIds.forEach { connectedFieldId ->
+                            setFieldConnection(field, connectedFieldId)
+                        }
+                    }
+
                     else -> Unit
                 }
             }
@@ -99,31 +121,58 @@ class CarlosFormManager(
     }
 
     /**
+     * Registers a dependency between two form fields for automatic cross-field validation.
+     *
+     * @param field The field whose validity depends on the value of [connectedFieldId].
+     * @param connectedFieldId The ID of the field that [field] is connected to.
+     */
+    private fun setFieldConnection(field: FormField<*>, connectedFieldId: String) {
+        val connections = fieldConnections[connectedFieldId]?.toMutableSet() ?: mutableSetOf()
+        fieldConnections[connectedFieldId] = connections.apply { add(field.id) }
+    }
+
+    /**
      * Initializes the form manager, setting up auto-validation and field visibility checks.
      *
      * @param autoValidationExceptionHandler Optional exception handler for auto-validation.
      */
-    @OptIn(FlowPreview::class)
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override suspend fun initFormManager(autoValidationExceptionHandler: CoroutineExceptionHandler?) {
-        coroutineScope {
-            initialized = true
-            autoValidationScope = this
-            autoValidationContext = autoValidationExceptionHandler ?: EmptyCoroutineContext
+        // Return if already initialized
+        if (initialized) return
 
-            fieldVisibility.debounce(FIELD_VISIBILITY_UPDATE_DEBOUNCE).collectLatest { _ ->
-                checkAllRequiredFieldFilled()
-            }
+        autoValidationContext = autoValidationExceptionHandler ?: EmptyCoroutineContext
+
+        val detachedJob = Job()
+
+        // Tie the detached job lifecycle to the callers job
+        coroutineContext[Job]?.parent?.invokeOnCompletion {
+            detachedJob.cancel()
         }
+
+        // Create scope that preserves caller's dispatcher but uses our detached job
+        autoValidationScope = CoroutineScope(coroutineContext + detachedJob)
+        autoValidationScope.launch(autoValidationContext) {
+            fieldVisibility
+                .debounce(FIELD_VISIBILITY_UPDATE_DEBOUNCE)
+                .collectLatest {
+                    checkAllRequiredFieldFilled()
+                }
+        }
+
+        initialized = true
     }
 
     /**
      * Launches auto-validation with the provided validation block on the specified auto-validation scope and context.
      *
+     * @param validationDelay An optional delay parameter for delaying the fields validation
      * @param validationBlock The suspend function to perform validation.
      */
-    private fun launchAutoValidation(validationBlock: suspend () -> Unit) {
+    private fun launchAutoValidation(validationDelay: Duration? = null, validationBlock: suspend () -> Unit) {
         autoValidationJob?.cancel()
         autoValidationJob = autoValidationScope.launch(autoValidationContext) {
+            validationDelay?.let { delay(validationDelay) }
             monitorValidationProgress(validationBlock)
         }
     }
@@ -188,7 +237,8 @@ class CarlosFormManager(
      */
     override fun onFieldFocusCleared(id: String) {
         checkInitialized()
-        if (validationStrategy == FormFieldValidationStrategy.AUTO_ON_FOCUS_CLEAR) {
+        val strategy = fieldCustomValidationStrategies[id] ?: validationStrategy
+        if (strategy == FormFieldValidationStrategy.AutoOnFocusClear) {
             launchAutoValidation {
                 validateAndUpdateFieldState(id)
                 validateFieldConnections(id)
@@ -197,42 +247,60 @@ class CarlosFormManager(
     }
 
     /**
-     * Handles the event when the value of a field changes.
+     * Handles changes to the value of a form field.
      *
-     * Clears the validation result, updates the required fields filling state,
-     * and triggers auto-validation if the validation strategy is set to [FormFieldValidationStrategy.AUTO_INLINE].
+     * This method updates the field's state when its value changes, ensuring that
+     * the form remains consistent and that validation logic is applied according
+     * to the configured validation strategy.
      *
-     * @param id The ID of the field.
-     * @param value The new value of the field.
+     * Behavior:
+     * - Updates the field's state with the new [value].
+     * - Clears any existing [FormFieldValidationResult] and resets validation progress.
+     * - Triggers auto-validation if the strategy is [FormFieldValidationStrategy.AutoInline].
+     * - Automatically triggers auto-validation for the field connections if has any.
+     *
+     * @param id The unique identifier of the field whose value has changed.
+     * @param value The new value assigned to the field, or `null` if cleared.
+     *
+     * @see FormFieldValidationStrategy For available validation strategies.
+     * @see validateAndUpdateFieldState For how individual field validation is applied.
+     * @see validateFieldConnections For how connected fields are validated after updates.
      */
     override fun <T> onFieldValueChanged(id: String, value: T?) {
         checkInitialized()
         getFieldStateFlow<T>(id).update { state ->
-            state.copy(value, validationResult = null)
+            state.copy(value, validationInProgress = false, validationResult = null)
         }
         if (requiredFieldIds.contains(id)) {
             checkAllRequiredFieldFilled()
         }
-        when (validationStrategy) {
-            FormFieldValidationStrategy.MANUAL -> {
-                fieldConnections[id]?.forEach { connectedFieldId ->
-                    getFieldStateFlow<T>(connectedFieldId).update { state ->
-                        state.copy(validationResult = null)
-                    }
-                }
-            }
 
-            FormFieldValidationStrategy.AUTO_INLINE -> {
-                launchAutoValidation {
+        val strategy = fieldCustomValidationStrategies[id] ?: validationStrategy
+        val hasConnections = !fieldConnections[id].isNullOrEmpty()
+        val shouldValidate = strategy is FormFieldValidationStrategy.AutoInline || hasConnections
+
+        if (shouldValidate) {
+            launchAutoValidation {
+                if (strategy is FormFieldValidationStrategy.AutoInline) {
                     validateAndUpdateFieldState(id)
-                    validateFieldConnections(id)
                 }
-            }
-
-            else -> {
-                // no - op
+                validateFieldConnections(id)
             }
         }
+    }
+
+    /**
+     * Handles the event when a field value is reset.
+     *
+     * Restores the field to its initialValue and delegates the update to [onFieldValueChanged],
+     * ensuring that validation state, required field tracking, and auto-validation are handled
+     * consistently with normal value changes.
+     *
+     * @param id The ID of the field to reset.
+     */
+    override fun onFieldValueReset(id: String) {
+        val initialFieldValue = formFields.first { item -> item.id == id }.initialValue
+        onFieldValueChanged(id, initialFieldValue)
     }
 
     /**
@@ -279,7 +347,7 @@ class CarlosFormManager(
     override fun <T> getFieldValue(id: String): T? = getFieldItem<T>(id).fieldState.value.value
 
     /**
-     * Validates the entire form, including individual field validations and connections between fields.
+     * Validates the entire form.
      *
      * @return `true` if the form is valid, otherwise `false`.
      */
@@ -293,6 +361,23 @@ class CarlosFormManager(
 
         if (BuildConfig.DEBUG) {
             printFormState()
+        }
+
+        return isFormValid
+    }
+
+    /**
+     * Validates the form field item.
+     *
+     * @param id The unique identifier of the form field item.
+     * @return `true` if the field is valid after validation, `false` otherwise.
+     */
+    override suspend fun validateField(id: String): Boolean {
+        checkInitialized()
+        var isFormValid = false
+
+        monitorValidationProgress {
+            isFormValid = validateAndUpdateFieldState(id)
         }
 
         return isFormValid
@@ -323,8 +408,9 @@ class CarlosFormManager(
             return true
         }
         val fieldState = fieldStates.getValue(id)
+        fieldState.update { state -> state.copy(validationInProgress = true) }
         val validationResult = validateField(id, fieldState.value.value)
-        fieldState.update { state -> state.copy(validationResult = validationResult) }
+        fieldState.update { state -> state.copy(validationInProgress = false, validationResult = validationResult) }
         return validationResult is FormFieldValidationResult.Valid
     }
 
@@ -367,7 +453,20 @@ class CarlosFormManager(
     private suspend fun validateFieldConnections(id: String) {
         fieldConnections[id]?.forEach { connectedFieldId ->
             if (checkFieldFilled(connectedFieldId)) {
-                validateAndUpdateFieldState(connectedFieldId)
+                val connectedFieldStrategy = fieldCustomValidationStrategies[connectedFieldId] ?: validationStrategy
+                when (connectedFieldStrategy) {
+                    FormFieldValidationStrategy.Manual -> {
+                        // clear validation result until explicitly validated
+                        fieldStates[connectedFieldId]?.update { state ->
+                            state.copy(validationInProgress = false, validationResult = null)
+                        }
+                    }
+
+                    is FormFieldValidationStrategy.AutoOnFocusClear,
+                    is FormFieldValidationStrategy.AutoInline -> {
+                        validateAndUpdateFieldState(connectedFieldId)
+                    }
+                }
             }
         }
     }
@@ -380,6 +479,7 @@ class CarlosFormManager(
         fieldStates.forEach { (_, fieldItemState) ->
             fieldItemState.update { state ->
                 state.copy(
+                    validationInProgress = false,
                     validationResult = FormFieldValidationResult.Invalid.Unknown
                 )
             }

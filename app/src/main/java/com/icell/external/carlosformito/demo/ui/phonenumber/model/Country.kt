@@ -1,10 +1,8 @@
 package com.icell.external.carlosformito.demo.ui.phonenumber.model
 
-import androidx.annotation.StringRes
 import com.icell.external.carlosformito.demo.R
 
 enum class Country(
-    @StringRes
     val selectionTextRes: Int,
     val callCode: String
 ) {

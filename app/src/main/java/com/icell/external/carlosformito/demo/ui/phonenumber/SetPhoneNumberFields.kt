@@ -1,7 +1,6 @@
 package com.icell.external.carlosformito.demo.ui.phonenumber
 
 import com.icell.external.carlosformito.core.api.model.FormField
-import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import com.icell.external.carlosformito.demo.R
 import com.icell.external.carlosformito.demo.ui.phonenumber.model.Country
@@ -17,7 +16,7 @@ object SetPhoneNumberFields {
         return listOf(
             FormField(
                 id = KEY_COUNTRY_CODE,
-                initialState = FormFieldState(Country.TST),
+                initialValue = Country.TST,
                 validators = listOf(
                     ValueRequiredValidator(R.string.value_required_error)
                 )

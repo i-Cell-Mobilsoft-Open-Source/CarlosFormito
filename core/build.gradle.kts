@@ -31,7 +31,7 @@ publishing {
         register("GitHubPackagesRelease", MavenPublication::class.java) {
             groupId = "com.icell.external.carlosformito"
             artifactId = "carlosformito-core"
-            version = "0.0.4-SNAPSHOT"
+            version = "0.1.0-SNAPSHOT"
             artifact(layout.buildDirectory.dir("outputs/aar/core-debug.aar"))
 
             // Attach sources

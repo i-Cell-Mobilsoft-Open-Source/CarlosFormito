@@ -7,6 +7,7 @@ com.icell.external.carlosformito.core.api
 com.icell.external.carlosformito.core.api.model
 com.icell.external.carlosformito.core.api.validator
 com.icell.external.carlosformito.core.ui
+com.icell.external.carlosformito.core.ui.extensions
 com.icell.external.carlosformito.core.validator
 com.icell.external.carlosformito.core.validator.connections
 com.icell.external.carlosformito.core.validator.regex

@@ -1,21 +1,24 @@
 package com.icell.external.carlosformito.core.api.model
 
+import kotlin.time.Duration
+
 /**
- * Class that enumerates different strategies for form field validation.
+ * Supported strategies for form field validation.
  */
-enum class FormFieldValidationStrategy {
+sealed interface FormFieldValidationStrategy {
     /**
      * Validate all fields together manually
      */
-    MANUAL,
+    data object Manual : FormFieldValidationStrategy
 
     /**
      * Validating each field automatically by focus clear events
      */
-    AUTO_ON_FOCUS_CLEAR,
+    data object AutoOnFocusClear : FormFieldValidationStrategy
 
     /**
      * Validating each field automatically by field value change events
+     * @param delay An optional delay parameter for delaying the fields validation
      */
-    AUTO_INLINE
+    data class AutoInline(val delay: Duration? = null) : FormFieldValidationStrategy
 }

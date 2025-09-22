@@ -18,8 +18,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.core.ui.collectFieldState
-import com.icell.external.carlosformito.core.ui.errorMessage
+import com.icell.external.carlosformito.core.ui.extensions.collectFieldState
+import com.icell.external.carlosformito.core.ui.extensions.errorMessage
 import com.icell.external.carlosformito.ui.field.base.BaseTextField
 import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 

@@ -1,18 +1,22 @@
 package com.icell.external.carlosformito.demo.ui.fieldsamples
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
@@ -22,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,14 +35,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.icell.external.carlosformito.commondemo.clearFocusOnTap
+import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
+import com.icell.external.carlosformito.core.ui.extensions.collectFieldState
 import com.icell.external.carlosformito.demo.ui.common.CarlosTopAppBar
 import com.icell.external.carlosformito.demo.ui.common.SimpleSelectionBottomSheet
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_DATE
-import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_NAME
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_PACKAGE
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_SECRET
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_SIZE
 import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_TIME
+import com.icell.external.carlosformito.demo.ui.fieldsamples.SamplesFormFields.KEY_FORM_FIELD_USERNAME
 import com.icell.external.carlosformito.demo.ui.fieldsamples.model.PackageType
 import com.icell.external.carlosformito.ui.field.FormDatePickerField
 import com.icell.external.carlosformito.ui.field.FormIntegerField
@@ -132,21 +137,70 @@ fun SampleFormScreen(
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
+                val usernameFieldItem = viewModel.getFieldItem<String>(KEY_FORM_FIELD_USERNAME)
+                val usernameFieldState by usernameFieldItem.collectFieldState()
                 FormTextField(
-                    fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_NAME),
+                    fieldItem = usernameFieldItem,
                     label = {
-                        Text("Name*")
+                        Text("Username*")
                     },
-                    supportingText = "Please enter your full name."
+                    trailingIcon = {
+                        AnimatedVisibility(usernameFieldState.validationInProgress) {
+                            CircularProgressIndicator(
+                                strokeWidth = 3.dp,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    },
+                    supportingText = "Please enter your username."
                 )
 
+                Button(
+                    onClick = {
+                        focusManager.clearFocus()
+                        usernameFieldItem.onFieldValueReset()
+                    }
+                ) {
+                    Text("Reset name")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                val passwordFieldItem = viewModel.getFieldItem<String>(KEY_FORM_FIELD_SECRET)
                 FormPasswordTextField(
-                    fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_SECRET),
+                    fieldItem = passwordFieldItem,
                     label = {
                         Text("Secret*")
                     },
-                    supportingText = "Please give a strong password (min 8 characters)."
+                    supportingText = "Please give a strong password that meets the following criteria:"
                 )
+
+                Text(
+                    text = """
+                    • Min 8 character
+                    • Contains a number
+                    • Contains a special character
+                    • Contains upper- and lowercase characters
+                    """.trimIndent(),
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+
+                if (viewModel.validationStrategy == FormFieldValidationStrategy.Manual) {
+                    Button(
+                        onClick = {
+                            focusManager.clearFocus()
+                            coroutineScope.launch {
+                                passwordFieldItem.validateField()
+                            }
+                        },
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
+                        Text("Check password validity")
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 FormDatePickerField(
                     fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_DATE),
@@ -169,7 +223,7 @@ fun SampleFormScreen(
                 FormIntegerField(
                     fieldItem = viewModel.getFieldItem(KEY_FORM_FIELD_SIZE),
                     label = {
-                        Text("Size (optional field)")
+                        Text("Size*")
                     },
                     supportingText = "Please enter a value between 100 and 200."
                 )
@@ -188,9 +242,7 @@ fun SampleFormScreen(
                     displayedValue = { packageType -> packageType?.displayedValue() ?: "" }
                 )
 
-                val allRequiredFieldFilled by viewModel.allRequiredFieldFilled.collectAsState()
                 Button(
-                    enabled = allRequiredFieldFilled,
                     onClick = viewModel::submit,
                     modifier = Modifier.fillMaxWidth()
                 ) {

@@ -4,6 +4,9 @@
     <!--Validator error texts-->
     <string name="min_length_error">Min. length: %1$d character(s)</string>
     <string name="value_required_error">This field is required!</string>
+    <string name="value_not_contains_special_character_error">Should contain a special character!</string>
+    <string name="value_not_contains_number_error">Should contain a number!</string>
+    <string name="value_not_contains_upper_and_lowercase_character_error">Should contain upper- and lowercase characters!</string>
     <string name="invalid_format_error">Invalid format!</string>
     <string name="date_min_error">Must be a date after or equal to: %s!</string>
     <string name="date_max_error">Must be a date before or equal to: %s!</string>
@@ -14,4 +17,9 @@
     <string name="integer_min_error">Value must be greater than or equal to %d!</string>
     <string name="integer_max_error">Value must be lesser than or equal to %d!</string>
     <string name="integer_min_max_error">Must be a decimal between: %1$d and %2$d!</string>
+    <string name="apple_quantity_error">Quantity exceeds stock of %1$s %2$s (max %3$d pcs)</string>
+    <string name="username_is_already_taken_error">Sorry, the username is already taken!</string>
+
+    <!--Testing-->
+    <string name="carlos_lbl_test_invalid_input">Invalid input!</string>
 </resources>

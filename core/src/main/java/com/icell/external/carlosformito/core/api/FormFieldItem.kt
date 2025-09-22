@@ -29,6 +29,11 @@ interface FormFieldItem<T> {
     fun <T> onFieldValueChanged(value: T?)
 
     /**
+     * Notifies the form field item that its value has been reset to the initial value.
+     */
+    fun onFieldValueReset()
+
+    /**
      * Notifies the form field item that focus has been cleared from the field.
      */
     fun onFieldFocusCleared()
@@ -39,6 +44,13 @@ interface FormFieldItem<T> {
      * @param visible Boolean indicating whether the field is visible or not.
      */
     fun onFieldVisibilityChanged(visible: Boolean)
+
+    /**
+     * Validates the form field item.
+     *
+     * @return `true` if the field is valid after validation, `false` otherwise.
+     */
+    suspend fun validateField(): Boolean
 }
 
 /**

@@ -5,11 +5,15 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidationRe
 /**
  * Represents the state of a form field, including its current value and validation result.
  *
- * @property value The current value of the form field.
- * @property validationResult The result of the form field's validation.
+ * @property value The current value entered in the form field. Defaults to `null` if no input is provided yet.
+ * @property validationInProgress A flag indicating whether the field is currently being validated
+ * (e.g., for async validation such as checking username availability).
+ * @property validationResult The latest validation result for the field, or `null` if no validation
+ * has been performed yet.
  */
 data class FormFieldState<T>(
     val value: T? = null,
+    val validationInProgress: Boolean = false,
     val validationResult: FormFieldValidationResult? = null
 ) {
 

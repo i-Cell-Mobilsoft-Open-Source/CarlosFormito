@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.core.validator
 
-import androidx.annotation.StringRes
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 
@@ -12,7 +11,6 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
  */
 class TextRegexValidator(
     private val pattern: String,
-    @StringRes
     private val errorMessageId: Int? = null
 ) : FormFieldValidator<String> {
 

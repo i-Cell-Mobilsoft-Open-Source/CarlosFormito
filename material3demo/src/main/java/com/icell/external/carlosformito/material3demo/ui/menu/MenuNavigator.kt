@@ -5,15 +5,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.icell.external.carlosformito.core.api.model.FormFieldValidationStrategy
+import com.icell.external.carlosformito.material3demo.ui.contextaware.ContextAwareValidationSampleScreen
+import com.icell.external.carlosformito.material3demo.ui.contextaware.ContextAwareValidationViewModel
 import com.icell.external.carlosformito.material3demo.ui.fieldsamples.SampleFormScreen
 import com.icell.external.carlosformito.material3demo.ui.fieldsamples.SamplesFormViewModel
-import com.icell.external.carlosformito.material3demo.ui.menu.Route.Companion.KEY_ARG_VALIDATION_STRATEGY
 
 @Composable
 fun MenuNavigator(
@@ -51,25 +50,36 @@ fun MenuNavigator(
             MenuScreen(
                 viewModel = viewModel<MenuViewModel>(),
                 onNavigateToFieldsSample = { validationStrategy ->
-                    navController.navigate("${Route.KEY_FIELD_SAMPLES_ROOT}/${validationStrategy.name}")
+                    Route.validationStrategy = validationStrategy
+                    navController.navigate(Route.FieldSamples.route)
+                },
+                onContextAwareFieldValidationSample = { validationStrategy ->
+                    Route.validationStrategy = validationStrategy
+                    navController.navigate(Route.ContextAwareValidationSample.route)
                 }
             )
         }
-        composable(
-            route = Route.FieldSamples.route,
-            arguments = listOf(
-                navArgument(KEY_ARG_VALIDATION_STRATEGY) { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val validationStrategy = enumValueOf<FormFieldValidationStrategy>(
-                requireNotNull(backStackEntry.arguments?.getString(KEY_ARG_VALIDATION_STRATEGY))
-            )
+
+        composable(Route.FieldSamples.route) { backStackEntry ->
             val viewModel: SamplesFormViewModel = viewModel {
-                SamplesFormViewModel(validationStrategy)
+                SamplesFormViewModel(Route.validationStrategy)
             }
 
             SampleFormScreen(
                 title = "Built-in field samples",
+                viewModel = viewModel,
+                onBackPressed = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(Route.ContextAwareValidationSample.route) {
+            val viewModel: ContextAwareValidationViewModel = viewModel {
+                ContextAwareValidationViewModel(Route.validationStrategy)
+            }
+            ContextAwareValidationSampleScreen(
+                title = "Context-aware validation sample",
                 viewModel = viewModel,
                 onBackPressed = {
                     navController.navigateUp()
@@ -82,10 +92,10 @@ fun MenuNavigator(
 sealed class Route(val route: String) {
 
     data object MenuScreen : Route("MenuRoute")
-    data object FieldSamples : Route("$KEY_FIELD_SAMPLES_ROOT/{$KEY_ARG_VALIDATION_STRATEGY}")
+    data object FieldSamples : Route("FieldSamples")
+    data object ContextAwareValidationSample : Route("ContextAwareValidationSample")
 
     companion object {
-        const val KEY_FIELD_SAMPLES_ROOT = "FieldSamples"
-        const val KEY_ARG_VALIDATION_STRATEGY = "validationStrategy"
+        var validationStrategy: FormFieldValidationStrategy = FormFieldValidationStrategy.Manual
     }
 }

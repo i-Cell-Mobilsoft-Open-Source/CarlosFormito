@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import com.icell.external.carlosformito.core.api.FormFieldItem
-import com.icell.external.carlosformito.core.ui.collectFieldState
+import com.icell.external.carlosformito.core.ui.extensions.collectFieldState
 import com.icell.external.carlosformito.ui.datepicker.CarlosDatePicker
 import com.icell.external.carlosformito.ui.theme.LocalCarlosConfigs
 import com.icell.external.carlosformito.ui.theme.LocalCarlosFormats

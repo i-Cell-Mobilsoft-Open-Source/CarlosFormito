@@ -1,7 +1,6 @@
 package com.icell.external.carlosformito.demo.ui.custom
 
 import com.icell.external.carlosformito.core.api.model.FormField
-import com.icell.external.carlosformito.core.api.model.FormFieldState
 import com.icell.external.carlosformito.core.validator.ValueRequiredValidator
 import com.icell.external.carlosformito.demo.R
 import com.icell.external.carlosformito.demo.ui.custom.fields.model.PaymentMethod
@@ -20,7 +19,7 @@ object CustomFormFields {
         return listOf(
             FormField(
                 id = KEY_QUANTITY,
-                initialState = FormFieldState(1),
+                initialValue = 1,
                 validators = emptyList()
             ),
             FormField(
@@ -35,7 +34,7 @@ object CustomFormFields {
             ),
             FormField(
                 id = KEY_PAYMENT_METHOD_TYPE,
-                initialState = FormFieldState(PaymentMethod.Balance),
+                initialValue = PaymentMethod.Balance,
                 validators = emptyList()
             ),
             FormField(
@@ -46,7 +45,7 @@ object CustomFormFields {
             ),
             FormField(
                 id = KEY_SAVE_PAYMENT_METHOD_CHECKED,
-                initialState = FormFieldState(false),
+                initialValue = false,
                 validators = emptyList()
             )
         )

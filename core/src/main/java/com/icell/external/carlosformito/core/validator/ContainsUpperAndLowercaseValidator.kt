@@ -1,6 +1,5 @@
 package com.icell.external.carlosformito.core.validator
 
-import androidx.annotation.StringRes
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidationResult
 import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
 
@@ -10,7 +9,7 @@ import com.icell.external.carlosformito.core.api.validator.FormFieldValidator
  * @param errorMessageId Optional resource ID for an error message to be displayed if validation fails.
  */
 class ContainsUpperAndLowercaseValidator(
-    @StringRes private val errorMessageId: Int? = null
+    private val errorMessageId: Int? = null
 ) : FormFieldValidator<String> {
 
     /**
