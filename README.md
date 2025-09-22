@@ -29,13 +29,13 @@ repositories {
 
 dependencies {
     // Carlos core functionality
-    implementation("com.icell.external.carlosformito:carlosformito-core:$carlos_version")
+    implementation("hu.icellmobilsoft.carlosformito:carlosformito-core:$carlos_version")
 
     // Carlos built-in FormFields for material3 (optional usage)
-    implementation("com.icell.external.carlosformito:carlosformito-material3:$carlos_version")
+    implementation("hu.icellmobilsoft.carlosformito:carlosformito-material3:$carlos_version")
 
     // Carlos built-in FormFields for material (optional usage)
-    implementation("com.icell.external.carlosformito:carlosformito-material:$carlos_version")
+    implementation("hu.icellmobilsoft.carlosformito:carlosformito-material:$carlos_version")
 }
 ```
 

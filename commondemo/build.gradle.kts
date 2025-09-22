@@ -7,7 +7,7 @@ plugins {
 apply<CommonLibraryGradlePlugin>()
 
 android {
-    namespace = "com.icell.external.carlosformito.commondemo"
+    namespace = "hu.icellmobilsoft.carlosformito.commondemo"
 
     buildFeatures {
         compose = true
