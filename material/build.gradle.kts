@@ -10,7 +10,7 @@ apply(plugin = "org.jetbrains.dokka")
 apply<CommonLibraryGradlePlugin>()
 
 android {
-    namespace = "com.icell.external.carlosformito.ui"
+    namespace = "hu.icellmobilsoft.carlosformito.ui"
 
     buildFeatures {
         compose = true
@@ -29,7 +29,7 @@ publishing {
     registerCarlosRepository(project)
     publications {
         register("GitHubPackagesRelease", MavenPublication::class.java) {
-            groupId = "com.icell.external.carlosformito"
+            groupId = "hu.icellmobilsoft.carlosformito"
             artifactId = "carlosformito-material"
             version = "0.1.0-SNAPSHOT"
             artifact(layout.buildDirectory.dir("outputs/aar/material-debug.aar"))

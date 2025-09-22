@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.icell.external.carlosformito.demo"
+    namespace = "hu.icellmobilsoft.carlosformito.demo"
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        applicationId = "com.icell.external.carlosformito.demo"
+        applicationId = "hu.icellmobilsoft.carlosformito.demo"
 
         minSdk = ProjectConfig.demoMinSdk
         targetSdk = ProjectConfig.targetSdk
