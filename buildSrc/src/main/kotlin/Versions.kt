@@ -19,4 +19,5 @@ object Versions {
     const val dokka = "1.9.20"
     const val kotlinJvmTarget = "17"
     const val dependencyUpdates = "0.52.0"
+    const val gradleMavenPublishPlugin = "0.34.0"
 }
