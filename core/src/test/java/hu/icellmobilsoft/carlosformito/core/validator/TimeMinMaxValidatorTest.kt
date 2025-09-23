@@ -6,8 +6,8 @@ import hu.icellmobilsoft.carlosformito.core.R
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.util.ValidatorTestUtils.isValidationResultInvalid
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalTime
 import org.junit.Test
-import java.time.LocalTime
 
 /**
  * Unit tests for [TimeMinMaxValidator].
@@ -20,8 +20,8 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `validate null input`() = runTest {
-        val minValue = LocalTime.MIN
-        val maxValue = LocalTime.MIN.plusHours(1)
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(13, 0)
 
         val validator = TimeMinMaxValidator(minValue, maxValue)
         val validationResult = validator.validate(null)
@@ -35,9 +35,9 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `validate time before min value`() = runTest {
-        val minValue = LocalTime.NOON
-        val maxValue = LocalTime.MAX
-        val testValue = minValue.minusHours(1)
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(23, 59)
+        val testValue = LocalTime(11, 0)
 
         val validator = TimeMinMaxValidator(minValue, maxValue)
         val validationResult = validator.validate(testValue)
@@ -51,9 +51,9 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `validate time after max value`() = runTest {
-        val minValue = LocalTime.NOON
-        val maxValue = LocalTime.MAX
-        val testValue = maxValue.plusHours(1)
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(23, 59)
+        val testValue = LocalTime(0, 59)
 
         val validator = TimeMinMaxValidator(minValue, maxValue)
         val validationResult = validator.validate(testValue)
@@ -67,9 +67,9 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
-        val minValue = LocalTime.NOON
-        val maxValue = LocalTime.MAX
-        val testValue = maxValue.plusHours(1)
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(23, 59)
+        val testValue = LocalTime(0, 59)
 
         val validator =
             TimeMinMaxValidator(minValue, maxValue, R.string.carlos_lbl_test_invalid_input)
@@ -89,9 +89,9 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `test invalid input returns error message args`() = runTest {
-        val minValue = LocalTime.NOON
-        val maxValue = LocalTime.MAX
-        val testValue = maxValue.plusHours(1)
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(23, 59)
+        val testValue = LocalTime(0, 59)
 
         val validator = TimeMinMaxValidator(minValue, maxValue, R.string.carlos_lbl_test_invalid_input)
         val validationResult = validator.validate(testValue)
@@ -110,9 +110,9 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `validate time within the valid range`() = runTest {
-        val minValue = LocalTime.NOON
-        val maxValue = LocalTime.MAX
-        val testValue = LocalTime.of(20, 45)
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(23, 59)
+        val testValue = LocalTime(20, 45)
 
         val validator = TimeMinMaxValidator(minValue, maxValue)
         val validationResult = validator.validate(testValue)
@@ -126,8 +126,8 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `validate time equal to min value`() = runTest {
-        val minValue = LocalTime.NOON
-        val maxValue = LocalTime.MAX
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(23, 59)
 
         val validator = TimeMinMaxValidator(minValue, maxValue)
         val validationResult = validator.validate(minValue)
@@ -141,8 +141,8 @@ class TimeMinMaxValidatorTest {
      */
     @Test
     fun `validate time equal to max value`() = runTest {
-        val minValue = LocalTime.NOON
-        val maxValue = LocalTime.MAX
+        val minValue = LocalTime(12, 0)
+        val maxValue = LocalTime(23, 59)
 
         val validator = TimeMinMaxValidator(minValue, maxValue)
         val validationResult = validator.validate(maxValue)

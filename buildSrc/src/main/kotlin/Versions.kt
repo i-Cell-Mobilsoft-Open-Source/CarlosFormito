@@ -12,12 +12,12 @@ object Versions {
     const val espresso = "3.7.0"
     const val truthAssert = "1.4.5"
     const val coroutinesTest = "1.10.2"
-    const val desugaring = "2.1.5"
     const val extendedMaterialIcons = "1.6.4"
     const val composeCompiler = "2.2.20"
     const val detekt = "1.23.8"
     const val dokka = "1.9.20"
     const val kotlinJvmTarget = "17"
     const val dependencyUpdates = "0.52.0"
+    const val kotlinxDateTime = "0.7.1"
     const val gradleMavenPublishPlugin = "0.34.0"
 }

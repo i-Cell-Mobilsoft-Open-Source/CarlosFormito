@@ -1,11 +1,14 @@
 package hu.icellmobilsoft.carlosformito.demo.ui.custom
 
+import hu.icellmobilsoft.carlosformito.commondemo.now
+import hu.icellmobilsoft.carlosformito.commondemo.plus
 import hu.icellmobilsoft.carlosformito.core.api.model.FormField
 import hu.icellmobilsoft.carlosformito.core.validator.ValueRequiredValidator
 import hu.icellmobilsoft.carlosformito.demo.R
 import hu.icellmobilsoft.carlosformito.demo.ui.custom.fields.model.PaymentMethod
 import hu.icellmobilsoft.carlosformito.demo.ui.custom.fields.validator.ValidityStartValidator
-import java.time.ZonedDateTime
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDateTime
 
 object CustomFormFields {
 
@@ -27,8 +30,8 @@ object CustomFormFields {
                 validators = listOf(
                     ValueRequiredValidator(R.string.value_required_error),
                     ValidityStartValidator(
-                        minDateTime = ZonedDateTime.now(),
-                        maxDateTime = ZonedDateTime.now().plusWeeks(1)
+                        minDateTime = LocalDateTime.now(),
+                        maxDateTime = LocalDateTime.now().plus(1, DateTimeUnit.WEEK)
                     )
                 )
             ),

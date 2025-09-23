@@ -5,10 +5,12 @@ import com.google.android.material.datepicker.CompositeDateValidator
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Object that provides a builder function for creating and configuring a [MaterialDatePicker].
@@ -18,7 +20,7 @@ object DatePickerBuilder {
     /**
      * The absolute minimum date that can be selected, set to January 1, 1900.
      * */
-    private val ABSOLUTE_MIN_DATE: LocalDate = LocalDate.of(1900, 1, 1)
+    private val ABSOLUTE_MIN_DATE: LocalDate = LocalDate(1900, 1, 1)
 
     /**
      * Builds a [MaterialDatePicker] dialog with the specified configuration.
@@ -80,8 +82,9 @@ object DatePickerBuilder {
      * @param localDate The [LocalDate] to be converted.
      * @return The UTC milliseconds since the epoch corresponding to the start of the day in UTC.
      */
+    @OptIn(ExperimentalTime::class)
     private fun localDateToUtcMillis(localDate: LocalDate): Long {
-        return localDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+        return localDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
     }
 
     /**
@@ -90,7 +93,8 @@ object DatePickerBuilder {
      * @param utcMillis The UTC milliseconds since the epoch.
      * @return The corresponding [LocalDate].
      */
+    @OptIn(ExperimentalTime::class)
     private fun localDateFromUtcMillis(utcMillis: Long): LocalDate {
-        return Instant.ofEpochMilli(utcMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+        return Instant.fromEpochMilliseconds(utcMillis).toLocalDateTime(TimeZone.currentSystemDefault()).date
     }
 }

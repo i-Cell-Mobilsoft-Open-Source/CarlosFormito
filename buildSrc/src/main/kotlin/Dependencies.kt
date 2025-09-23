@@ -22,6 +22,7 @@ object Dependencies {
     const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
     const val navigationRuntimeKtx = "androidx.navigation:navigation-runtime-ktx:${Versions.navigation}"
     const val navigationCompose = "androidx.navigation:navigation-compose:${Versions.navigation}"
+    const val kotlinxDateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinxDateTime}"
 
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
     const val junit = "junit:junit:${Versions.junit}"
@@ -30,7 +31,6 @@ object Dependencies {
     const val truthAssert = "com.google.truth:truth:${Versions.truthAssert}"
     const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutinesTest}"
 
-    const val desugaring = "com.android.tools:desugar_jdk_libs:${Versions.desugaring}"
     const val detektFormattingPlugin = "io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detekt}"
     const val dokkaPlugin = "org.jetbrains.dokka:android-documentation-plugin:${Versions.dokka}"
 }
@@ -58,10 +58,6 @@ private fun DependencyHandler.composeCoreDependencies() {
     implementation(Dependencies.composeUiGraphics)
     implementation(Dependencies.composeUiTooling)
     implementation(Dependencies.composeUiToolingPreview)
-}
-
-fun DependencyHandler.desugaring() {
-    coreLibraryDesugaring(Dependencies.desugaring)
 }
 
 fun DependencyHandler.carlosCore() {

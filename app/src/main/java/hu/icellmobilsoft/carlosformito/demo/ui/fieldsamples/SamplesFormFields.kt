@@ -1,5 +1,6 @@
 package hu.icellmobilsoft.carlosformito.demo.ui.fieldsamples
 
+import hu.icellmobilsoft.carlosformito.commondemo.now
 import hu.icellmobilsoft.carlosformito.core.api.model.FormField
 import hu.icellmobilsoft.carlosformito.core.validator.ContainsNumberValidator
 import hu.icellmobilsoft.carlosformito.core.validator.ContainsSpecialCharacterValidator
@@ -12,8 +13,10 @@ import hu.icellmobilsoft.carlosformito.core.validator.ValueRequiredValidator
 import hu.icellmobilsoft.carlosformito.demo.R
 import hu.icellmobilsoft.carlosformito.demo.ui.fieldsamples.model.PackageType
 import hu.icellmobilsoft.carlosformito.demo.ui.fieldsamples.validator.UsernameAvailabilityValidator
-import java.time.LocalDate
-import java.time.LocalTime
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.plus
 
 @Suppress("MagicNumber")
 object SamplesFormFields {
@@ -52,7 +55,7 @@ object SamplesFormFields {
                     ValueRequiredValidator(R.string.value_required_error),
                     DateMinMaxValidator(
                         minValue = LocalDate.now(),
-                        maxValue = LocalDate.now().plusWeeks(1),
+                        maxValue = LocalDate.now().plus(1, DateTimeUnit.WEEK),
                         R.string.date_min_max_error
                     )
                 )
@@ -62,8 +65,8 @@ object SamplesFormFields {
                 validators = listOf(
                     ValueRequiredValidator(R.string.value_required_error),
                     TimeMinMaxValidator(
-                        minValue = LocalTime.NOON,
-                        maxValue = LocalTime.of(18, 0)
+                        minValue = LocalTime(12, 0),
+                        maxValue = LocalTime(18, 0)
                     )
                 )
             ),

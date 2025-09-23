@@ -1,6 +1,9 @@
 # CarlosFormito
 
-<img src="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/images/carlos_logo.png" height="200" alt="Carlos Logo"/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./documentation/images/carlos_logo_dark.png" height="200">
+  <img alt="Carlos Logo" src="./documentation/images/carlos_logo_light.png" height="200">
+</picture>
 
 Easy form state management for Jetpack Compose.
 
@@ -38,6 +41,8 @@ dependencies {
     implementation("hu.icellmobilsoft.carlosformito:carlosformito-material:$carlos_version")
 }
 ```
+
+**Note:** Don't forget to enable core library desugaring in your project if `minSdk < 26`.
 
 ## Using Carlos
 

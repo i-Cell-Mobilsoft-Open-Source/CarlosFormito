@@ -1,8 +1,8 @@
 package hu.icellmobilsoft.carlosformito.demo.ui.custom.fields.model
 
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import java.io.Serializable
-import java.time.LocalDate
-import java.time.LocalTime
 
 data class ValidityStart(
     val date: LocalDate? = null,

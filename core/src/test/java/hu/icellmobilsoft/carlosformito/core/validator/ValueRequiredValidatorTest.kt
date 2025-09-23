@@ -6,8 +6,8 @@ import hu.icellmobilsoft.carlosformito.core.R
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.util.ValidatorTestUtils.isValidationResultInvalid
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDate
 import org.junit.Test
-import java.time.LocalDate
 
 /**
  * Unit tests for [ValueRequiredValidator].
@@ -118,7 +118,7 @@ class ValueRequiredValidatorTest {
     @Test
     fun `validate LocalDate input`() = runTest {
         val validator = ValueRequiredValidator<LocalDate>()
-        val validatorResult = validator.validate(LocalDate.MIN)
+        val validatorResult = validator.validate(LocalDate(2025, 9, 23))
 
         assertThat(validatorResult).isEqualTo(FormFieldValidationResult.Valid)
     }

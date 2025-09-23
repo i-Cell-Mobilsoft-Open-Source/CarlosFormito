@@ -43,14 +43,9 @@ class CommonLibraryGradlePlugin : Plugin<Project> {
             }
 
             compileOptions {
-                isCoreLibraryDesugaringEnabled = true
                 sourceCompatibility = JavaVersion.VERSION_17
                 targetCompatibility = JavaVersion.VERSION_17
             }
-        }
-
-        project.dependencies.apply {
-            desugaring()
         }
     }
 

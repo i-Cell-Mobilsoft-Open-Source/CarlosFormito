@@ -6,8 +6,8 @@ import hu.icellmobilsoft.carlosformito.core.R
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.util.ValidatorTestUtils.isValidationResultInvalid
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalTime
 import org.junit.Test
-import java.time.LocalTime
 
 /**
  * Unit tests for [TimeMaxValidator].
@@ -20,7 +20,7 @@ class TimeMaxValidatorTest {
      */
     @Test
     fun `validate null input`() = runTest {
-        val validator = TimeMaxValidator(LocalTime.now())
+        val validator = TimeMaxValidator(LocalTime(12, 0))
         val validationResult = validator.validate(null)
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
@@ -32,9 +32,9 @@ class TimeMaxValidatorTest {
      */
     @Test
     fun `validate time before max value`() = runTest {
-        val maxValue = LocalTime.of(5, 30)
+        val maxValue = LocalTime(5, 30)
         val validator = TimeMaxValidator(maxValue)
-        val validationResult = validator.validate(maxValue.minusHours(1))
+        val validationResult = validator.validate(LocalTime(4, 30))
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
@@ -45,7 +45,7 @@ class TimeMaxValidatorTest {
      */
     @Test
     fun `validate time equal to max value`() = runTest {
-        val maxValue = LocalTime.of(5, 30)
+        val maxValue = LocalTime(5, 30)
         val validator = TimeMaxValidator(maxValue)
         val validationResult = validator.validate(maxValue)
 
@@ -58,9 +58,9 @@ class TimeMaxValidatorTest {
      */
     @Test
     fun `validate time after max value`() = runTest {
-        val maxValue = LocalTime.of(5, 30)
+        val maxValue = LocalTime(5, 30)
         val validator = TimeMaxValidator(maxValue)
-        val validationResult = validator.validate(maxValue.plusHours(1))
+        val validationResult = validator.validate(LocalTime(6, 30))
 
         assertThat(validationResult).isValidationResultInvalid()
     }
@@ -71,9 +71,9 @@ class TimeMaxValidatorTest {
      */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
-        val maxValue = LocalTime.of(5, 30)
+        val maxValue = LocalTime(5, 30)
         val validator = TimeMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
-        val validationResult = validator.validate(maxValue.plusHours(1))
+        val validationResult = validator.validate(LocalTime(6, 30))
 
         assertThat(validationResult)
             .isInstanceOf(FormFieldValidationResult.Invalid.MessageWithArgs::class.java)
@@ -89,9 +89,9 @@ class TimeMaxValidatorTest {
      */
     @Test
     fun `test invalid input returns error message args`() = runTest {
-        val maxValue = LocalTime.of(5, 30)
+        val maxValue = LocalTime(5, 30)
         val validator = TimeMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
-        val validationResult = validator.validate(maxValue.plusHours(1))
+        val validationResult = validator.validate(LocalTime(6, 30))
 
         assertThat(validationResult)
             .isInstanceOf(FormFieldValidationResult.Invalid.MessageWithArgs::class.java)

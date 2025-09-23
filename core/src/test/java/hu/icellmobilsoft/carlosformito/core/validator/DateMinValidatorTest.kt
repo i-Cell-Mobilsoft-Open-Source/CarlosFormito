@@ -6,8 +6,11 @@ import hu.icellmobilsoft.carlosformito.core.R
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.util.ValidatorTestUtils.isValidationResultInvalid
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import org.junit.Test
-import java.time.LocalDate
 
 /**
  * Unit tests for [DateMinValidator].
@@ -19,7 +22,7 @@ class DateMinValidatorTest {
      */
     @Test
     fun `validate null value`() = runTest {
-        val validator = DateMinValidator(LocalDate.MIN)
+        val validator = DateMinValidator(LocalDate(2025, 9, 23))
         val validationResult = validator.validate(null)
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
@@ -30,9 +33,9 @@ class DateMinValidatorTest {
      */
     @Test
     fun `validate value before min value`() = runTest {
-        val minValue = LocalDate.of(2023, 1, 1)
+        val minValue = LocalDate(2023, 1, 1)
         val validator = DateMinValidator(minValue)
-        val invalidValue = minValue.minusDays(1)
+        val invalidValue = minValue.minus(1, DateTimeUnit.DAY)
         val validationResult = validator.validate(invalidValue)
 
         assertThat(validationResult).isValidationResultInvalid()
@@ -43,7 +46,7 @@ class DateMinValidatorTest {
      */
     @Test
     fun `validate value equal to min value`() = runTest {
-        val minValue = LocalDate.of(2023, 1, 1)
+        val minValue = LocalDate(2023, 1, 1)
         val validator = DateMinValidator(minValue)
         val validationResult = validator.validate(minValue)
 
@@ -55,9 +58,9 @@ class DateMinValidatorTest {
      */
     @Test
     fun `validate value after min value`() = runTest {
-        val minValue = LocalDate.of(2023, 1, 1)
+        val minValue = LocalDate(2023, 1, 1)
         val validator = DateMinValidator(minValue)
-        val validValue = minValue.plusDays(1)
+        val validValue = minValue.plus(1, DateTimeUnit.DAY)
         val validationResult = validator.validate(validValue)
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
@@ -68,10 +71,10 @@ class DateMinValidatorTest {
      */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
-        val minValue = LocalDate.of(2023, 1, 1)
+        val minValue = LocalDate(2023, 1, 1)
 
         val validator = DateMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
-        val invalidValue = minValue.minusDays(1)
+        val invalidValue = minValue.minus(1, DateTimeUnit.DAY)
         val validationResult = validator.validate(invalidValue)
 
         assertThat(validationResult)
@@ -87,10 +90,10 @@ class DateMinValidatorTest {
      */
     @Test
     fun `test invalid input returns error message args`() = runTest {
-        val minValue = LocalDate.of(2023, 1, 1)
+        val minValue = LocalDate(2023, 1, 1)
 
         val validator = DateMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
-        val invalidValue = minValue.minusDays(1)
+        val invalidValue = minValue.minus(1, DateTimeUnit.DAY)
         val validationResult = validator.validate(invalidValue)
 
         assertThat(validationResult)

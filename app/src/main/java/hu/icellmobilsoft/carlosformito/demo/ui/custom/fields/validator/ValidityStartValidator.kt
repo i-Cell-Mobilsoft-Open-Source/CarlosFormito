@@ -4,16 +4,15 @@ import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationRes
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidator
 import hu.icellmobilsoft.carlosformito.demo.R
 import hu.icellmobilsoft.carlosformito.demo.ui.custom.fields.model.ValidityStart
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format
 
 class ValidityStartValidator(
-    private val minDateTime: ZonedDateTime,
-    private val maxDateTime: ZonedDateTime
+    private val minDateTime: LocalDateTime,
+    private val maxDateTime: LocalDateTime
 ) : FormFieldValidator<ValidityStart> {
 
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm")
+    private val dateTimeFormat = LocalDateTime.Formats.ISO
 
     override suspend fun validate(value: ValidityStart?): FormFieldValidationResult {
         value?.let {
@@ -23,13 +22,13 @@ class ValidityStartValidator(
             val nonNullTime = value.time ?: return FormFieldValidationResult.Invalid.Message(
                 R.string.validity_start_missing_time
             )
-            val dateTimeValue = ZonedDateTime.of(nonNullDate, nonNullTime, ZoneId.systemDefault())
-            if (dateTimeValue.isBefore(minDateTime) || dateTimeValue.isAfter(maxDateTime)) {
+            val dateTimeValue = LocalDateTime(nonNullDate, nonNullTime)
+            if (dateTimeValue < minDateTime || dateTimeValue > maxDateTime) {
                 return FormFieldValidationResult.Invalid.MessageWithArgs(
                     R.string.validity_start_out_of_range,
                     listOf(
-                        minDateTime.format(dateTimeFormatter),
-                        maxDateTime.format(dateTimeFormatter)
+                        minDateTime.format(dateTimeFormat),
+                        maxDateTime.format(dateTimeFormat)
                     )
                 )
             }

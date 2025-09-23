@@ -20,8 +20,8 @@ import hu.icellmobilsoft.carlosformito.ui.extension.requireActivity
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosFormats
 import hu.icellmobilsoft.carlosformito.ui.util.TimePickerBuilder
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.DateTimeFormat
 
 /**
  * A composable function for a time picker field with various customization options.
@@ -49,13 +49,13 @@ import java.time.format.DateTimeFormatter
  * (including label, placeholder, leading and trailing icons, border) for this picker field in
  * different states. The default [colors] uses the [LocalCarlosConfigs]'s colors defined by the theme, which defaults to
  * [TextFieldDefaults.outlinedTextFieldColors] if the field is outlined or [TextFieldDefaults.textFieldColors] otherwise
- * @param timeFormatter the [DateTimeFormatter] used to format the displayed time.
- * The default [timeFormatter] uses the [LocalCarlosFormats]'s timeFormatter defined by the theme
- * which defaults to "HH:mm" (24-hour format)
+ * @param timeFormat the [DateTimeFormat] used to format the displayed time.
+ * The default [timeFormat] uses the [LocalCarlosFormats]'s timeFormat defined by the theme
+ * which defaults to [LocalTime.Formats.ISO].
  * @param dialogTitle the title to be displayed on the time picker dialog
  * @param onClick the callback that is triggered when the picker field is clicked
- * @param timeFormat the format used for displaying time on the picker dialog.
- * The default [timeFormat] uses the [LocalCarlosFormats]'s timeFormat defined by the theme
+ * @param is24HourFormat the format used for displaying time on the picker dialog.
+ * The default [is24HourFormat] uses the [LocalCarlosFormats]'s timeFormat defined by the theme
  * which defaults to system's time format
  * @param enabled controls the enabled state of the picker field. When `false`, the picker field will
  * be neither editable nor focusable, the input of the picker field will not be selectable,
@@ -81,10 +81,10 @@ fun FormTimePickerField(
     outlined: Boolean = LocalCarlosConfigs.current.outlined,
     shape: Shape = LocalCarlosConfigs.current.shape,
     colors: TextFieldColors = LocalCarlosConfigs.current.colors,
-    timeFormatter: DateTimeFormatter = LocalCarlosFormats.current.timeFormatter,
+    timeFormat: DateTimeFormat<LocalTime> = LocalCarlosFormats.current.timeFormat,
     dialogTitle: String,
     onClick: (() -> Unit)? = null,
-    timeFormat: Int = LocalCarlosFormats.current.timeFormat,
+    is24HourFormat: Boolean = LocalCarlosFormats.current.is24HourFormat,
     enabled: Boolean = true,
     isClearable: Boolean = true,
     clearIcon: ImageVector = Icons.Default.Clear,
@@ -111,7 +111,7 @@ fun FormTimePickerField(
             TimePickerBuilder.build(
                 dialogTitle = dialogTitle,
                 selectedTime = state.value,
-                timeFormat = timeFormat,
+                is24HourFormat = is24HourFormat,
                 onTimeSelected = { selectedDate ->
                     fieldItem.onFieldValueChanged(selectedDate)
                 }
@@ -122,7 +122,7 @@ fun FormTimePickerField(
         clearIcon = clearIcon,
         displayedValue = { value ->
             value?.let {
-                timeFormatter.format(value)
+                timeFormat.format(value)
             } ?: ""
         },
         contentDescription = contentDescription,

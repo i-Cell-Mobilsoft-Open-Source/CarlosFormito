@@ -24,7 +24,7 @@ mavenPublishing {
     coordinates(
         groupId = "hu.icellmobilsoft.carlosformito",
         artifactId = "carlosformito-core",
-        version = "1.0.0"
+        version = "1.0.1"
     )
 
     pom {
@@ -60,6 +60,7 @@ mavenPublishing {
 dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.lifecycleRuntimeKtx)
+    implementation(Dependencies.kotlinxDateTime)
 
     composeCore()
 

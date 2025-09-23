@@ -5,52 +5,56 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
-import com.google.android.material.timepicker.TimeFormat
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.DateTimeFormat
 
 /**
- * A class that provides default formatting options for date and time values used by the Carlos form fields.
+ * Provides default formatting options for date and time values used by Carlos form fields.
  *
- * @property dateFormatter The [DateTimeFormatter] used for formatting dates.
- * Defaults to [DateTimeFormatter.ISO_LOCAL_DATE].
- * @property timeFormatter The [DateTimeFormatter] used for formatting times.
- * Defaults to "HH:mm" (24-hour format).
- * @param timeFormat An optional parameter to specify the time format, either 12-hour or 24-hour clock.
- * If null, the system's time format will be used.
+ * @property dateFormat The [DateTimeFormat] used for formatting dates.
+ * Defaults to [LocalDate.Formats.ISO].
+ * @property timeFormat The [DateTimeFormat] used for formatting times.
+ * Defaults to [LocalTime.Formats.ISO].
+ * @param is24HourFormat Optional. Specifies whether to use a 12-hour or 24-hour clock.
+ * If `null`, the system’s current time format will be used.
  */
 class CarlosFormatDefaults(
-    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE,
-    val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
-    timeFormat: Int? = null
+    val dateFormat: DateTimeFormat<LocalDate> = LocalDate.Formats.ISO,
+    val timeFormat: DateTimeFormat<LocalTime> = LocalTime.Formats.ISO,
+    is24HourFormat: Boolean? = null
 ) {
 
-    // Backing property to store the optional time format parameter
-    private val timeFormatParam: Int? = timeFormat
+    // Backing property for the optional time format parameter
+    private val is24HourFormatParam: Boolean? = is24HourFormat
 
     /**
-     * The time format to be used, either provided or derived from the system settings.
-     * This is a 12-hour or 24-hour clock format represented by [TimeFormat.CLOCK_12H] or [TimeFormat.CLOCK_24H].
+     * Whether the 24-hour clock format should be used.
+     *
+     * If [is24HourFormatParam] is provided, it is returned directly.
+     * Otherwise, the value is derived from the system settings.
+     *
+     * @return `true` for 24-hour format, `false` for 12-hour format.
      */
-    val timeFormat: Int
+    val is24HourFormat: Boolean
         @ReadOnlyComposable
         @Composable
-        get() = timeFormatParam ?: getSystemTimeFormat()
+        get() = is24HourFormatParam ?: getSystemTimeFormat()
 
     /**
-     * Retrieves the system's default time format (12-hour or 24-hour clock).
+     * Retrieves the system’s default time format.
      *
-     * @return [TimeFormat.CLOCK_24H] if the system is set to 24-hour format, [TimeFormat.CLOCK_12H] otherwise.
+     * @return `true` if the system is set to 24-hour format, `false` otherwise.
      */
     @ReadOnlyComposable
     @Composable
-    private fun getSystemTimeFormat(): Int {
-        val isSystem24Hour = DateFormat.is24HourFormat(LocalContext.current)
-        return if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-    }
+    private fun getSystemTimeFormat(): Boolean = DateFormat.is24HourFormat(LocalContext.current)
 }
 
 /**
- * A composition local provider for [CarlosFormatDefaults].
- * This allows for a consistent use of date and time formats across a composable hierarchy.
+ * A [staticCompositionLocalOf] provider for [CarlosFormatDefaults].
+ *
+ * This enables consistent date and time formatting across a Compose hierarchy
+ * by providing [CarlosFormatDefaults] at the composition level.
  */
 val LocalCarlosFormats = staticCompositionLocalOf { CarlosFormatDefaults() }
