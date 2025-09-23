@@ -16,14 +16,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import hu.icellmobilsoft.carlosformito.core.api.FormFieldItem
 import hu.icellmobilsoft.carlosformito.core.ui.extensions.collectFieldState
 import hu.icellmobilsoft.carlosformito.ui.datepicker.CarlosDatePicker
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosFormats
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format.DateTimeFormat
 
 /**
  * A composable function for a date picker field with various customization options.
@@ -53,9 +54,9 @@ import java.time.format.DateTimeFormatter
  * (including label, placeholder, leading and trailing icons, border) for this picker field in
  * different states. The default [colors] uses the [LocalCarlosConfigs]'s colors defined by the theme, which defaults to
  * [OutlinedTextFieldDefaults.colors] if the field is outlined or [TextFieldDefaults.colors] otherwise
- * @param dateFormatter the [DateTimeFormatter] used to format the displayed date.
- * The default [dateFormatter] uses the [LocalCarlosFormats]'s dateFormatter defined by the theme
- * which defaults to [DateTimeFormatter.ISO_LOCAL_DATE]
+ * @param dateFormat the [DateTimeFormat] used to format the displayed date.
+ * The default [DateTimeFormat] uses the [LocalCarlosFormats]'s dateFormat defined by the theme
+ * which defaults to [LocalDate.Formats.ISO]
  * @param dialogTitle the title to be displayed on the date picker dialog
  * @param minDate The minimum date that can be selected
  * @param maxDate The maximum date that can be selected
@@ -86,7 +87,7 @@ fun FormDatePickerField(
     outlined: Boolean = LocalCarlosConfigs.current.outlined,
     shape: Shape = LocalCarlosConfigs.current.shape,
     colors: TextFieldColors = LocalCarlosConfigs.current.colors,
-    dateFormatter: DateTimeFormatter = LocalCarlosFormats.current.dateFormatter,
+    dateFormat: DateTimeFormat<LocalDate> = LocalCarlosFormats.current.dateFormat,
     dialogTitle: String,
     dialogHeadline: String? = null,
     minDate: LocalDate? = null,
@@ -107,7 +108,7 @@ fun FormDatePickerField(
         CarlosDatePicker(
             dialogTitle = dialogTitle,
             dialogHeadline = dialogHeadline,
-            formatter = dateFormatter,
+            format = dateFormat,
             selectedDate = state.value,
             minDate = minDate,
             maxDate = maxDate,
@@ -117,7 +118,9 @@ fun FormDatePickerField(
             },
             hideDialog = {
                 dialogVisible = false
-            }
+            },
+            confirmButtonText = stringResource(android.R.string.ok),
+            dismissButtonText = stringResource(android.R.string.cancel)
         )
     }
 
@@ -140,7 +143,7 @@ fun FormDatePickerField(
         clearIcon = clearIcon,
         displayedValue = { value ->
             value?.let {
-                dateFormatter.format(value)
+                dateFormat.format(value)
             } ?: ""
         },
         contentDescription = contentDescription,

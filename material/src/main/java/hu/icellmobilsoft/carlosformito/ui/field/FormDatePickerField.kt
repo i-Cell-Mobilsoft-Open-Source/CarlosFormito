@@ -20,8 +20,8 @@ import hu.icellmobilsoft.carlosformito.ui.extension.requireActivity
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosFormats
 import hu.icellmobilsoft.carlosformito.ui.util.DatePickerBuilder
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format.DateTimeFormat
 
 /**
  * A composable function for a date picker field with various customization options.
@@ -49,9 +49,9 @@ import java.time.format.DateTimeFormatter
  * (including label, placeholder, leading and trailing icons, border) for this picker field in
  * different states. The default [colors] uses the [LocalCarlosConfigs]'s colors defined by the theme, which defaults to
  * [TextFieldDefaults.outlinedTextFieldColors] if the field is outlined or [TextFieldDefaults.textFieldColors] otherwise
- * @param dateFormatter the [DateTimeFormatter] used to format the displayed date.
- * The default [dateFormatter] uses the [LocalCarlosFormats]'s dateFormatter defined by the theme
- * which defaults to [DateTimeFormatter.ISO_LOCAL_DATE]
+ * @param dateFormat the [DateTimeFormat] used to format the displayed date.
+ * The default [dateFormat] uses the [LocalCarlosFormats]'s dateFormat defined by the theme
+ * which defaults to [LocalDate.Formats.ISO]
  * @param dialogTitle the title to be displayed on the date picker dialog
  * @param minDate The minimum date that can be selected
  * @param maxDate The maximum date that can be selected
@@ -80,7 +80,7 @@ fun FormDatePickerField(
     outlined: Boolean = LocalCarlosConfigs.current.outlined,
     shape: Shape = LocalCarlosConfigs.current.shape,
     colors: TextFieldColors = LocalCarlosConfigs.current.colors,
-    dateFormatter: DateTimeFormatter = LocalCarlosFormats.current.dateFormatter,
+    dateFormat: DateTimeFormat<LocalDate> = LocalCarlosFormats.current.dateFormat,
     dialogTitle: String,
     minDate: LocalDate? = null,
     maxDate: LocalDate? = null,
@@ -123,7 +123,7 @@ fun FormDatePickerField(
         clearIcon = clearIcon,
         displayedValue = { value ->
             value?.let {
-                dateFormatter.format(value)
+                dateFormat.format(value)
             } ?: ""
         },
         contentDescription = contentDescription,

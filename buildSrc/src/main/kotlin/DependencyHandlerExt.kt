@@ -24,7 +24,3 @@ fun DependencyHandler.testImplementation(dependency: String) {
 fun DependencyHandler.androidTestImplementation(dependency: String) {
     add("androidTestImplementation", dependency)
 }
-
-fun DependencyHandler.coreLibraryDesugaring(dependency: String) {
-    add("coreLibraryDesugaring", dependency)
-}

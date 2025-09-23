@@ -19,7 +19,6 @@ hu.icellmobilsoft.carlosformito.ui.theme
 hu.icellmobilsoft.carlosformito.ui.util
 module:material3
 hu.icellmobilsoft.carlosformito.ui.datepicker
-hu.icellmobilsoft.carlosformito.ui.extension
 hu.icellmobilsoft.carlosformito.ui.field
 hu.icellmobilsoft.carlosformito.ui.field.base
 hu.icellmobilsoft.carlosformito.ui.theme

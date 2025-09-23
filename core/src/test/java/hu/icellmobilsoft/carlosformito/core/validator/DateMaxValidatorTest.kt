@@ -6,8 +6,11 @@ import hu.icellmobilsoft.carlosformito.core.R
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.util.ValidatorTestUtils.isValidationResultInvalid
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import org.junit.Test
-import java.time.LocalDate
 
 /**
  * Unit tests for [DateMaxValidator].
@@ -19,7 +22,7 @@ class DateMaxValidatorTest {
      */
     @Test
     fun `validate null input`() = runTest {
-        val validator = DateMaxValidator(LocalDate.now())
+        val validator = DateMaxValidator(LocalDate(2025, 9, 23))
         val validationResult = validator.validate(null)
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
@@ -30,9 +33,9 @@ class DateMaxValidatorTest {
      */
     @Test
     fun `validate date before max value`() = runTest {
-        val maxValue = LocalDate.of(2023, 1, 1)
+        val maxValue = LocalDate(2023, 1, 1)
         val validator = DateMaxValidator(maxValue)
-        val validationResult = validator.validate(maxValue.minusDays(1))
+        val validationResult = validator.validate(maxValue.minus(1, DateTimeUnit.DAY))
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
     }
@@ -42,7 +45,7 @@ class DateMaxValidatorTest {
      */
     @Test
     fun `validate date equal to max value`() = runTest {
-        val maxValue = LocalDate.of(2023, 1, 1)
+        val maxValue = LocalDate(2023, 1, 1)
         val validator = DateMaxValidator(maxValue)
         val validationResult = validator.validate(maxValue)
 
@@ -54,9 +57,9 @@ class DateMaxValidatorTest {
      */
     @Test
     fun `validate date after max value`() = runTest {
-        val maxValue = LocalDate.of(2023, 1, 1)
+        val maxValue = LocalDate(2023, 1, 1)
         val validator = DateMaxValidator(maxValue)
-        val validationResult = validator.validate(maxValue.plusDays(1))
+        val validationResult = validator.validate(maxValue.plus(1, DateTimeUnit.DAY))
 
         assertThat(validationResult).isValidationResultInvalid()
     }
@@ -66,9 +69,9 @@ class DateMaxValidatorTest {
      */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
-        val maxValue = LocalDate.of(2023, 1, 1)
+        val maxValue = LocalDate(2023, 1, 1)
         val validator = DateMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
-        val validationResult = validator.validate(maxValue.plusDays(1))
+        val validationResult = validator.validate(maxValue.plus(1, DateTimeUnit.DAY))
 
         assertThat(validationResult)
             .isInstanceOf(FormFieldValidationResult.Invalid.MessageWithArgs::class.java)
@@ -83,9 +86,9 @@ class DateMaxValidatorTest {
      */
     @Test
     fun `test invalid input returns error message args`() = runTest {
-        val maxValue = LocalDate.of(2023, 1, 1)
+        val maxValue = LocalDate(2023, 1, 1)
         val validator = DateMaxValidator(maxValue, R.string.carlos_lbl_test_invalid_input)
-        val validationResult = validator.validate(maxValue.plusDays(1))
+        val validationResult = validator.validate(maxValue.plus(1, DateTimeUnit.DAY))
 
         assertThat(validationResult)
             .isInstanceOf(FormFieldValidationResult.Invalid.MessageWithArgs::class.java)

@@ -14,8 +14,10 @@ import hu.icellmobilsoft.carlosformito.ui.theme.CarlosFieldConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.CarlosFormatDefaults
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosFormats
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 
 private val darkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -29,6 +31,7 @@ private val lightColorScheme = lightColorScheme(
     tertiary = Pink40
 )
 
+@OptIn(FormatStringsInDatetimeFormats::class)
 @Composable
 fun CarlosFormitoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -58,8 +61,10 @@ fun CarlosFormitoTheme(
             outlined = false
         ),
         LocalCarlosFormats provides CarlosFormatDefaults(
-            dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG),
-            timeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
+            dateFormat = LocalDate.Format {
+                byUnicodePattern("yyyy-MM-dd")
+            },
+            timeFormat = LocalTime.Formats.ISO,
             is24HourFormat = false
         )
     ) {

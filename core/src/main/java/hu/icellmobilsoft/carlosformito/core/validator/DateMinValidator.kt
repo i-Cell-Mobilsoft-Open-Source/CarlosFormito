@@ -2,7 +2,7 @@ package hu.icellmobilsoft.carlosformito.core.validator
 
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidator
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 /**
  * `DateMinValidator` validates that a LocalDate value is not before a specified minimum date.
@@ -24,7 +24,7 @@ class DateMinValidator(
      */
     override suspend fun validate(value: LocalDate?): FormFieldValidationResult {
         value?.let {
-            if (value.isBefore(minValue)) {
+            if (value < minValue) {
                 return FormFieldValidationResult.Invalid.of(
                     errorMessageId = errorMessageId,
                     formatArgs = listOf(minValue)

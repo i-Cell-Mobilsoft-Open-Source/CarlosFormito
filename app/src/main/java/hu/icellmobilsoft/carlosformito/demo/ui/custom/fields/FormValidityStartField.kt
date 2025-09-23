@@ -1,6 +1,5 @@
 package hu.icellmobilsoft.carlosformito.demo.ui.custom.fields
 
-import android.text.format.DateFormat
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.android.material.timepicker.TimeFormat
 import hu.icellmobilsoft.carlosformito.core.api.FormFieldItem
 import hu.icellmobilsoft.carlosformito.core.ui.TrackVisibilityEffect
 import hu.icellmobilsoft.carlosformito.core.ui.extensions.collectFieldState
@@ -33,10 +31,12 @@ import hu.icellmobilsoft.carlosformito.core.ui.testId
 import hu.icellmobilsoft.carlosformito.demo.ui.custom.fields.model.ValidityStart
 import hu.icellmobilsoft.carlosformito.ui.extension.requireActivity
 import hu.icellmobilsoft.carlosformito.ui.field.base.TextFieldSupportingText
+import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosFormats
 import hu.icellmobilsoft.carlosformito.ui.util.DatePickerBuilder
 import hu.icellmobilsoft.carlosformito.ui.util.TimePickerBuilder
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.DateTimeFormat
 
 @Composable
 fun FormValidityStartField(
@@ -45,8 +45,9 @@ fun FormValidityStartField(
     enabled: Boolean = true,
     minDate: LocalDate? = null,
     maxDate: LocalDate? = null,
-    dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd."),
-    timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
+    dateFormat: DateTimeFormat<LocalDate> = LocalCarlosFormats.current.dateFormat,
+    timeFormat: DateTimeFormat<LocalTime> = LocalCarlosFormats.current.timeFormat,
+    isSystem24Hour: Boolean = LocalCarlosFormats.current.is24HourFormat,
     supportingText: CharSequence? = null
 ) {
     val state by fieldItem.collectFieldState()
@@ -66,7 +67,7 @@ fun FormValidityStartField(
 
         Row {
             val displayedDateValue = savedValue.date?.let { date ->
-                dateFormatter.format(date)
+                dateFormat.format(date)
             } ?: "Select date"
 
             SelectValueCard(
@@ -91,7 +92,7 @@ fun FormValidityStartField(
             Spacer(modifier = Modifier.width(16.dp))
 
             val displayedTimeValue = savedValue.time?.let { time ->
-                timeFormatter.format(time)
+                timeFormat.format(time)
             } ?: "Select time"
 
             SelectValueCard(
@@ -99,13 +100,10 @@ fun FormValidityStartField(
                 enabled = enabled,
                 modifier = Modifier.weight(1f)
             ) {
-                val isSystem24Hour = DateFormat.is24HourFormat(context)
-                val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-
                 TimePickerBuilder.build(
                     dialogTitle = "Select time",
                     selectedTime = savedValue.time,
-                    timeFormat = clockFormat,
+                    is24HourFormat = isSystem24Hour,
                     onTimeSelected = { selectedTime ->
                         savedValue = savedValue.copy(time = selectedTime)
 

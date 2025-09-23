@@ -32,7 +32,6 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -50,8 +49,6 @@ android {
 }
 
 dependencies {
-    desugaring()
-
     carlosCore()
     carlosMaterial()
     carlosCommonDemo()
@@ -63,6 +60,7 @@ dependencies {
     implementation(Dependencies.navigationRuntimeKtx)
     implementation(Dependencies.material)
     implementation(Dependencies.extendedMaterialIcons)
+    implementation(Dependencies.kotlinxDateTime)
 
     composeMaterial()
 

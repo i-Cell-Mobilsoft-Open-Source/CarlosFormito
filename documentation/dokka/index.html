@@ -44,7 +44,7 @@
                     </a>
             </div>
             <div class="library-version">
-v0.1.0            </div>
+v1.0.1            </div>
         </div>
     </div>
     <div class="navigation-controls">
@@ -62,7 +62,10 @@ v0.1.0            </div>
   <div class="cover ">
     <div class="cover ">
       <h1 class="">CarlosFormito</h1>
-<img src="https://github.com/icellmobilsoft/CarlosFormito/blob/master/documentation/images/carlos_logo.png" height="200" alt="Carlos Logo"/>      <p class="paragraph">Easy form state management for Jetpack Compose.</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./documentation/images/carlos_logo_dark.png" height="200">
+  <img alt="Carlos Logo" src="./documentation/images/carlos_logo_light.png" height="200">
+</picture>      <p class="paragraph">Easy form state management for Jetpack Compose.</p>
       <h2 class="">Introduction</h2>
       <p class="paragraph">Working with forms in your application? Carlos can be your ultimate wingman.<br>While building forms might seem straightforward, a closer look reveals the need to manage:</p>
       <ol>
@@ -86,6 +89,7 @@ v0.1.0            </div>
 <span class="top-right-position"><span class="copy-icon"></span>
           <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
         </span></div>
+      <p class="paragraph"><strong>Note:</strong> Don't forget to enable core library desugaring in your project if <code class="lang-kotlin">minSdk &lt; 26</code>.</p>
       <h2 class="">Using Carlos</h2>
       <div class="sample-container">
         <pre><code class="block lang-kotlin" theme="idea">// Define the form fields, initial states and it's validators<br>val formFields = listOf(<br>    FormField(<br>        id = KEY_USERNAME,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 3, R.string.min_length_error)<br>        )<br>    ),<br>    FormField(<br>        id = KEY_PASSWORD,<br>        validators = listOf(<br>            ValueRequiredValidator(R.string.value_required_error),<br>            TextMinLengthValidator(minLength = 8)<br>        )<br>    )<br>)<br><br>// Initialize the form manager with the fields and a validation strategy<br>val formManager = CarlosFormManager(formFields, FormFieldValidationStrategy.Manual)<br><br>// Implement a form using the formManager<br>@Composable<br>fun LoginForm(formManager: FormManager) {<br>    val scope = rememberCoroutineScope()<br><br>    // Initialize the form manager<br>    LaunchedEffect(Unit) {<br>        formManager.initFormManager()<br>    }<br><br>    Column {<br><br>        // Bind the FieldItem to the FormField composable<br>        FormTextField(<br>            fieldItem = formManager.getFieldItem(KEY_USERNAME),<br>            label = {<br>                Text(&quot;Name*&quot;)<br>            },<br>            supportingText = &quot;Please enter your username.&quot;<br>        )<br><br>        FormPasswordTextField(<br>            fieldItem = formManager.getFieldItem(KEY_PASSWORD),<br>            label = {<br>                Text(&quot;Password*&quot;)<br>            },<br>            supportingText = &quot;Please enter your password.&quot;<br>        )<br><br>        Button(<br>            onClick = {<br>                // Validate the form when clicking the submit button<br>                scope.launch {<br>                    formManager.validateForm()<br>                }<br>            },<br>            modifier = Modifier.fillMaxWidth()<br>        ) {<br>            Text(&quot;Submit&quot;)<br>        }<br>    }<br>}</code></pre>
@@ -142,15 +146,15 @@ v0.1.0            </div>
         <tbody>
           <tr>
             <td>ValueRequiredValidator</td>
-            <td>Ensures that a value is not null or blank (for <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">String</code> types).</td>
+            <td>Ensures that a value is not null or blank (for <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">String</code> types).</td>
           </tr>
           <tr>
             <td>TextMinLengthValidator</td>
-            <td>Checks if a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">String</code> value meets the minimum length requirement.</td>
+            <td>Checks if a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">String</code> value meets the minimum length requirement.</td>
           </tr>
           <tr>
             <td>TextRegexValidator</td>
-            <td>Verifies that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">String</code> value matches a specified regex pattern.</td>
+            <td>Verifies that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">String</code> value matches a specified regex pattern.</td>
           </tr>
           <tr>
             <td>IntegerMinValidator</td>
@@ -166,39 +170,39 @@ v0.1.0            </div>
           </tr>
           <tr>
             <td>DateMinValidator</td>
-            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">LocalDate</code> value is not earlier than a specified minimum date.</td>
+            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">LocalDate</code> value is not earlier than a specified minimum date.</td>
           </tr>
           <tr>
             <td>DateMaxValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">LocalDate</code> value does not exceed a specified maximum date.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">LocalDate</code> value does not exceed a specified maximum date.</td>
           </tr>
           <tr>
             <td>DateMinMaxValidator</td>
-            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">LocalDate</code> value falls within a specific date range.</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">LocalDate</code> value falls within a specific date range.</td>
           </tr>
           <tr>
             <td>TimeMinValidator</td>
-            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">LocalTime</code> value is not earlier than a minimum time.</td>
+            <td>Checks that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">LocalTime</code> value is not earlier than a minimum time.</td>
           </tr>
           <tr>
             <td>TimeMaxValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">LocalTime</code> value does not exceed a maximum time.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">LocalTime</code> value does not exceed a maximum time.</td>
           </tr>
           <tr>
             <td>TimeMinMaxValidator</td>
-            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">LocalTime</code> falls within a specified range.</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">LocalTime</code> falls within a specified range.</td>
           </tr>
           <tr>
             <td>ContainsNumberValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">String</code> contains at least one numeric digit.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">String</code> contains at least one numeric digit.</td>
           </tr>
           <tr>
             <td>ContainsSpecialCharacterValidator</td>
-            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">String</code> contains at least one special character.</td>
+            <td>Ensures that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">String</code> contains at least one special character.</td>
           </tr>
           <tr>
             <td>ContainsUpperAndLowercaseValidator</td>
-            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@75aa882d lang-kotlin">String</code> includes both uppercase and lowercase characters.</td>
+            <td>Confirms that a <code class="org.jetbrains.dokka.pages.commenttable@74d84ed7 lang-kotlin">String</code> includes both uppercase and lowercase characters.</td>
           </tr>
         </tbody>
       </table>

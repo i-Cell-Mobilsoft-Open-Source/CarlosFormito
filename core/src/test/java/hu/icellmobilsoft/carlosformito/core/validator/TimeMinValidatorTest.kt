@@ -6,8 +6,8 @@ import hu.icellmobilsoft.carlosformito.core.R
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.util.ValidatorTestUtils.isValidationResultInvalid
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalTime
 import org.junit.Test
-import java.time.LocalTime
 
 /**
  * Unit tests for [TimeMinValidator].
@@ -20,7 +20,7 @@ class TimeMinValidatorTest {
      */
     @Test
     fun `validate null value`() = runTest {
-        val validator = TimeMinValidator(LocalTime.MIN)
+        val validator = TimeMinValidator(LocalTime(12, 0))
         val validationResult = validator.validate(null)
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
@@ -32,9 +32,9 @@ class TimeMinValidatorTest {
      */
     @Test
     fun `validate value before min value`() = runTest {
-        val minValue = LocalTime.of(5, 30)
+        val minValue = LocalTime(5, 30)
         val validator = TimeMinValidator(minValue)
-        val invalidValue = minValue.minusHours(1)
+        val invalidValue = LocalTime(4, 30)
         val validationResult = validator.validate(invalidValue)
 
         assertThat(validationResult).isValidationResultInvalid()
@@ -46,7 +46,7 @@ class TimeMinValidatorTest {
      */
     @Test
     fun `validate value equal to min value`() = runTest {
-        val minValue = LocalTime.of(5, 30)
+        val minValue = LocalTime(5, 30)
         val validator = TimeMinValidator(minValue)
         val validationResult = validator.validate(minValue)
 
@@ -59,9 +59,9 @@ class TimeMinValidatorTest {
      */
     @Test
     fun `validate value after min value`() = runTest {
-        val minValue = LocalTime.of(5, 30)
+        val minValue = LocalTime(5, 30)
         val validator = TimeMinValidator(minValue)
-        val validValue = minValue.plusHours(1)
+        val validValue = LocalTime(6, 30)
         val validationResult = validator.validate(validValue)
 
         assertThat(validationResult).isEqualTo(FormFieldValidationResult.Valid)
@@ -73,10 +73,10 @@ class TimeMinValidatorTest {
      */
     @Test
     fun `test invalid input returns custom error message`() = runTest {
-        val minValue = LocalTime.of(5, 30)
+        val minValue = LocalTime(5, 30)
 
         val validator = TimeMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
-        val invalidValue = minValue.minusHours(1)
+        val invalidValue = LocalTime(4, 30)
         val validationResult = validator.validate(invalidValue)
 
         assertThat(validationResult)
@@ -93,10 +93,10 @@ class TimeMinValidatorTest {
      */
     @Test
     fun `test invalid input returns error message args`() = runTest {
-        val minValue = LocalTime.of(5, 30)
+        val minValue = LocalTime(5, 30)
 
         val validator = TimeMinValidator(minValue, R.string.carlos_lbl_test_invalid_input)
-        val invalidValue = minValue.minusHours(1)
+        val invalidValue = LocalTime(4, 30)
         val validationResult = validator.validate(invalidValue)
 
         assertThat(validationResult)

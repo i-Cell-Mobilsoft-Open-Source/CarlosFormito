@@ -1,6 +1,5 @@
 package hu.icellmobilsoft.carlosformito.ui.field
 
-import android.R
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,7 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import hu.icellmobilsoft.carlosformito.core.api.FormFieldItem
@@ -53,8 +52,8 @@ import hu.icellmobilsoft.carlosformito.core.ui.extensions.collectFieldState
 import hu.icellmobilsoft.carlosformito.ui.extension.selectedTime
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosFormats
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.DateTimeFormat
 
 /**
  * A composable function for a time picker field with various customization options.
@@ -84,9 +83,9 @@ import java.time.format.DateTimeFormatter
  * (including label, placeholder, leading and trailing icons, border) for this picker field in
  * different states. The default [colors] uses the [LocalCarlosConfigs]'s colors defined by the theme, which defaults to
  * [OutlinedTextFieldDefaults.colors] if the field is outlined or [TextFieldDefaults.colors] otherwise
- * @param timeFormatter the [DateTimeFormatter] used to format the displayed time.
- * The default [timeFormatter] uses the [LocalCarlosFormats]'s timeFormatter defined by the theme
- * which defaults to "HH:mm" (24-hour format)
+ * @param timeFormat the [DateTimeFormat] used to format the displayed time.
+ * The default [timeFormat] uses the [LocalCarlosFormats]'s timeFormatter defined by the theme
+ * which defaults to [LocalTime.Formats.ISO].
  * @param dialogTitle the title to be displayed on the time picker dialog
  * @param onClick the callback that is triggered when the picker field is clicked
  * @param is24HourFormat indicates if the 24-hour - or the 12 hour (AM/ PM) - format should be used for displaying time
@@ -119,7 +118,7 @@ fun FormTimePickerField(
     outlined: Boolean = LocalCarlosConfigs.current.outlined,
     shape: Shape = LocalCarlosConfigs.current.shape,
     colors: TextFieldColors = LocalCarlosConfigs.current.colors,
-    timeFormatter: DateTimeFormatter = LocalCarlosFormats.current.timeFormatter,
+    timeFormat: DateTimeFormat<LocalTime> = LocalCarlosFormats.current.timeFormat,
     dialogTitle: String,
     onClick: (() -> Unit)? = null,
     is24HourFormat: Boolean = LocalCarlosFormats.current.is24HourFormat,
@@ -131,14 +130,13 @@ fun FormTimePickerField(
     supportingText: CharSequence? = null,
     testTag: String? = null,
 ) {
-    val context = LocalContext.current
     val state by fieldItem.collectFieldState()
 
     val displayMode = remember { mutableStateOf(DisplayMode.Picker) }
     var dialogVisible by remember { mutableStateOf(false) }
 
     if (dialogVisible) {
-        val currentValue = state.value ?: LocalTime.now()
+        val currentValue = state.value ?: LocalTime(0, 0)
         val timePickerState = rememberTimePickerState(
             initialHour = currentValue.hour,
             initialMinute = currentValue.minute,
@@ -154,14 +152,14 @@ fun FormTimePickerField(
                         dialogVisible = false
                     }
                 ) {
-                    Text(text = context.getString(R.string.ok))
+                    Text(text = stringResource(android.R.string.ok))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { dialogVisible = false }
                 ) {
-                    Text(text = context.getString(R.string.cancel))
+                    Text(text = stringResource(android.R.string.cancel))
                 }
             },
             displayModeIcon = {
@@ -195,7 +193,7 @@ fun FormTimePickerField(
         clearIcon = clearIcon,
         displayedValue = { value ->
             value?.let {
-                timeFormatter.format(value)
+                timeFormat.format(value)
             } ?: ""
         },
         contentDescription = contentDescription,

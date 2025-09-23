@@ -7,13 +7,14 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
-import com.google.android.material.timepicker.TimeFormat
 import hu.icellmobilsoft.carlosformito.ui.theme.CarlosFieldConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.CarlosFormatDefaults
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosConfigs
 import hu.icellmobilsoft.carlosformito.ui.theme.LocalCarlosFormats
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 
 private val darkColorPalette = darkColors(
     primary = Purple200,
@@ -31,6 +32,7 @@ private val lightColorPalette = lightColors(
     surface = Color.White
 )
 
+@OptIn(FormatStringsInDatetimeFormats::class)
 @Composable
 fun CarlosTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -50,9 +52,11 @@ fun CarlosTheme(
             outlined = false
         ),
         LocalCarlosFormats provides CarlosFormatDefaults(
-            dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG),
-            timeFormatter = DateTimeFormatter.ofPattern("HH:mm"),
-            timeFormat = TimeFormat.CLOCK_24H
+            dateFormat = LocalDate.Format {
+                byUnicodePattern("yyyy-MM-dd")
+            },
+            timeFormat = LocalTime.Formats.ISO,
+            is24HourFormat = true
         )
     ) {
         MaterialTheme(

@@ -2,7 +2,7 @@ package hu.icellmobilsoft.carlosformito.core.validator
 
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidationResult
 import hu.icellmobilsoft.carlosformito.core.api.validator.FormFieldValidator
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 /**
  * `DateMinMaxValidator` validates that a LocalDate value is within a specified date range.
@@ -26,7 +26,7 @@ class DateMinMaxValidator(
      */
     override suspend fun validate(value: LocalDate?): FormFieldValidationResult {
         value?.let {
-            if (value.isBefore(minValue) || value.isAfter(maxValue)) {
+            if (value < minValue || value > maxValue) {
                 return FormFieldValidationResult.Invalid.of(
                     errorMessageId = errorMessageId,
                     formatArgs = listOf(minValue, maxValue)

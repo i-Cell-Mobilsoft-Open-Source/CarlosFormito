@@ -24,7 +24,7 @@ mavenPublishing {
     coordinates(
         groupId = "hu.icellmobilsoft.carlosformito",
         artifactId = "carlosformito-material3",
-        version = "1.0.0"
+        version = "1.0.1"
     )
 
     pom {
@@ -63,6 +63,7 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.appcompat)
     implementation(Dependencies.extendedMaterialIcons)
+    implementation(Dependencies.kotlinxDateTime)
 
     composeMaterial3()
 
