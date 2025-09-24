@@ -24,7 +24,7 @@ class UsernameAvailabilityValidator(
         val username = value ?: return FormFieldValidationResult.Valid
 
         // Faking network request delay
-        delay(3.seconds)
+        delay(1.seconds)
 
         if (username in takenUsernames) {
             return FormFieldValidationResult.Invalid.of(errorMessageId)
