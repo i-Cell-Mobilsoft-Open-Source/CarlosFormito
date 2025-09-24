@@ -278,14 +278,19 @@ class CarlosFormManager(
 
         val strategy = fieldCustomValidationStrategies[id] ?: validationStrategy
         val hasConnections = !fieldConnections[id].isNullOrEmpty()
-        val shouldValidate = strategy is FormFieldValidationStrategy.AutoInline || hasConnections
 
-        if (shouldValidate) {
-            launchAutoValidation {
-                if (strategy is FormFieldValidationStrategy.AutoInline) {
+        when {
+            strategy is FormFieldValidationStrategy.AutoInline -> {
+                launchAutoValidation(validationDelay = strategy.delay) {
                     validateAndUpdateFieldState(id)
+                    validateFieldConnections(id)
                 }
-                validateFieldConnections(id)
+            }
+
+            hasConnections -> {
+                launchAutoValidation {
+                    validateFieldConnections(id)
+                }
             }
         }
     }

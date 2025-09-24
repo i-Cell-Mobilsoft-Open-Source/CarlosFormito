@@ -24,7 +24,7 @@ mavenPublishing {
     coordinates(
         groupId = "hu.icellmobilsoft.carlosformito",
         artifactId = "carlosformito-material3",
-        version = "1.0.1"
+        version = "1.0.2"
     )
 
     pom {

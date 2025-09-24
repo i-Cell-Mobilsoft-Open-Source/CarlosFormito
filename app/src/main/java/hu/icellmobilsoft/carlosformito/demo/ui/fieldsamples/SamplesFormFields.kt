@@ -2,6 +2,7 @@ package hu.icellmobilsoft.carlosformito.demo.ui.fieldsamples
 
 import hu.icellmobilsoft.carlosformito.commondemo.now
 import hu.icellmobilsoft.carlosformito.core.api.model.FormField
+import hu.icellmobilsoft.carlosformito.core.api.model.FormFieldValidationStrategy
 import hu.icellmobilsoft.carlosformito.core.validator.ContainsNumberValidator
 import hu.icellmobilsoft.carlosformito.core.validator.ContainsSpecialCharacterValidator
 import hu.icellmobilsoft.carlosformito.core.validator.ContainsUpperAndLowercaseValidator
@@ -17,6 +18,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.plus
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("MagicNumber")
 object SamplesFormFields {
@@ -37,7 +39,8 @@ object SamplesFormFields {
                     TextMinLengthValidator(minLength = 3, R.string.min_length_error),
                     UsernameAvailabilityValidator(errorMessageId = R.string.username_is_already_taken_error)
                 ),
-                initialValue = "guest"
+                initialValue = "guest",
+                customValidationStrategy = FormFieldValidationStrategy.AutoInline(delay = 1.seconds)
             ),
             FormField(
                 id = KEY_FORM_FIELD_SECRET,
