@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hu.icellmobilsoft.carlosformito.commondemo.clearFocusOnTap
 import hu.icellmobilsoft.carlosformito.core.api.model.FormFieldValidationStrategy
 import hu.icellmobilsoft.carlosformito.core.ui.extensions.collectFieldState
@@ -236,8 +237,11 @@ fun SampleFormScreen(
                     displayedValue = { packageType -> packageType?.displayedValue() ?: "" }
                 )
 
+                val validationInProgress by viewModel.validationInProgress.collectAsStateWithLifecycle()
+
                 Button(
                     onClick = viewModel::submit,
+                    enabled = !validationInProgress,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Submit")
