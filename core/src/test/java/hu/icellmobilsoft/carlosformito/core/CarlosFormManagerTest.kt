@@ -275,6 +275,176 @@ class CarlosFormManagerTest {
         }
 
     @Test
+    fun `AutoInline strategy - runs validations for multiple fields in parallel`() = runTest {
+        val field1Key = "field1"
+        val field2Key = "field2"
+
+        val field1 = FormField(
+            id = field1Key,
+            initialValue = "value1",
+            validators = listOf(mockValidator)
+        )
+
+        val field2 = FormField(
+            id = field2Key,
+            initialValue = "value2",
+            validators = listOf(mockValidator)
+        )
+
+        coEvery { mockValidator.validate(any()) } returns FormFieldValidationResult.Valid
+
+        val manager = CarlosFormManager(
+            formFields = listOf(field1, field2),
+            validationStrategy = FormFieldValidationStrategy.AutoInline(delay = 200.milliseconds)
+        )
+
+        manager.initFormManager()
+        advanceTimeBy(1.seconds)
+
+        manager.onFieldVisibilityChanged(field1Key, true)
+        manager.onFieldVisibilityChanged(field2Key, true)
+
+        // Trigger both fields to validate
+        manager.onFieldValueChanged(field1Key, "new1")
+        manager.onFieldValueChanged(field2Key, "new2")
+
+        advanceTimeBy(500)
+
+        val field1Result = manager.getFieldItem<String>(field1Key).fieldState.value.validationResult
+        val field2Result = manager.getFieldItem<String>(field2Key).fieldState.value.validationResult
+
+        assertThat(field1Result).isInstanceOf(FormFieldValidationResult.Valid::class.java)
+        assertThat(field2Result).isInstanceOf(FormFieldValidationResult.Valid::class.java)
+
+        coVerify(exactly = 1) { mockValidator.validate("new1") }
+        coVerify(exactly = 1) { mockValidator.validate("new2") }
+    }
+
+    @Test
+    fun `AutoInline strategy - long validation on one field does not block other fields`() = runTest {
+        val validationStarted = CompletableDeferred<Unit>()
+
+        val slowValidator = object : FormFieldValidator<String> {
+            override suspend fun validate(value: String?): FormFieldValidationResult {
+                validationStarted.complete(Unit)
+                awaitCancellation() // never finishes
+            }
+        }
+
+        val field1Key = "field1"
+        val field2Key = "field2"
+
+        val field1 = FormField(
+            id = field1Key,
+            validators = listOf(slowValidator)
+        )
+
+        val field2 = FormField(
+            id = field2Key,
+            validators = listOf(mockValidator)
+        )
+
+        coEvery { mockValidator.validate(any()) } returns FormFieldValidationResult.Valid
+
+        val manager = CarlosFormManager(
+            formFields = listOf(field1, field2),
+            validationStrategy = FormFieldValidationStrategy.AutoInline(delay = 200.milliseconds)
+        )
+
+        manager.initFormManager()
+        advanceTimeBy(1.seconds)
+
+        manager.onFieldVisibilityChanged(field1Key, true)
+        manager.onFieldVisibilityChanged(field2Key, true)
+
+        // Start long-running validation on field1
+        manager.onFieldValueChanged(field1Key, "slow-value")
+        validationStarted.await()
+
+        // Trigger validation on field2
+        manager.onFieldValueChanged(field2Key, "fast-value")
+        advanceTimeBy(500)
+
+        val field2Result = manager.getFieldItem<String>(field2Key).fieldState.value.validationResult
+        assertThat(field2Result).isInstanceOf(FormFieldValidationResult.Valid::class.java)
+
+        coVerify(exactly = 1) { mockValidator.validate("fast-value") }
+    }
+
+    @Test
+    fun `AutoInline strategy - overlapping slow and fast validations, both results are preserved`() = runTest {
+        val slowValidationStarted = CompletableDeferred<Unit>()
+        val slowValidationFinished = CompletableDeferred<Unit>()
+
+        val slowValidator = object : FormFieldValidator<String> {
+            override suspend fun validate(value: String?): FormFieldValidationResult {
+                slowValidationStarted.complete(Unit)
+                // Simulate long-running work
+                advanceTimeBy(1.seconds)
+                slowValidationFinished.complete(Unit)
+                return FormFieldValidationResult.Valid
+            }
+        }
+
+        val fastValidator = object : FormFieldValidator<String> {
+            override suspend fun validate(value: String?): FormFieldValidationResult {
+                return FormFieldValidationResult.Invalid.Unknown
+            }
+        }
+
+        val field1Key = "field1"
+        val field2Key = "field2"
+
+        val field1 = FormField(
+            id = field1Key,
+            validators = listOf(slowValidator)
+        )
+
+        val field2 = FormField(
+            id = field2Key,
+            validators = listOf(fastValidator)
+        )
+
+        val manager = CarlosFormManager(
+            formFields = listOf(field1, field2),
+            validationStrategy = FormFieldValidationStrategy.AutoInline(delay = 100.milliseconds)
+        )
+
+        manager.initFormManager()
+        advanceTimeBy(1.seconds)
+
+        manager.onFieldVisibilityChanged(field1Key, true)
+        manager.onFieldVisibilityChanged(field2Key, true)
+
+        // Trigger both validations close to each other
+        manager.onFieldValueChanged(field1Key, "slow")
+        slowValidationStarted.await()
+
+        manager.onFieldValueChanged(field2Key, "fast")
+
+        // Advance enough for fast validation to complete but not slow one
+        advanceTimeBy(200)
+
+        val field1State = manager.getFieldItem<String>(field1Key).fieldState
+        val field2State = manager.getFieldItem<String>(field2Key).fieldState
+
+        val field1Result = field1State.value.validationResult
+        val field2Result = field2State.value.validationResult
+
+        assertThat(field1Result).isNull() // slow still running
+        assertThat(field2Result).isInstanceOf(FormFieldValidationResult.Invalid::class.java)
+
+        // Now let the slow validation finish
+        slowValidationFinished.await()
+
+        val finalField1Result = field1State.value.validationResult
+        val finalField2Result = field2State.value.validationResult
+
+        assertThat(finalField1Result).isInstanceOf(FormFieldValidationResult.Valid::class.java)
+        assertThat(finalField2Result).isInstanceOf(FormFieldValidationResult.Invalid::class.java)
+    }
+
+    @Test
     fun `Required field affects allRequiredFieldFilled`() = runTest {
         val requiredField = FormField<String>(
             id = TEST_FORM_FIELD_ID,

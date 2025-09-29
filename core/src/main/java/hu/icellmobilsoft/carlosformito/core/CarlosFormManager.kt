@@ -19,10 +19,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.collections.forEach
@@ -86,7 +90,7 @@ class CarlosFormManager(
     private var initialized: Boolean = false
 
     // Coroutine variables for auto-validation
-    private var autoValidationJob: Job? = null
+    private var autoValidationJobs: HashMap<String, Job> = hashMapOf()
     private lateinit var autoValidationScope: CoroutineScope
     private lateinit var autoValidationContext: CoroutineContext
 
@@ -133,15 +137,30 @@ class CarlosFormManager(
     }
 
     /**
-     * Initializes the form manager, setting up auto-validation and field visibility checks.
+     * Initializes the form manager.
+     *
+     * Sets up the coroutine scope for auto-validation, observes field visibility
+     * to track required fields, and derives the aggregated [validationInProgress]
+     * state from individual fields. Call once, subsequent calls are ignored.
      *
      * @param autoValidationExceptionHandler Optional exception handler for auto-validation.
      */
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override suspend fun initFormManager(autoValidationExceptionHandler: CoroutineExceptionHandler?) {
         // Return if already initialized
         if (initialized) return
 
+        setupAutoValidationScope(autoValidationExceptionHandler)
+        observeFieldsVisibility()
+        observeValidationInProgress()
+
+        initialized = true
+    }
+
+    /**
+     * Creates the coroutine scope for auto-validation, tied to the caller's lifecycle.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private suspend fun setupAutoValidationScope(autoValidationExceptionHandler: CoroutineExceptionHandler?) {
         autoValidationContext = autoValidationExceptionHandler ?: EmptyCoroutineContext
 
         val detachedJob = Job()
@@ -153,6 +172,13 @@ class CarlosFormManager(
 
         // Create scope that preserves caller's dispatcher but uses our detached job
         autoValidationScope = CoroutineScope(coroutineContext + detachedJob)
+    }
+
+    /**
+     * Observes fields visibility changes and updates required-field completion status.
+     */
+    @OptIn(FlowPreview::class)
+    private fun observeFieldsVisibility() {
         autoValidationScope.launch(autoValidationContext) {
             fieldVisibility
                 .debounce(FIELD_VISIBILITY_UPDATE_DEBOUNCE)
@@ -160,37 +186,31 @@ class CarlosFormManager(
                     checkAllRequiredFieldFilled()
                 }
         }
-
-        initialized = true
     }
 
     /**
-     * Launches auto-validation with the provided validation block on the specified auto-validation scope and context.
-     *
-     * @param validationDelay An optional delay parameter for delaying the fields validation
-     * @param validationBlock The suspend function to perform validation.
+     * Observes per-field validation progress and updates the aggregated form-level state.
      */
-    private fun launchAutoValidation(validationDelay: Duration? = null, validationBlock: suspend () -> Unit) {
-        autoValidationJob?.cancel()
-        autoValidationJob = autoValidationScope.launch(autoValidationContext) {
-            validationDelay?.let { delay(validationDelay) }
-            monitorValidationProgress(validationBlock)
+    private fun observeValidationInProgress() {
+        autoValidationScope.launch(autoValidationContext) {
+            combine(
+                flows = getFieldsValidationInProgressFlows()
+            ) { fieldsValidationInProgress -> fieldsValidationInProgress.any { it } }
+                .distinctUntilChanged()
+                .collectLatest { validationInProgress ->
+                    mutableValidationInProgress.value = validationInProgress
+                }
         }
     }
 
     /**
-     * Monitors the progress of a validation block, updating the [validationInProgress] state accordingly.
-     *
-     * @param validationBlock The block of code representing the validation process.
+     * Returns a list of flows, each emitting the `validationInProgress` state
+     * of a specific field. Used to derive the overall form-level
+     * [validationInProgress] by combining all field flows.
      */
-    private suspend fun monitorValidationProgress(validationBlock: suspend () -> Unit) {
-        try {
-            mutableValidationInProgress.value = true
-            validationBlock()
-            mutableValidationInProgress.value = false
-        } catch (throwable: Throwable) {
-            mutableValidationInProgress.value = false
-            throw throwable
+    private fun getFieldsValidationInProgressFlows(): List<Flow<Boolean>> {
+        return fieldStates.values.map { fieldStateFlow ->
+            fieldStateFlow.map { state -> state.validationInProgress }.distinctUntilChanged()
         }
     }
 
@@ -240,10 +260,8 @@ class CarlosFormManager(
         checkInitialized()
         val strategy = fieldCustomValidationStrategies[id] ?: validationStrategy
         if (strategy == FormFieldValidationStrategy.AutoOnFocusClear) {
-            launchAutoValidation {
-                validateAndUpdateFieldState(id)
-                validateFieldConnections(id)
-            }
+            autoValidateField(id)
+            validateFieldConnections(id)
         }
     }
 
@@ -264,7 +282,7 @@ class CarlosFormManager(
      * @param value The new value assigned to the field, or `null` if cleared.
      *
      * @see FormFieldValidationStrategy For available validation strategies.
-     * @see validateAndUpdateFieldState For how individual field validation is applied.
+     * @see validateField For how individual field validation is applied.
      * @see validateFieldConnections For how connected fields are validated after updates.
      */
     override fun <T> onFieldValueChanged(id: String, value: T?) {
@@ -281,16 +299,30 @@ class CarlosFormManager(
 
         when {
             strategy is FormFieldValidationStrategy.AutoInline -> {
-                launchAutoValidation(validationDelay = strategy.delay) {
-                    validateAndUpdateFieldState(id)
-                    validateFieldConnections(id)
-                }
+                autoValidateField(id, validationDelay = strategy.delay)
+                validateFieldConnections(id)
             }
 
             hasConnections -> {
-                launchAutoValidation {
-                    validateFieldConnections(id)
-                }
+                validateFieldConnections(id)
+            }
+        }
+    }
+
+    /**
+     * Launches auto-validation with the provided validation block on the specified auto-validation scope and context.
+     *
+     * @param fieldId The ID of the field being validated
+     * @param validationDelay An optional delay parameter for delaying the fields validation
+     */
+    private fun autoValidateField(fieldId: String, validationDelay: Duration? = null) {
+        autoValidationJobs[fieldId]?.cancel()
+        autoValidationJobs[fieldId] = autoValidationScope.launch(autoValidationContext) {
+            try {
+                validationDelay?.let { delay(validationDelay) }
+                validateField(fieldId)
+            } finally {
+                autoValidationJobs.remove(fieldId)
             }
         }
     }
@@ -359,31 +391,10 @@ class CarlosFormManager(
      */
     override suspend fun validateForm(): Boolean {
         checkInitialized()
-        var isFormValid = false
-
-        monitorValidationProgress {
-            isFormValid = validateIndividualFields()
-        }
+        val isFormValid = validateIndividualFields()
 
         if (BuildConfig.DEBUG) {
             printFormState()
-        }
-
-        return isFormValid
-    }
-
-    /**
-     * Validates the form field item.
-     *
-     * @param id The unique identifier of the form field item.
-     * @return `true` if the field is valid after validation, `false` otherwise.
-     */
-    override suspend fun validateField(id: String): Boolean {
-        checkInitialized()
-        var isFormValid = false
-
-        monitorValidationProgress {
-            isFormValid = validateAndUpdateFieldState(id)
         }
 
         return isFormValid
@@ -396,7 +407,7 @@ class CarlosFormManager(
      */
     private suspend fun validateIndividualFields(): Boolean {
         return fieldStates.keys
-            .map { id -> validateAndUpdateFieldState(id) }
+            .map { id -> validateField(id) }
             .all { isValid -> isValid }
     }
 
@@ -406,10 +417,9 @@ class CarlosFormManager(
      * @param id The ID of the field to validate.
      * @return `true` if the field is valid, otherwise `false`.
      */
-    private suspend fun validateAndUpdateFieldState(id: String): Boolean {
-        /**
-         * Skip validation for invisible fields
-         */
+    override suspend fun validateField(id: String): Boolean {
+        checkInitialized()
+        // Skip validation for invisible fields
         if (fieldVisibility.value[id] != true) {
             return true
         }
@@ -456,7 +466,7 @@ class CarlosFormManager(
      *
      * Note: a connected field is validated only if it is filled.
      */
-    private suspend fun validateFieldConnections(id: String) {
+    private fun validateFieldConnections(id: String) {
         fieldConnections[id]?.forEach { connectedFieldId ->
             if (checkFieldFilled(connectedFieldId)) {
                 val connectedFieldStrategy = fieldCustomValidationStrategies[connectedFieldId] ?: validationStrategy
@@ -470,7 +480,7 @@ class CarlosFormManager(
 
                     is FormFieldValidationStrategy.AutoOnFocusClear,
                     is FormFieldValidationStrategy.AutoInline -> {
-                        validateAndUpdateFieldState(connectedFieldId)
+                        autoValidateField(connectedFieldId)
                     }
                 }
             }
