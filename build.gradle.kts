@@ -66,6 +66,6 @@ tasks.dokkaHtmlMultiModule {
     pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
         // Setting project README.md to the dokka documentation landing page
         includes.from("README.md")
-        version = "v1.0.2"
+        version = "v1.0.3"
     }
 }
